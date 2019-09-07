@@ -86,7 +86,6 @@ export default class App extends React.Component {
 
   // 选择商品
   selectProduct(key) {
-    console.log(1);
     const _lists = this.state.lists;
     if (key < 2) {
       _lists[0].check === false

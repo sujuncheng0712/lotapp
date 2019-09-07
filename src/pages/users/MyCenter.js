@@ -34,7 +34,6 @@ export default class App extends React.Component {
     let LoginInfo = await AsyncStorage.getItem('LoginInfo');
     LoginInfo = eval('(' + LoginInfo + ')');
     if (LoginInfo !== null) {
-      console.log(LoginInfo.name);
       this.setState({name: LoginInfo.name});
       this.props.navigation.navigate('Home');
     } else {

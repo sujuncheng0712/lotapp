@@ -7,16 +7,19 @@ import MyCenter from './src/pages/users/MyCenter';
 import MyShop from './src/pages/users/MyShop';
 import Device from './src/pages/users/Device';
 import Record from './src/pages/users/Record';
+import Address from './src/pages/users/Address';
+import Create from './src/pages/users/Create';
 import AddDevice from './src/pages/Device/AddDevice';
 import ScanScreen from './src/pages/Device/ScanScreen';
 import Activation from './src/pages/Device/Activation';
+
 import Settlement from './src/pages/Settlement';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
   {
-
+    Address:Address,
     Home: Home,
     Login: Login,
     MyCenter: MyCenter,
@@ -27,6 +30,8 @@ const AppStack = createStackNavigator(
     ScanScreen: ScanScreen,
     Activation: Activation,
     Settlement:Settlement,
+    //Address:Address,
+    Create:Create,
   },
   // {
   //   initialRouteName: 'Home',

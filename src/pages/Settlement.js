@@ -1,6 +1,8 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, AsyncStorage, Image,CheckBox} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, AsyncStorage, Image,ScrollView} from 'react-native';
 const url = 'https://iot2.dochen.cn/api';
+import CheckBox from 'react-native-check-box'
+import {color} from 'react-native-reanimated';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -103,44 +105,107 @@ export default class App extends React.Component {
 
 
     return (
-      <View style={styles.pages}>
-        <View style={styles.list}>
-          {products}
-          <View style={styles.total}>
-            <Text>应付：</Text>
-            <Text style={{color:'#FF7A01'}}>{orderInfo.total}.00</Text>
-            <Text>元</Text>
+      <ScrollView>
+        <View style={styles.pages}>
+          <View style={styles.list}>
+            {products}
+            <View style={styles.total}>
+              <Text>应付：</Text>
+              <Text style={{color:'#FF7A01'}}>{orderInfo.total}.00</Text>
+              <Text>元</Text>
+            </View>
           </View>
-        </View>
-        <Text style={{width:'100%',textAlign: 'left'}}>收货地址：</Text>
+          <Text style={{width:'100%',textAlign: 'left'}}>收货地址：</Text>
+          <TouchableOpacity
+            style={styles.addressItem}
+            onPress={() => {
+              addressInfo.address ?
+              this.props.navigation.navigate('Address') :this.props.navigation.navigate('Create');
+            }}>
+            <View style={styles.addressLeft}>
+              <View style={styles.username}>
+                <Text style={{marginRight:10}}>{addressInfo.contact || '请填写联系人姓名'}</Text>
+                <Text>{addressInfo.phone || '请填写联系人手机号'}</Text>
+              </View>
+              <View style={styles.address}>
+                <Text>{detailAddress || '请选择收货地址'}</Text>
+              </View>
+              <View/>
+            </View>
+            <Image
+              style={styles.addressImg}
+              source={require('../images/right.png')}
+            />
 
-        <View style={styles.addressItem}>
-          <View style={styles.addressLeft}>
-            <View style={styles.username}>
-              <Text style={{marginRight:10}}>{addressInfo.contact || '请填写联系人姓名'}</Text>
-              <Text>{addressInfo.phone || '请填写联系人手机号'}</Text>
+      </TouchableOpacity>
+          <View style={styles.pay}>
+            <Text style={{width:'100%',textAlign: 'left'}}>支付方式：</Text>
+            <View style={styles.payItem}>
+              <Image
+                resizeMode="stretch"
+                style={styles.payImg}
+                source={require('../images/wxPay.png')}
+              />
+              <Text style={{flexDirection: 'row',padding:12,flex:0.9}}>余额支付  </Text>
+             <CheckBox
+              checkBoxColor={'#FF7A01'}
+              style={{flex: 0.1, padding: 10}}
+              onClick={()=>{
+                this.setState({
+                  isChecked:!this.state.isChecked,
+                  value:1,
+                })
+              }}
+              isChecked={!this.state.isChecked}
+              //leftText={"微信支付"}
+            />
             </View>
-            <View style={styles.address}>
-              <Text>{detailAddress || '请选择收货地址'}</Text>
+            <View style={styles.payItem}>
+              <Image
+                resizeMode="stretch"
+                style={styles.payImg}
+                source={require('../images/balancePay.png')}
+              />
+              <View style={{flexDirection: 'row',padding:12,flex:0.9}}>
+                <Text>余额支付  </Text>
+                <Text style={{color:'#FF7A01'}}> 余额：{this.state.balance}元</Text>
+              </View>
+
+            <CheckBox
+              checkBoxColor={'#FF7A01'}
+              style={{flex: 0.1, padding: 10}}
+              onClick={()=>{
+                this.setState({
+                  isChecked:!this.state.isChecked,
+                  value:2,
+                })
+              }}
+              isChecked={this.state.isChecked}
+              //leftText={`余额  支付余额：${this.state.balance}元`}
+            />
             </View>
-            <View/>
           </View>
-          <Image
-            style={styles.addressImg}
-            source={require('../images/right.png')}
-          />
+          <View style={styles.buy}>
+            <View style={styles.buyLeft}>
+              <Text style={{position:'absolute',bottom:2.5 }}>合计：</Text>
+              <Text style={{color:'#FF7A01',fontSize:20,position:'absolute',bottom:0,left:40 }}>{orderInfo.total}.00</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                this.props.navigation.navigate('ScanScreen');
+              }}>
+              <Text
+                style={{
+                  color:'white',
+                  textAlign:'center',
+                }}
+              >提交</Text>
+            </TouchableOpacity>
+          </View>
+
         </View>
-        <View style={styles.pay}>
-          <Text style={{width:'100%',textAlign: 'left'}}>支付方式：</Text>
-          <View style={styles.payItem}>
-            <Text>微信支付</Text><CheckBox style={{backgroundColor:'#FF7A01',
-            }}></CheckBox>
-          </View>
-          <View style={styles.payItem}>
-            <Text>余额支付</Text><CheckBox PropTypes={styles.payItem}></CheckBox>
-          </View>
-        </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -199,8 +264,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   pay:{
-    borderWidth:1,
-    borderColor:'red',
+    marginTop:10,
     width:'100%',
     fontSize: 10,
   },
@@ -209,7 +273,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   checkbox:{
-
-  }
-
+    //checkBoxColor:"#FF7A01",
+  },
+  payImg:{
+    flex:0.09,
+    marginTop:10,
+    height:25,
+    width:25,
+  },
+  buy:{
+    marginTop:40,
+    width:'100%',
+    flexDirection: 'row',
+  },
+  buyLeft:{
+    flex:0.87,
+    flexDirection: 'row',
+    alignContent:'flex-end',
+  },
+  button:{
+    flex:0.13,
+    backgroundColor: '#FF7A01',
+    borderColor:'#FF7A01',
+    color:'#FF7A01',
+    textAlign:'center',
+    borderRadius:3,
+    width: 30,
+    fontSize:8,
+    padding: 5,
+  },
 })

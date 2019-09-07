@@ -1,12 +1,10 @@
 import {createBottomTabNavigator} from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome';
+
 import React from 'react';
-///123
-import Login from '../pages/users/Login';
 import MyCenter from '../pages/users/MyCenter';
 import MyShop from './users/MyShop';
 import Device from './users/Device';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 const HomeBottomRoute = createBottomTabNavigator(
   {
     device: {
