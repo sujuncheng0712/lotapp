@@ -133,11 +133,11 @@ export default class App extends React.Component {
         <View style={styles.pay}>
           <Text style={{width:'100%',textAlign: 'left'}}>支付方式：</Text>
           <View style={styles.payItem}>
-            <Text>微信支付1121</Text><CheckBox style={{backgroundColor:'#FF7A01',
+            <Text>微信支付21</Text><CheckBox style={{backgroundColor:'#FF7A01',
             }}></CheckBox>
           </View>
           <View style={styles.payItem}>
-            <Text>余额支付1121</Text><CheckBox PropTypes={styles.payItem}></CheckBox>
+            <Text>余额支付21</Text><CheckBox PropTypes={styles.payItem}></CheckBox>
           </View>
         </View>
       </View>
