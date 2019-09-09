@@ -1,8 +1,16 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, AsyncStorage, Image,ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  AsyncStorage,
+  Image,
+  ScrollView,
+  DeviceEventEmitter,
+} from 'react-native';
 const url = 'https://iot2.dochen.cn/api';
 import CheckBox from 'react-native-check-box'
-import {color} from 'react-native-reanimated';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -34,7 +42,8 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-
+    DeviceEventEmitter.addListener('Address', ()=> {this._checkLoginState()})
+    this._checkLoginState()
   }
 
   // 验证本地存储的资料是否有效
@@ -146,7 +155,7 @@ export default class App extends React.Component {
                 style={styles.payImg}
                 source={require('../images/wxPay.png')}
               />
-              <Text style={{flexDirection: 'row',padding:12,flex:0.9}}>余额支付  </Text>
+              <Text style={{flexDirection: 'row',padding:12,flex:0.9}}>微信支付  </Text>
              <CheckBox
               checkBoxColor={'#FF7A01'}
               style={{flex: 0.1, padding: 10}}

@@ -10,6 +10,7 @@
   "dependencies": {
     "@ant-design/react-native": "^3.1.14",
     "antd": "^3.22.2",
+    "antd-mobile-demo-data": "^0.3.0",
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-camera": "^3.3.0",

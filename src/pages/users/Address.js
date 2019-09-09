@@ -8,7 +8,7 @@ import {
   ToastAndroid,
   Modal,
   Dimensions,
-  TouchableOpacity,
+  TouchableOpacity,ScrollView,DeviceEventEmitter
 } from 'react-native';
 const url = 'https://iot2.dochen.cn/api';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -19,6 +19,7 @@ export default class App extends React.Component {
       lists: [],
       LoginInfo:{},
       modalVisible: false,
+      uuid:'',
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -29,12 +30,17 @@ export default class App extends React.Component {
 
   // render创建之前
   componentWillMount() {
-    this._checkLoginState();
+
   }
 
   componentDidMount() {
     //wechat.registerApp('wxed79edc328ec284a');
+   DeviceEventEmitter.addListener('Address', ()=> {this._checkLoginState()})
+    this._checkLoginState()
   }
+  componentWillUnmount() {
+    DeviceEventEmitter.removeAllListeners();
+  };
 
   // 验证本地存储的资料是否有效
   _checkLoginState = async () => {
@@ -90,9 +96,9 @@ export default class App extends React.Component {
     })
   }
 
-  addressDelete(uuid){
+  addressDelete(){
     const {LoginInfo} = this.state;
-    let urlInfo  =`${url}/users/${LoginInfo.uid}/address/${uuid}?uid=${LoginInfo.uid}`;
+    let urlInfo  =`${url}/users/${LoginInfo.uid}/address/${this.state.uuid}?uid=${LoginInfo.uid}`;
     fetch(urlInfo,{
       method:'DELETE',
     }).then(res =>{
@@ -114,80 +120,89 @@ export default class App extends React.Component {
     const {lists} = this.state;
     let showList = lists.map((item,key)=>{
       return(
-        <View style={styles.item} key={key}>
-          <View style={styles.one}>
+        <ScrollView>
+          <View style={styles.item} key={key}>
+            <View style={styles.one}>
+                <Icon
+                  style={{flex:0.09}}
+                  name="check-circle"
+                  size={20} color={item.default ? '#ff8800' : '#666'}
+                  onPress={()=>{
+                    item.default = 1;
+                    this.addressDefault(item.uuid,item)
+                  }}
+                /><Text  style={{flex:0.85}}>默认</Text>
               <Icon
-                style={{flex:0.09}}
-                name="check-circle"
-                size={20} color={item.default ? '#ff8800' : '#666'}
+                style={{flex:0.1}}
+                name="edit"
+                size={20} color={'#ff8800'}
                 onPress={()=>{
-                  item.default = 1;
-                  this.addressDefault(item.uuid,item)
+                  this.props.navigation.navigate('Create', {
+                    uuid: item.uuid,
+                    title:'修改地址',address:item,
+                    refresh: function () {
+                      this.init();
+                    }
+                  });
                 }}
-              /><Text  style={{flex:0.85}}>默认</Text>
-            <Icon
-              style={{flex:0.1}}
-              name="edit"
-              size={20} color={'#ff8800'}
-              onPress={()=>{
-                this.props.navigation.navigate('Create', {uuid: item.uuid,title:'修改地址',address:item});
-              }}
-            />
-            <Icon
-              style={{flex:0.1}}
-              name="close"
-              size={20} color={'#ff8800'}
-              onPress={()=>{
-                this.setModalVisible(true);
-              }}
-            />
-          </View>
-          <View style={styles.one}>
-            <Text>收货人：{item.contact}  </Text>
-            <Text>  手机：{item.phone}</Text>
-          </View>
-          <View style={styles.one}>
-            <Text>地区：{item.area}</Text>
-          </View>
-          <View style={styles.one}>
-            <Text>收货地址：{item.address}</Text>
-          </View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.modalVisible}
-            onRequestClose={() => {
-              alert("Modal has been closed.");
-            }}
-          >
-            <View style={{height:Dimensions.get('window').height, justifyContent:'center', alignItems:'center', backgroundColor:'rgba(0,0,0,0.5)'}}>
-              <View style={{height:250,  width:300, margin:20, backgroundColor:'white'}}>
-                <View style={{flex:1, justifyContent:'center', alignItems:'center', borderWidth:1, borderColor:'#eee'}}>
-                  <Text>确认删除该地址？</Text>
-                </View>
-                <View style={styles.one}>
-                  <TouchableHighlight
-                    style={styles.button}
-                    onPress={() => {
-                      this.addressDelete(item.uuid);
-                    }}
-                  >
-                    <Text style={{textAlign: 'center',color:'#fff',}}>确认</Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    style={styles.button2}
-                    onPress={() => {
-                      this.setModalVisible(false);
-                    }}
-                  >
-                    <Text style={{textAlign: 'center',}}>取消</Text>
-                  </TouchableHighlight>
-                </View>
-
-              </View>
+              />
+              <Icon
+                style={{flex:0.1}}
+                name="close"
+                size={20} color={'#ff8800'}
+                onPress={()=>{
+                  this.setModalVisible(true);
+                  this.setState({uuid:item.uuid});
+                }}
+              />
             </View>
-          </Modal>
-        </View>
+            <View style={styles.one}>
+              <Text>收货人：{item.contact}  </Text>
+              <Text>  手机：{item.phone}</Text>
+            </View>
+            <View style={styles.one}>
+              <Text>地区：{item.area}</Text>
+            </View>
+            <View style={styles.one}>
+              <Text>收货地址：{item.address}</Text>
+            </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {
+                alert("Modal has been closed.");
+              }}
+            >
+              <View style={{height:Dimensions.get('window').height, justifyContent:'center', alignItems:'center', backgroundColor:'rgba(0,0,0,0.5)'}}>
+                <View style={{height:250,  width:300, margin:20, backgroundColor:'white'}}>
+                  <View style={{flex:1, justifyContent:'center', alignItems:'center', borderWidth:1, borderColor:'#eee'}}>
+                    <Text>确认删除该地址？</Text>
+                  </View>
+                  <View style={styles.one}>
+                    <TouchableHighlight
+                      style={styles.button}
+                      onPress={() => {
+                        this.addressDelete(item.uuid);
+                      }}
+                    >
+                      <Text style={{textAlign: 'center',color:'#fff',}}>确认</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                      style={styles.button2}
+                      onPress={() => {
+                        this.setModalVisible(false);
+                      }}
+                    >
+                      <Text style={{textAlign: 'center',}}>取消</Text>
+                    </TouchableHighlight>
+                  </View>
+
+                </View>
+              </View>
+            </Modal>
+          </View>
+        </ScrollView>
       )
     });
     return (
@@ -196,7 +211,9 @@ export default class App extends React.Component {
         <TouchableOpacity
           style={styles.button3}
           onPress={() => {
-            this.props.navigation.navigate('Create',{title:'添加地址'});
+            this.props.navigation.navigate('Create',{
+              title:'添加地址',
+            });
           }}>
           <Text
             style={{
