@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     borderBottomWidth:0.5,
     borderColor: '#bbb',
-    height:'12%',
+    height:50,
     padding: 5,
   },
   title:{
@@ -272,5 +272,6 @@ const styles = StyleSheet.create({
   },
   input:{
     width:'70%',
+    marginTop: 0,
   }
 })

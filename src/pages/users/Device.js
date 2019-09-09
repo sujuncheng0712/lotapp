@@ -82,7 +82,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    //wechat.registerApp('wxed79edc328ec284a');
+    wechat.registerApp('wxed79edc328ec284a');
   }
 
   ReloadEquipments(LoginInfo) {
@@ -409,6 +409,23 @@ export default class App extends React.Component {
             ))}
           </ScrollView>
         </View>
+        <TouchableOpacity style={styles.btn} onPress={()=>{
+          wechat.shareToTimeline({
+            type: 'imageUrl',
+            title: 'web image',
+            description: 'share web image to time line',
+            mediaTagName: 'email signature',
+            messageAction: undefined,
+            messageExt: undefined,
+            imageUrl: 'http://www.ncloud.hk/email-signature-262x100.png'
+          }).then((success)=>{
+            console.log(success)
+          }).catch((error)=>{
+            console.log(error)
+          })
+        }}>
+          <Text>分享到朋友圈</Text>
+        </TouchableOpacity>
       </View>
     );
   }
