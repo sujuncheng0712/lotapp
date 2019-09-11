@@ -8,7 +8,7 @@ import {
   ToastAndroid,
   Modal,
   Dimensions,
-  TouchableOpacity,ScrollView,DeviceEventEmitter
+  TouchableOpacity,ScrollView,DeviceEventEmitter,BackHandler
 } from 'react-native';
 const url = 'https://iot2.dochen.cn/api';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -30,7 +30,6 @@ export default class App extends React.Component {
 
   // render创建之前
   componentWillMount() {
-
   }
 
   componentDidMount() {
@@ -41,6 +40,7 @@ export default class App extends React.Component {
   componentWillUnmount() {
     DeviceEventEmitter.removeAllListeners();
   };
+
 
   // 验证本地存储的资料是否有效
   _checkLoginState = async () => {

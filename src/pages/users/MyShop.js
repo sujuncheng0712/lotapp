@@ -9,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
-  ToastAndroid,
+  ToastAndroid,BackHandler
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as wechat from 'react-native-wechat';
@@ -35,10 +35,28 @@ export default class App extends React.Component {
   componentWillMount() {
     // 验证/读取 登陆状态
     this._checkLoginState();
+    BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
   }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+  }
+
 
   componentDidMount() {
     //wechat.registerApp('wxed79edc328ec284a');
+  }
+
+  onBackAndroid = () => {
+    if (this.props.navigation.isFocused()) {
+      if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+        //最近2秒内按过back键，可以退出应用。
+        BackHandler.exitApp();
+      }
+      this.lastBackPressed = Date.now();
+      ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+      return true;
+    }
   }
 
   // 验证本地存储的资料是否有效
@@ -175,7 +193,7 @@ export default class App extends React.Component {
     const {lists, count, sale_type} = this.state;
     return (
       <View style={{flex: 1}}>
-        <View style={{flex: 0.9}}>
+        <View style={{flex: 0.75}}>
           <Swiper
             style={styles.wrapper}
             height={100}
@@ -242,6 +260,7 @@ export default class App extends React.Component {
                   <Image
                     style={styles.itemImg}
                     source={{uri: `${item.prev_image}`}}
+                    cache={'force-cache'}
                   />
                   <View>
                     <Text>{item.title}</Text>

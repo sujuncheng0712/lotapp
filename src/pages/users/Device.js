@@ -8,7 +8,7 @@ import {
   Image,
   ToastAndroid,
   TouchableOpacity,
-  ScrollView,
+  ScrollView, BackHandler,
 } from 'react-native';
 import * as wechat from 'react-native-wechat';
 import Swiper from 'react-native-swiper';
@@ -79,10 +79,27 @@ export default class App extends React.Component {
   componentWillMount() {
     // 验证/读取 登陆状态
     this._checkLoginState();
+    BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
   }
 
   componentDidMount() {
-    //wechat.registerApp('wxed79edc328ec284a');
+    wechat.registerApp('wxed79edc328ec284a');
+  }
+
+  onBackAndroid = () => {
+    if (this.props.navigation.isFocused()) {
+      if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+        //最近2秒内按过back键，可以退出应用。
+        BackHandler.exitApp();
+      }
+      this.lastBackPressed = Date.now();
+      ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+      return true;
+    }
   }
 
   ReloadEquipments(LoginInfo) {

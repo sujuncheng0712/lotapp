@@ -119,6 +119,10 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+configurations.all {
+    resolutionStrategy.force 'com.android.support:support-v4:27.1.0'
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -196,7 +200,7 @@ dependencies {
     implementation project(':react-native-reanimated')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";
       debugImplementation files(hermesPath + "hermes-debug.aar")

@@ -1,6 +1,16 @@
 import React from 'react';
 import  district  from 'antd-mobile-demo-data';
-import {View, Text, StyleSheet, TouchableOpacity, TextInput, ToastAndroid,AsyncStorage,DeviceEventEmitter} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ToastAndroid,
+  AsyncStorage,
+  DeviceEventEmitter,
+  BackHandler,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { PickerView,Picker,Provider } from '@ant-design/react-native';
 import address1 from '../../../service/address';
@@ -50,9 +60,19 @@ export default class App extends React.Component {
       LoginInfo:'',
     };
   }
+
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle:navigation.getParam('title')
+    };
+  };
   // render创建之前
   componentWillMount() {
 
+  }
+
+  componentDidMount() {
+    //wechat.registerApp('wxed79edc328ec284a');
     let addressInfo = this.props.navigation.getParam('address','');
     this.setState({addressInfo:addressInfo})
     if (addressInfo !==''){
@@ -64,21 +84,11 @@ export default class App extends React.Component {
       })
     }
     console.log(addressInfo)
-  }
-
-  componentDidMount() {
-    //wechat.registerApp('wxed79edc328ec284a');
     this._checkLoginState();
   }
 
-  componentWillUnmount() {
-  };
 
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitle:navigation.getParam('title')
-    };
-  };
+
 
   // 验证本地存储的资料是否有效
   _checkLoginState = async () => {
@@ -95,11 +105,7 @@ export default class App extends React.Component {
   submit(){
     const {LoginInfo,contact,phone,address,area,addressInfo,defaultValue}  =this.state;
     let newDefault = defaultValue ? 1 :0;
-    console.log(contact);
-    console.log(phone);
-    console.log(address);
-    console.log(area);
-    console.log(addressInfo);
+
     if (contact ===''){
       ToastAndroid.show('收货人姓名必须填写！', ToastAndroid.SHORT);
       return false;
@@ -253,7 +259,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     borderBottomWidth:0.5,
     borderColor: '#bbb',
-    height:'12%',
+    height:50,
     padding: 5,
   },
   title:{

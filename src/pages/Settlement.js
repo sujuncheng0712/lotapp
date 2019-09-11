@@ -7,8 +7,9 @@ import {
   AsyncStorage,
   Image,
   ScrollView,
-  DeviceEventEmitter,
+  DeviceEventEmitter, BackHandler, ToastAndroid,
 } from 'react-native';
+import * as wechat from 'react-native-wechat';
 const url = 'https://iot2.dochen.cn/api';
 import CheckBox from 'react-native-check-box'
 export default class App extends React.Component {
@@ -39,11 +40,16 @@ export default class App extends React.Component {
       orderInfo: products,
       productsLists: products.data,
     })
+
+
   }
 
+  componentWillUnmount() {
+
+  }
   componentDidMount() {
     DeviceEventEmitter.addListener('Address', ()=> {this._checkLoginState()})
-    this._checkLoginState()
+    this._checkLoginState();
   }
 
   // 验证本地存储的资料是否有效
@@ -59,7 +65,7 @@ export default class App extends React.Component {
         res.json().then(info =>{
           console.log(info)
           if (info.status && info.uw_datas.length !== 0){
-            this.setState({balance:res.uw_datas[0].balance})
+            this.setState({balance:info.uw_datas[0].balance})
           }
         })
       })
@@ -86,6 +92,82 @@ export default class App extends React.Component {
     }
   };
 
+// 生成订单号
+  payCurr() {
+    const {productsLists, addressInfo,LoginInfo,value} = this.state;
+    if (addressInfo ===[]){
+      ToastAndroid.show('设置成功！', ToastAndroid.SHORT);
+      return false;
+    }
+    let urlInfo = `${url}/orders?uid=${LoginInfo.uid}&sale_type=${LoginInfo.sale_type}`;
+    fetch(urlInfo,{
+      method:'POST',
+      body:JSON.stringify({
+        products: productsLists,
+        contact: addressInfo,
+        message:null,
+        who_buy : 1 ,
+      })
+    }).then(res =>{
+      res.json().then(info =>{
+        console.log(info)
+        if (info.status){
+          if (value ===1){
+            let urlInfo = `${url}/orders/${info.data[0].uuid}/pay/wx?uid=${LoginInfo.uid}&oid=123&mid=${LoginInfo.mid}&sale_type=${LoginInfo.sale_type}`;
+            fetch(urlInfo,{
+              method:'POST',
+              body:JSON.stringify({
+                oid:'123',
+              })
+            }).then(res =>{
+              res.json().then(info =>{
+                console.log(info);
+                if (info.status){
+                  wechat.pay(
+                    {
+                      partnerId: '1517139621',  // 商家向财付通申请的商家id
+                      prepayId: info.data[0].prepayid,   // 预支付订单
+                      nonceStr: info.data[0].nonceStr,   // 随机串，防重发
+                      timeStamp: info.data[0].timeStamp,  // 时间戳，防重发
+                      package: info.data[0].package,    // 商家根据财付通文档填写的数据和签名
+                      sign: info.data[0].paySign,        // 商家根据微信开放平台文档对数据做的签名
+                    }
+                  ).then((success)=>{
+                    console.log(success)
+                  }).catch((error)=>{
+                    console.log(error)
+                  })
+
+                }else{
+                  ToastAndroid.show('订单生成失败！', ToastAndroid.SHORT);
+                }
+              })
+            })
+          }else if (value ===2){
+            let urlInfo = `${url}/orders/${info.data[0].uuid}/pay/wallet?real_uid=${LoginInfo.uid}&oid=123&mid=${LoginInfo.mid}&sale_type=${LoginInfo.sale_type}`;
+            fetch(urlInfo,{
+              method:'POST',
+              body:JSON.stringify({
+                oid:'123',
+              })
+            }).then(res=>{
+              res.json().then(info =>{
+                console.log(info);
+                if (info.status){
+                  ToastAndroid.show('支付成功！', ToastAndroid.SHORT);
+                  this.props.navigation.navigate('Home');
+                }else{
+                  if (info.code === 20004){
+                    ToastAndroid.show('余额不足！', ToastAndroid.SHORT);
+                  }
+                }
+              })
+            })
+          }
+        }
+      })
+    })
+  }
 
 
   render() {
@@ -129,7 +211,7 @@ export default class App extends React.Component {
             style={styles.addressItem}
             onPress={() => {
               addressInfo.address ?
-              this.props.navigation.navigate('Address') :this.props.navigation.navigate('Create');
+              this.props.navigation.push('Address') :this.props.navigation.push('Create');
             }}>
             <View style={styles.addressLeft}>
               <View style={styles.username}>
@@ -202,7 +284,7 @@ export default class App extends React.Component {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                this.props.navigation.navigate('ScanScreen');
+                this.payCurr();
               }}>
               <Text
                 style={{
