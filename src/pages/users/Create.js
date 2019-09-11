@@ -278,5 +278,6 @@ const styles = StyleSheet.create({
   },
   input:{
     width:'70%',
+    marginTop: 0,
   }
 })

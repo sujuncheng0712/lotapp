@@ -235,8 +235,8 @@ const styles = StyleSheet.create({
   },
   item:{
     width:'100%',
-    borderColor:'red',
-    borderWidth: 1,
+    borderColor:'#bbb',
+    borderWidth: 0.5,
     padding: 10,
   },
   one:{
