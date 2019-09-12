@@ -1,4 +1,3 @@
-import {createStackNavigator, createAppContainer} from 'react-navigation';
 import React from 'react';
 import {
   View,
@@ -99,7 +98,7 @@ export default class App extends React.Component {
           <View style={styles.orderList}>
             <TouchableOpacity
               style={styles.orderItem}
-              onPress={()=> this.props.navigation.navigate('ScanScreen')}>
+              onPress={()=> this.props.navigation.navigate('Orders',{title:'未付款'})}>
               <Image
                 style={styles.orderImg}
                 source={require('../../images/user/unpay.png')}
@@ -108,7 +107,7 @@ export default class App extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.orderItem}
-              onPress={()=> this.props.navigation.navigate('ScanScreen')}>
+              onPress={()=> this.props.navigation.navigate('Orders',{title:'待发货'})}>
               <Image
                 style={styles.orderImg}
                 source={require('../../images/user/unsend.png')}
@@ -117,7 +116,7 @@ export default class App extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.orderItem}
-              onPress={()=> this.props.navigation.navigate('ScanScreen')}>
+              onPress={()=> this.props.navigation.navigate('Orders',{title:'待收货'})}>
               <Image
                 style={styles.orderImg}
                 source={require('../../images/user/car.png')}
@@ -126,7 +125,7 @@ export default class App extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.orderItem}
-              onPress={()=> this.props.navigation.navigate('ScanScreen')}>
+              onPress={()=> this.props.navigation.navigate('Orders',{title:'退款/售后'})}>
               <Image
                 style={styles.orderImg}
                 source={require('../../images/user/havesell.png')}
@@ -149,8 +148,6 @@ const styles = StyleSheet.create({
   },
   content:{
     flex:0.6,
-    borderWidth:1,
-    borderColor:'red',
   },
   button: {
     backgroundColor: '#0078D7',
@@ -176,8 +173,6 @@ const styles = StyleSheet.create({
   orderList:{
     padding:10,
     flexDirection: 'row',
-    borderWidth:1,
-    borderColor:'blue',
   },
   orderItem:{
     flex:0.25,
@@ -186,6 +181,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     padding: 5,
     height:30,
+    alignItems: 'center',
   },
   orderImg:{
     width:45,

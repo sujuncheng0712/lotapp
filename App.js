@@ -9,10 +9,11 @@ import Device from './src/pages/users/Device';
 import Record from './src/pages/users/Record';
 import Address from './src/pages/users/Address';
 import Create from './src/pages/users/Create';
-import AddDevice from './src/pages/Device/AddDevice';
-import ScanScreen from './src/pages/Device/ScanScreen';
-import Activation from './src/pages/Device/Activation';
-
+import AddDevice from './src/pages/device/AddDevice';
+import ScanScreen from './src/pages/device/ScanScreen';
+import Activation from './src/pages/device/Activation';
+import Orders from './src/pages/order/Orders';
+import Order from './src/pages/order/Order';
 import Settlement from './src/pages/Settlement';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
@@ -31,6 +32,8 @@ const AppStack = createStackNavigator(
     Settlement:Settlement,
     Address:Address,
     Create:Create,
+    Orders:Orders,
+    Order:Order,
   },
   // {
   //   initialRouteName: 'Home',
