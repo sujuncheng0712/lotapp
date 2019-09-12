@@ -45,7 +45,7 @@ export default class App extends React.Component {
   }
 
   componentWillUnmount() {
-
+   // DeviceEventEmitter.removeAllListeners();
   }
   componentDidMount() {
     DeviceEventEmitter.addListener('Address', ()=> {this._checkLoginState()})

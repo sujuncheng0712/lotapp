@@ -38,7 +38,7 @@ export default class App extends React.Component {
     this._checkLoginState()
   }
   componentWillUnmount() {
-    DeviceEventEmitter.removeAllListeners();
+    //DeviceEventEmitter.removeAllListeners();
   };
 
 
