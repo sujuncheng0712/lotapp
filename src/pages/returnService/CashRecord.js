@@ -13,8 +13,9 @@ export default class App extends React.Component {
     };
   }
   static navigationOptions = ({navigation}) => {
+    let title = navigation.getParam('state');
     return {
-      headerTitle: '补贴记录',
+      headerTitle: title==='record' ? '补贴记录' :title ==='recharge'? '充值记录' :'提现记录',
     };
   };
 
@@ -91,7 +92,8 @@ export default class App extends React.Component {
     }
   };
   render() {
-    const {data} = this.state;
+    const {data,deposit} = this.state;
+    const title = this.props.navigation.getParam('state');
     const separator = () =>  {
       return (
         <View style={styles.separator}></View>
@@ -99,25 +101,44 @@ export default class App extends React.Component {
     };
     return (
       <View style={{flex: 1,}}>
-        <View style={styles.title}>
+        { title === 'recharge' ? <View style={styles.title}>
           <Text style={styles.titleDate}>时间</Text>
-          <Text style={styles.titleItem}>类型</Text>
+          <Text style={styles.titleItem}>电话号码</Text>
           <Text style={styles.titleItem}>金额</Text>
-          <Text style={styles.titleItem}>余额</Text>
+          <Text style={styles.titleItem}>类型</Text>
         </View>
+          :
+          <View style={styles.title}>
+           <Text style={styles.titleDate}>时间</Text>
+            <Text style={styles.titleItem}>类型</Text>
+           <Text style={styles.titleItem}>金额</Text>
+           <Text style={styles.titleItem}>余额</Text>
+           </View>
+        }
+
         <View  style={{flex:1}}>
           <FlatList
             style={{flex:1}}
-            data={data}
+            data={title === 'recharge' ? deposit : data}
             keyExtractor={(item) => String(item.id)}
             ItemSeparatorComponent={separator}
             renderItem={({item}) =>
+            title === 'recharge' ?
+              <View style={styles.item}>
+                <Text style={styles.titleDate}>{item.created_at}</Text>
+                <Text style={styles.titlePhone}>{item.phone}</Text>
+                <Text style={styles.titleItem}>{item.amount}</Text>
+                <Text style={styles.titleItem}>{item.type}</Text>
+              </View>
+              :
               <View style={styles.item}>
                 <Text style={styles.titleDate}>{item.created_at}</Text>
                 <Text style={styles.titleItem}>{item.type}</Text>
                 <Text style={styles.titleItem}>{item.amount}</Text>
                 <Text style={styles.titleItem}>{item.balance}</Text>
               </View>
+
+
             }
           />
         </View>
@@ -132,6 +153,11 @@ const styles = StyleSheet.create({
   },
   titleDate:{
     flex:1.2,
+    textAlign:'center',
+    padding:10,
+  },
+  titlePhone:{
+    flex:1.4,
     textAlign:'center',
     padding:10,
   },

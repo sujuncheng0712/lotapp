@@ -40,7 +40,7 @@ export default class App extends React.Component {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            this.props.navigation.navigate('ScanScreen');
+            this.props.navigation.navigate('ScanScreen',{state:'add'});
           }}>
           <Text
             style={{

@@ -221,8 +221,50 @@ export default class App extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ }}>
+        <View>
           {showList}
+        </View>
+        <View style={{padding:10}}>
+          <Text>必备工具</Text>
+        </View>
+
+        <View style={styles.orderList}>
+          <TouchableOpacity
+            style={styles.orderItem}
+            onPress={()=> this.props.navigation.navigate('Code')}>
+            <Image
+              style={styles.orderImg}
+              source={require('../../images/pic/look.png')}
+            />
+            <Text>激活码</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.orderItem}
+            onPress={()=> this.props.navigation.navigate('Orders',{title:'待发货'})}>
+            <Image
+              style={styles.orderImg}
+              source={require('../../images/pic/extend.png')}
+            />
+            <Text>我要分享</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.orderItem}
+            onPress={()=> this.props.navigation.navigate('Setup')}>
+            <Image
+              style={styles.orderImg}
+              source={require('../../images/user/setup.png')}
+            />
+            <Text>我要报装</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.orderItem}
+            onPress={()=> this.props.navigation.navigate('Fix')}>
+            <Image
+              style={styles.orderImg}
+              source={require('../../images/pic/fix.png')}
+            />
+            <Text>我要保修</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -231,14 +273,12 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   top:{
-    flex: 0.4,
+    flex: 0.55,
     width: '100%',
     alignItems: 'center',
   },
   content:{
-    flex:0.3,
-    borderColor: 'red',
-    borderWidth:1,
+    flex:0.40,
   },
   button: {
     backgroundColor: '#0078D7',
@@ -249,7 +289,6 @@ const styles = StyleSheet.create({
     width: 50,
     fontSize: 10,
     height:20,
-
   },
   ImageBackground:{
     flex:1,

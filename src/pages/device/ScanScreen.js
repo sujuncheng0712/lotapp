@@ -20,7 +20,8 @@ class ScanScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      moveAnim: new Animated.Value(0)
+      moveAnim: new Animated.Value(0),
+      state:'',
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -30,6 +31,8 @@ class ScanScreen extends React.Component {
   };
 
   componentDidMount() {
+    let state = this.props.navigation.getParam('state','');
+    this.setState({state})
     this.startAnimation();
   }
 
@@ -47,6 +50,7 @@ class ScanScreen extends React.Component {
   //  识别二维码
   onBarCodeRead = (result) => {
     const { navigate } = this.props.navigation;
+    const {state} = this.state;
     const {data} = result;
     const codeReg = /^[abcdefh\d]{6,16}$/i;
     if (codeReg.test(data)) {
@@ -54,15 +58,26 @@ class ScanScreen extends React.Component {
         "设备扫码成功！",
         ToastAndroid.SHORT
       );
-      this.props.navigation.navigate('Activation', {
-        eid: data
-      })
+      if (this.state==='add'){
+        this.props.navigation.navigate('Activation', {
+          eid: data
+        })
+      }else if (state==='fix'){
+        this.props.navigation.navigate('Fix', {
+          eid: data
+        })
+      }
+
     }else{
       ToastAndroid.show(
         "错误，不是有效的设备ID，请扫描正确的二维码！",
         ToastAndroid.SHORT
       );
-      this.props.navigation.navigate('AddDevice')
+      if (this.state==='add'){
+        this.props.navigation.navigate('AddDevice')
+      }else if (state==='fix'){
+        this.props.navigation.navigate('Fix')
+      }
     }
   };
 

@@ -18,12 +18,16 @@ import Settlement from './src/pages/Settlement';
 import CashRecord from './src/pages/returnService/CashRecord';
 import Wallet from './src/pages/returnService/Wallet';
 import Cash from './src/pages/returnService/Cash';
+import Code from './src/pages/returnService/Code';
+import Setup from './src/pages/returnService/Setup';
+import AfterRecord from './src/pages/returnService/AfterRecord';
+import Fix from './src/pages/returnService/Fix';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
   {
-    Cash:Cash,
+
     Home: Home,
     Login: Login,
     MyCenter: MyCenter,
@@ -40,7 +44,11 @@ const AppStack = createStackNavigator(
     Order:Order,
     CashRecord:CashRecord,
     Wallet:Wallet,
-
+    Cash:Cash,
+    Code:Code,
+    Setup:Setup,
+    AfterRecord:AfterRecord,
+    Fix:Fix,
   },
   // {
   //   initialRouteName: 'Home',
