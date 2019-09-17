@@ -31,7 +31,7 @@ class ScanScreen extends React.Component {
   };
 
   componentDidMount() {
-    let state = this.props.navigation.getParam('state','');
+    let state = this.props.navigation.getParam('state');
     this.setState({state})
     this.startAnimation();
   }
@@ -58,7 +58,7 @@ class ScanScreen extends React.Component {
         "设备扫码成功！",
         ToastAndroid.SHORT
       );
-      if (this.state==='add'){
+      if (state==='add'){
         this.props.navigation.navigate('Activation', {
           eid: data
         })

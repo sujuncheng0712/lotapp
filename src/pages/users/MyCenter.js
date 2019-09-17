@@ -8,7 +8,7 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  Image,
+  Image,ScrollView
 } from 'react-native';
 import {Button, WhiteSpace, WingBlank} from '@ant-design/react-native';
 import * as wechat from 'react-native-wechat';
@@ -121,6 +121,7 @@ export default class App extends React.Component {
       )
     })
     return (
+      <ScrollView>
       <View style={{flex:1}}>
         <View style={styles.top}>
           <ImageBackground
@@ -240,7 +241,7 @@ export default class App extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.orderItem}
-            onPress={()=> this.props.navigation.navigate('Orders',{title:'待发货'})}>
+            onPress={()=> this.props.navigation.navigate('Share',{state:'user'})}>
             <Image
               style={styles.orderImg}
               source={require('../../images/pic/extend.png')}
@@ -258,7 +259,7 @@ export default class App extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.orderItem}
-            onPress={()=> this.props.navigation.navigate('Fix')}>
+            onPress={()=> this.props.navigation.navigate('Fix',{eid:''})}>
             <Image
               style={styles.orderImg}
               source={require('../../images/pic/fix.png')}
@@ -267,18 +268,20 @@ export default class App extends React.Component {
           </TouchableOpacity>
         </View>
       </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   top:{
-    flex: 0.55,
+    //flex: 0.55,
     width: '100%',
     alignItems: 'center',
+    height:200,
   },
   content:{
-    flex:0.40,
+    //flex:0.40,
   },
   button: {
     backgroundColor: '#0078D7',

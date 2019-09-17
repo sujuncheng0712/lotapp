@@ -16,10 +16,8 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.theweflex.react.WeChatPackage;
-
-
 import java.util.List;
-
+import com.imagepicker.ImagePickerPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {

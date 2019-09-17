@@ -22,12 +22,14 @@ import Code from './src/pages/returnService/Code';
 import Setup from './src/pages/returnService/Setup';
 import AfterRecord from './src/pages/returnService/AfterRecord';
 import Fix from './src/pages/returnService/Fix';
+import Share from './src/pages/returnService/Share';
+import Extend from './src/pages/returnService/Extend';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
   {
-
+    Extend:Extend,
     Home: Home,
     Login: Login,
     MyCenter: MyCenter,
@@ -49,6 +51,8 @@ const AppStack = createStackNavigator(
     Setup:Setup,
     AfterRecord:AfterRecord,
     Fix:Fix,
+    Share:Share,
+    //Extend:Extend,
   },
   // {
   //   initialRouteName: 'Home',

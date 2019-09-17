@@ -1,4 +1,3 @@
-import {createStackNavigator, createAppContainer} from 'react-navigation';
 import React from 'react';
 import {View, Text, AsyncStorage, StyleSheet, TouchableOpacity, ToastAndroid, TextInput, Image} from 'react-native';
 import { PickerView,Picker,Provider } from '@ant-design/react-native';
@@ -6,7 +5,14 @@ import * as wechat from 'react-native-wechat';
 import address1 from '../../../service/address';
 import Icon from 'react-native-vector-icons/index';
 import district from 'antd-mobile-demo-data';
+import ImagePicker from 'react-native-image-picker';
 const url = 'https://iot2.dochen.cn/api';
+const instructions = Platform.select({
+  ios: 'Press Cmd+R to reload,\n' +
+    'Cmd+D or shake for dev menu',
+  android: 'Double tap R on your keyboard to reload,\n' +
+    'Shake or press menu button for dev menu',
+});
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +33,8 @@ export default class App extends React.Component {
       address:'',
       LoginInfo:'',
       eid:'',
+      avatarSource: null,
+      videoSource: null
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -37,15 +45,16 @@ export default class App extends React.Component {
 
   // render创建之前
   componentWillMount() {
-    const {navigation} = this.props;
-    const eid = navigation.getParam('eid', 'no');
-    this.setState({eid})
+
     // 验证/读取 登陆状态
     this._checkLoginState();
   }
 
   componentDidMount() {
     //wechat.registerApp('wxed79edc328ec284a');
+    const {navigation} = this.props;
+    const eid = navigation.getParam('eid','');
+    this.setState({eid})
   }
 
   // 验证本地存储的资料是否有效
@@ -60,16 +69,21 @@ export default class App extends React.Component {
     }
   };
   signUp(){
-    const {name,phone,area,address,LoginInfo} = this.state;
+    const {name,phone,area,address,remark,LoginInfo,eid,videoSource} = this.state;
     let urlInfo=`${url}/userSignUp`;
     fetch(urlInfo,{
       method:'POST',
       body:JSON.stringify({
         uid:LoginInfo.uid,
+        eid:eid,
         name:name,
         phone:phone,
         area:area,
         address:address,
+        remark:remark,
+        image:videoSource,
+        sale_type:LoginInfo.sale_type,
+        type:2,
         mid:LoginInfo.mid,
       })
     }).then(res =>{
@@ -78,16 +92,97 @@ export default class App extends React.Component {
         if (info.status){
           ToastAndroid.show('提交成功', ToastAndroid.SHORT);
           this.props.navigation.navigate('Home')
-        } else{
+        }else{
           ToastAndroid.show('提交失败', ToastAndroid.SHORT);
         }
       })
     })
   }
 
-  render() {
-    const {area,eid} = this.state;
+  //选择图片
+  selectPhotoTapped() {
+    const options = {
+      title: '选择图片',
+      cancelButtonTitle: '取消',
+      takePhotoButtonTitle: '拍照',
+      chooseFromLibraryButtonTitle: '选择照片',
+      cameraType: 'back',
+      mediaType: 'photo',
+      videoQuality: 'high',
+      durationLimit: 10,
+      maxWidth: 300,
+      maxHeight: 300,
+      quality: 0.8,
+      angle: 0,
+      allowsEditing: false,
+      noData: false,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
 
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        let source = { uri: response.uri };
+
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({
+          avatarSource: source
+        });
+      }
+    });
+  }
+
+  //选择视频
+  selectVideoTapped() {
+    const options = {
+
+      title: '选择视频',
+      cancelButtonTitle: '取消',
+      takePhotoButtonTitle: '录制视频',
+      chooseFromLibraryButtonTitle: '选择视频',
+      mediaType: 'video',
+      videoQuality: 'medium'
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled video picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        this.setState({
+          videoSource: response.uri
+        });
+      }
+    });
+  }
+
+
+  render() {
+    const {area} = this.state;
+    const {navigation} = this.props;
+    const eid = navigation.getParam('eid','');
     return (
       <Provider>
         <View style={{flex: 1,}}>
@@ -105,8 +200,8 @@ export default class App extends React.Component {
               <TextInput
                 style={styles.eidInput}
                 placeholder={'请输入设备号'}
-                onChangeText={(e)=>{this.setState({eid:e});console.log(e)}}
                 defaultValue={eid}
+                onChangeText={(e)=>{this.setState({eid:e});console.log(e)}}
               />
               <TouchableOpacity
                 onPress={()=>{this.props.navigation.navigate('ScanScreen',{state:'fix'});}}
@@ -172,6 +267,22 @@ export default class App extends React.Component {
               />
             </View>
 
+            <View style={styles.item}>
+              <Text style={styles.title}>故障图片：</Text>
+              <TouchableOpacity style={styles.input} onPress={this.selectPhotoTapped.bind(this)}>
+                <View >
+                  { this.state.avatarSource === null ? <Text>选择照片</Text> :
+                    <Image style={styles.avatar} source={this.state.avatarSource} />
+                  }
+                </View>
+              </TouchableOpacity>
+
+
+              { this.state.videoSource &&
+              <Text style={{margin: 8, textAlign: 'center'}}>{this.state.videoSource}</Text>
+              }
+            </View>
+
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
@@ -222,7 +333,7 @@ const styles = StyleSheet.create({
     borderWidth:0.5,
     borderRadius: 5,
     height:40,
-    marginRight:40,
+    marginRight:43,
   },
   eidInput:{
     width:'60%',
@@ -243,11 +354,16 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize:10,
     padding: 5,
-    marginTop: 40,
+    marginTop:130,
   },
   topImg:{
     width:40,
     height:40,
     marginLeft:5,
   },
+  avatar: {
+    marginTop:50,
+    width: 100,
+    height: 100
+  }
 })
