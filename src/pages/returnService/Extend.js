@@ -1,7 +1,9 @@
 import {createStackNavigator, createAppContainer} from 'react-navigation';
 import React from 'react';
-import {View, Text, AsyncStorage, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput} from 'react-native';
+import {View, Text, AsyncStorage, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { PickerView,Picker,Provider } from '@ant-design/react-native';
+import { WebView } from 'react-native-webview';
+import Video from 'react-native-video'
 import * as wechat from 'react-native-wechat';
 import address1 from '../../../service/address';
 import district from 'antd-mobile-demo-data';
@@ -9,17 +11,10 @@ const url = 'https://iot2.dochen.cn/api';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.onPress = () => {
-      setTimeout(() => {
-        this.setState({
-          data: district,
-        });
-      }, 500);
-    };
-    this.onChange = value => {
-      this.setState({ area:value });
-    };
+    this.layouty = 0,
     this.state = {
+      paused: true,
+
       type : '',
       state:'',
       play:false,
@@ -35,6 +30,7 @@ export default class App extends React.Component {
       remark:'',        //备注信息
       mid:'',
       model:'',
+      waiter:false,
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -81,21 +77,19 @@ export default class App extends React.Component {
       this.setState({number:1});
       this.forceUpdate();
     }
-
   }
 
   render() {
-    const {state,type,number,area} = this.state;
+    const {state,type,number,area,waiter} = this.state;
     console.log(number);
     return (
-
-
-        <View style={{flex:1,padding:10}}>
-          <ScrollView style={{height:1000}}>
+        <View style={{flex:1,padding:5}}>
+          <ScrollView style={{flex:1}} horizontal={false} ref={(view) => { this.myScrollView = view; }}>
           <Text style={{padding:10,textAlign:'center',fontWeight:'bold'}}>
             DGK{type ==='物联水机A20' ? '':'移动水吧A16' }，半价优惠活动
           </Text>
-          <View style={styles.item}>
+
+          <View style={styles.item2}>
             <Image
               style={styles.Img}
               resizeMode ={'stretch'}
@@ -103,78 +97,20 @@ export default class App extends React.Component {
             />
           </View>
 
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/A_02.jpg')}
-            />
-          </View>
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/A_03.jpg')}
-            />
-          </View>
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/A_04.jpg')}
-            />
-          </View>
+              {/*<Video*/}
+              {/*  style={styles.item2}*/}
+              {/* // source={require('../returnService/aa.mp4')}*/}
+              {/*  source={{uri: "http://gw.dochen.cn/assets/test.mp4"}}*/}
+              {/*  paused={this.state.paused}//暂停*/}
+              {/*  repeat={true}//确定在到达结尾时是否重复播放视频。*/}
+              {/*/>*/}
+            <WebView
+              style={styles.item2}
+              source={{uri:"https://v.qq.com/txp/iframe/player.html?vid=c06494ry9ef"}}
+            >
+            </WebView>
 
 
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/B_01.jpg')}
-            />
-          </View>
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/B_02.jpg')}
-            />
-          </View>
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/B_03.jpg')}
-            />
-          </View>
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/B_04.jpg')}
-            />
-          </View>
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/B_05.jpg')}
-            />
-          </View>
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/B_06.jpg')}
-            />
-          </View>
-          <View style={styles.item}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-              source={require('../../images/imgA20/B_07.jpg')}
-            />
-          </View>
           <View>
             <Text style={{textAlign:'center'}}>
               填写报名信息
@@ -207,7 +143,7 @@ export default class App extends React.Component {
               </View>
             </View>
             <Text>填写安装地址</Text>
-            <View style={styles.list}>
+            <View style={styles.list}  onLayout={event=>{this.layouty = event.nativeEvent.layout.y}}>
               <Provider>
                 <View style={styles.item}>
                   <Text style={styles.title}>联系人：</Text>
@@ -227,19 +163,11 @@ export default class App extends React.Component {
                 </View>
                 <View style={styles.item}>
                   <Text style={styles.title}>地区：</Text>
-                  <View style={styles.itemInput}  onPress={this.onPress}>
-                    <Picker
-                      data={address1}
-                      cols={3}
-                      value={this.state.area}
-                      placeholder={'请选择地区'}
-                      onChange={this.onChange}
-                    >
-                      <Text style={{height:'100%',paddingTop: 10}}>
-                        {area}
-                      </Text>
-                    </Picker>
-                  </View>
+                  <TextInput
+                    style={styles.itemInput}
+                    placeholder={'请输入地区'}
+                    onChangeText={(e)=>{this.setState({area:e})}}
+                  />
                 </View>
                 <View style={styles.item}>
                   <Text style={styles.title}>详细地址：</Text>
@@ -272,12 +200,63 @@ export default class App extends React.Component {
                 </TouchableOpacity>
               </Provider>
             </View>
-
             <View>
-
             </View>
           </View>
           </ScrollView>
+          <View style={{flexDirection:'row',height:40,borderColor:'red',borderWidth:1,}}>
+            <TouchableOpacity
+              style={{flex:1}}
+              onPress={() => {
+                this.setState({waiter:true});
+                this.forceUpdate();
+              }}>
+              <Text
+                style={{
+                  textAlign:'center',
+                  paddingTop:10,
+                }}
+              >联系客服</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{flex:1}}
+              onPress={() => {
+                this.myScrollView.scrollTo({ y: 1000, x: 0, animated: true});
+              }}>
+              <Text
+                style={styles.signUp}
+              >立即报名</Text>
+            </TouchableOpacity>
+          </View>
+          {
+            waiter ===true ?
+              <View
+                style={styles.buttom}>
+                <View style={styles.waiter}>
+                  <Image
+                    style={styles.Img}
+                    resizeMode ={'stretch'}
+                    source={require('../../images/imgA16/code.png')}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.cha}
+                  onPress={() => {
+                    this.setState({waiter:false});
+                    this.forceUpdate();
+                  }}
+                >
+                  <Image
+                    style={styles.chaImg}
+                    resizeMode ={'stretch'}
+                    source={require('../../images/imgA16/cha.png')}
+                  />
+                </TouchableOpacity>
+              </View>:
+              null
+          }
+
+
         </View>
 
 
@@ -329,8 +308,6 @@ const styles = StyleSheet.create({
   },
   button:{
     backgroundColor: '#FF7A01',
-    borderColor:'#FF7A01',
-    borderWidth:0.5,
     color:'#FF7A01',
     textAlign:'center',
     borderRadius:5,
@@ -338,5 +315,39 @@ const styles = StyleSheet.create({
     fontSize:10,
     padding: 5,
     marginTop: 10,
+    marginBottom: 20,
   },
+  signUp:{
+    textAlign:'center',
+    backgroundColor:'#FF7A01',
+    color:'#fff',
+    flex:1,
+    paddingTop: 10,
+  },
+  waiter:{
+    position:'absolute',
+    height:300,
+    width:'75%',
+    top:80,
+    left:50,
+  },
+  cha:{
+    position:'absolute',
+    height:50,
+    width:'75%',
+    top:370,
+    left:50,
+    alignItems:'center',
+  },
+  chaImg:{
+    height:'100%',
+    width:'20%',
+  },
+  buttom:{
+    height:'110%',
+    width:'110%',
+    position:'absolute',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    alignItems: 'center',
+  }
 })

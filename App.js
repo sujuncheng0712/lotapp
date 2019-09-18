@@ -29,7 +29,7 @@ console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
   {
-    Extend:Extend,
+   // Extend:Extend,
     Home: Home,
     Login: Login,
     MyCenter: MyCenter,
@@ -52,7 +52,7 @@ const AppStack = createStackNavigator(
     AfterRecord:AfterRecord,
     Fix:Fix,
     Share:Share,
-    //Extend:Extend,
+    Extend:Extend,
   },
   // {
   //   initialRouteName: 'Home',
