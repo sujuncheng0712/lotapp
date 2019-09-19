@@ -29,7 +29,6 @@ console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
   {
-   // Extend:Extend,
     Home: Home,
     Login: Login,
     MyCenter: MyCenter,

@@ -1,6 +1,16 @@
 import {createStackNavigator, createAppContainer} from 'react-navigation';
 import React from 'react';
-import {View, Text, AsyncStorage, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  AsyncStorage,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+  ToastAndroid,
+} from 'react-native';
 import { PickerView,Picker,Provider } from '@ant-design/react-native';
 import { WebView } from 'react-native-webview';
 import Video from 'react-native-video'
@@ -31,6 +41,10 @@ export default class App extends React.Component {
       mid:'',
       model:'',
       waiter:false,
+      LoginInfo:'',
+      province:'',
+      city:'',
+      town:'',
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -41,6 +55,9 @@ export default class App extends React.Component {
 
   // render创建之前
   componentWillMount() {
+    let type = this.props.navigation.getParam('type','');
+    let state = this.props.navigation.getParam('state','');
+    this.setState({type, state});
     // 验证/读取 登陆状态
     this._checkLoginState();
   }
@@ -59,6 +76,62 @@ export default class App extends React.Component {
       this.props.navigation.navigate('Login');
     }
   };
+
+  submit(){
+    let {  username, phone, area, address, remark,number,LoginInfo,type,province, city,town} = this.state;
+    let model = type ==='A20' ? 'DCA20-A' :'DCA16-A';
+    console.log(username)
+    console.log(phone)
+    console.log(address)
+    console.log(remark)
+    console.log(number)
+    console.log(model)
+    console.log(province)
+    console.log(city)
+    console.log(town)
+    if(!(username && phone && province && city && town   && address)){
+      ToastAndroid.show('*不能为空', ToastAndroid.SHORT);
+      return false;
+    }
+
+    fetch(`${url}/userSignUp`,{
+      method:'POST',
+      body:JSON.stringify({
+        mid:LoginInfo.mid,
+        name:username,
+        phone,
+        province,
+        city,
+        town,
+        quantity:number,
+        address,
+        remark,
+        model:model,
+      })
+    }).then(res=>{
+      if(res.ok){
+        res.json().then(info=>{
+          console.log(info)
+          if(info.status){
+            ToastAndroid.show('提交成功', ToastAndroid.SHORT);
+            setTimeout(()=>{
+              this.setState({
+                username:'',
+                phone:'',
+                province:'',
+                city:'',
+                town:'',
+                address:'',
+                remark:'',
+              });
+              this.myScrollView.scrollTo({ y: 0, x: 0, animated: true});
+              //this.props.navigation.navigate('Home')
+            },800)
+          }
+        })
+      }
+    });
+  }
 
   componentDidMount() {
     //wechat.registerApp('wxed79edc328ec284a');
@@ -81,21 +154,49 @@ export default class App extends React.Component {
 
   render() {
     const {state,type,number,area,waiter} = this.state;
-    console.log(number);
+    console.log(state);
+    console.log(type);
     return (
         <View style={{flex:1,padding:5}}>
           <ScrollView style={{flex:1}} horizontal={false} ref={(view) => { this.myScrollView = view; }}>
           <Text style={{padding:10,textAlign:'center',fontWeight:'bold'}}>
-            DGK{type ==='物联水机A20' ? '':'移动水吧A16' }，半价优惠活动
+            DGK{type ==='A20' ? '物联水机A20':'移动水吧A16' }，半价优惠活动
           </Text>
 
-          <View style={styles.item2}>
-            <Image
-              style={styles.Img}
-              resizeMode ={'stretch'}
-            source={require('../../images/imgA20/A_01.jpg')}
-            />
-          </View>
+
+            {type ==='A20' ?
+              <View style={{flex:1}}>
+              <View style={styles.imgItem}>
+                <Image
+                  style={styles.Img}
+                  resizeMode ={'stretch'}
+                  source={require('../../images/imgA20/A_01.jpg')}
+                />
+              </View>
+                <WebView
+                  style={styles.video}
+                  source={{uri:"https://v.qq.com/txp/iframe/player.html?vid=c06494ry9ef"}}
+                >
+                </WebView>
+              </View>
+              :
+              <View style={{flex:1}}>
+                <View style={styles.imgItem}>
+                  <Image
+                    style={styles.Img}
+                    resizeMode ={'stretch'}
+                    source={require('../../images/imgA16/A_01.jpg')}
+                  />
+                </View>
+                <WebView
+                  style={styles.video}
+                  source={{uri:"https://v.qq.com/txp/iframe/player.html?vid=l0563bbxvyk"}}
+                >
+                </WebView>
+              </View>
+            }
+
+
 
               {/*<Video*/}
               {/*  style={styles.item2}*/}
@@ -104,11 +205,7 @@ export default class App extends React.Component {
               {/*  paused={this.state.paused}//暂停*/}
               {/*  repeat={true}//确定在到达结尾时是否重复播放视频。*/}
               {/*/>*/}
-            <WebView
-              style={styles.item2}
-              source={{uri:"https://v.qq.com/txp/iframe/player.html?vid=c06494ry9ef"}}
-            >
-            </WebView>
+
 
 
           <View>
@@ -146,34 +243,56 @@ export default class App extends React.Component {
             <View style={styles.list}  onLayout={event=>{this.layouty = event.nativeEvent.layout.y}}>
               <Provider>
                 <View style={styles.item}>
-                  <Text style={styles.title}>联系人：</Text>
+                  <Text style={styles.title}>*联系人：</Text>
                   <TextInput
                     style={styles.itemInput}
                     placeholder={'请输入联系人'}
-                    onChangeText={(e)=>{this.setState({name:e});console.log(e)}}
+                    value={this.state.username}
+                    onChangeText={(e)=>{this.setState({username:e});console.log(e)}}
                   />
                 </View>
                 <View style={styles.item}>
-                  <Text style={styles.title}>联系电话：</Text>
+                  <Text style={styles.title}>*联系电话：</Text>
                   <TextInput
                     style={styles.itemInput}
                     placeholder={'请输入联系电话'}
+                    value={this.state.phone}
                     onChangeText={(e)=>{this.setState({phone:e})}}
                   />
                 </View>
                 <View style={styles.item}>
-                  <Text style={styles.title}>地区：</Text>
+                  <Text style={styles.title}>*省：</Text>
                   <TextInput
                     style={styles.itemInput}
-                    placeholder={'请输入地区'}
-                    onChangeText={(e)=>{this.setState({area:e})}}
+                    placeholder={'请输入省'}
+                    value={this.state.province}
+                    onChangeText={(e)=>{this.setState({province:e})}}
                   />
                 </View>
                 <View style={styles.item}>
-                  <Text style={styles.title}>详细地址：</Text>
+                  <Text style={styles.title}>*市：</Text>
+                  <TextInput
+                    style={styles.itemInput}
+                    placeholder={'请输入市'}
+                    value={this.state.city}
+                    onChangeText={(e)=>{this.setState({city:e})}}
+                  />
+                </View>
+                <View style={styles.item}>
+                  <Text style={styles.title}>*县/区：</Text>
+                  <TextInput
+                    style={styles.itemInput}
+                    placeholder={'请输入县/区'}
+                    value={this.state.town}
+                    onChangeText={(e)=>{this.setState({town:e})}}
+                  />
+                </View>
+                <View style={styles.item}>
+                  <Text style={styles.title}>*详细地址：</Text>
                   <TextInput
                     style={styles.itemInput}
                     placeholder={'请输入详细地址'}
+                    value={this.state.address}
                     onChangeText={(e)=>{this.setState({address:e})}}
                   />
                 </View>
@@ -182,6 +301,7 @@ export default class App extends React.Component {
                   <TextInput
                     style={styles.itemInput}
                     placeholder={'请输入备注信息'}
+                    value={this.state.remark}
                     onChangeText={(e)=>{this.setState({remark:e})}}
                   />
                 </View>
@@ -189,14 +309,14 @@ export default class App extends React.Component {
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
-                    this.signUp();
+                    this.submit();
                   }}>
                   <Text
                     style={{
                       color:'white',
                       textAlign:'center',
                     }}
-                  >确 认</Text>
+                  >提交完成报名</Text>
                 </TouchableOpacity>
               </Provider>
             </View>
@@ -204,7 +324,8 @@ export default class App extends React.Component {
             </View>
           </View>
           </ScrollView>
-          <View style={{flexDirection:'row',height:40,borderColor:'red',borderWidth:1,}}>
+          <View
+            style={{flexDirection:'row',height:40,borderColor: '#bbb',borderWidth: 0.5,borderRadius:5}}>
             <TouchableOpacity
               style={{flex:1}}
               onPress={() => {
@@ -272,12 +393,10 @@ const styles = StyleSheet.create({
     padding: 5,
     marginRight:50,
   },
-  item2:{
+  imgItem:{
     width:'100%',
     height:300,
     marginBottom:2,
-    borderColor:'blue',
-    borderWidth:1,
   },
   Img:{
     height:"100%",
@@ -349,5 +468,9 @@ const styles = StyleSheet.create({
     position:'absolute',
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
     alignItems: 'center',
+  },
+  video:{
+    width:'100%',
+    height:250,
   }
 })
