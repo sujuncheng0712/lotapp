@@ -360,7 +360,12 @@ export default class App extends React.Component {
         <View style={{flex: 1}}>
           <ScrollView>
             {lists.map((item, key) => (
-              <View style={styles.item}>
+              <TouchableOpacity 
+               style={styles.item}
+               onPress={() => {
+                this.props.navigation.navigate('DeviceIndex',{eid:item.uuid});
+              }}
+              >
                 {item.model === 'DCA16-A' ? (
                   <View>
                     <Image
@@ -422,7 +427,7 @@ export default class App extends React.Component {
                     {item.activation_at ? '已激活' : '未激活'}
                   </Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </View>

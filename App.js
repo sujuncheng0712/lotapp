@@ -10,6 +10,10 @@ import Record from './src/pages/users/Record';
 import Address from './src/pages/users/Address';
 import Create from './src/pages/users/Create';
 import AddDevice from './src/pages/device/AddDevice';
+import DeviceIndex from './src/pages/device/DeviceIndex';
+import Status from './src/pages/device/Status';
+import water from './src/pages/device/Water';
+import Filter from './src/pages/device/Filter';
 import ScanScreen from './src/pages/device/ScanScreen';
 import Activation from './src/pages/device/Activation';
 import Orders from './src/pages/order/Orders';
@@ -29,6 +33,7 @@ console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
   {
+    Status:Status,
     Home: Home,
     Login: Login,
     MyCenter: MyCenter,
@@ -52,6 +57,10 @@ const AppStack = createStackNavigator(
     Fix:Fix,
     Share:Share,
     Extend:Extend,
+    DeviceIndex:DeviceIndex,
+    Filter:Filter,
+    Wallet:Wallet,
+    //Status:Status,
   },
   // {
   //   initialRouteName: 'Home',
