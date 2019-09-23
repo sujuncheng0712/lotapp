@@ -55,7 +55,7 @@ export default class Login extends React.Component {
           if (info.status) {
             _storeData(info.data);
           } else {
-            message.success('登录失败，请检查用户名和密码');
+            ToastAndroid.show('登录失败，请检查用户名和密码', ToastAndroid.SHORT);
           }
         });
       });

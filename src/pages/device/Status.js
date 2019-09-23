@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground} from 'react-native';
+import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground,TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 const url = 'https://iot2.dochen.cn/api';
 export default class App extends React.Component {
@@ -13,6 +13,7 @@ export default class App extends React.Component {
       remarkR:'',
       costR:'',
       eid:'',
+      model:'',
       LoginInfoL:'',
     };
   }
@@ -28,9 +29,12 @@ export default class App extends React.Component {
 
   // 验证本地存储的资料是否有效
   _checkLoginState = async () => {
-    //let eid = this.props.navigation.getParam('eid');
-    let eid = '860344047684726';
-    this.setState({eid})
+    let eid = this.props.navigation.getParam('eid');
+   // let eid = '860344047684726';
+    //let model = "DCA20-A";
+    let model = this.props.navigation.getParam('model');
+
+    this.setState({eid,model})
     let LoginInfo = await AsyncStorage.getItem('LoginInfo');
     LoginInfo = eval('(' + LoginInfo + ')');
     console.log(LoginInfo)
@@ -38,12 +42,11 @@ export default class App extends React.Component {
       this.setState({LoginInfo: LoginInfo});
       //获取设备信息
       let urlInfo = `${url}/equipments/${eid}?uid=${LoginInfo.uid}&sale_type=${LoginInfo.sale_type}`;
-      console.log(urlInfo);
       fetch(urlInfo).then(res =>{
         res.json().then(info =>{
           console.log(info);
           if(info.status){
-            this.setState({info: response.data[0]});
+            this.setState({info: info.data[0]});
           }
         })
       })
@@ -71,9 +74,6 @@ export default class App extends React.Component {
     let uid = url_params(window.location).uid;
     let sale_type = url_params(window.location).sale_type;
     let eid = window.location.hash.split('/')[2];
-    /*console.log(uid)
-    console.log(sale_type)
-    console.log(eid)*/
     if(e==='C') {
       fetch(`${url}/returnOrder`,{
         method:'POST',
@@ -140,8 +140,7 @@ export default class App extends React.Component {
 }
 
   render() {
-    const {eid,info} = this.state;
-    let model = 'DCA20';
+    const {eid,info,model} = this.state;
      //退货金额
      let reg = new RegExp('^[0-9]*$');
      const Nums = ['../../images/Num/zero.png', 
@@ -197,24 +196,24 @@ export default class App extends React.Component {
 
       if (model.split('-')[0] === 'DCA20') {
         tool = [
-          {img: status[0] && !status[4] ? '../../images/Icon/Icon0.png' : '../../images/Icon/Icon0-1.png', name: '冲洗'},
-          {img: !status[1] && !status[0] && !status[4] ? '../../images/Icon/Icon1.png' :'../../images/Icon/Icon1-1.png', name: '制水'},
-          {img: status[1] && !status[0] && !status[4] ? '../../images/Icon/Icon2.png' : '../../images/Icon/Icon2-1.png', name: '水满'},
-          {img: status[2] && !status[4] ? '../../images/Icon/Icon3.png' : '../../images/Icon/Icon3-1.png', name: '缺水'},
-          {img: status[3] || status[4] ? '../../images/Icon/Icon4.png' : '../../images/Icon/Icon4-1.png', name: '检修'},
+          {img: status[0] && !status[4] ? require('../../images/Icon/Icon0.png') :  require('../../images/Icon/Icon0-1.png'), name: '冲洗'},
+          {img: !status[1] && !status[0] && !status[4] ?  require('../../images/Icon/Icon1.png') : require('../../images/Icon/Icon1-1.png'), name: '制水'},
+          {img: status[1] && !status[0] && !status[4] ?  require('../../images/Icon/Icon2.png') :  require('../../images/Icon/Icon2-1.png'), name: '水满'},
+          {img: status[2] && !status[4] ?  require('../../images/Icon/Icon3.png') :  require('../../images/Icon/Icon3-1.png'), name: '缺水'},
+          {img: status[3] || status[4] ?  require('../../images/Icon/Icon4.png' ): require( '../../images/Icon/Icon4-1.png'), name: '检修'},
         ];
       } else if (model.split('-')[0] === 'DCA16') {
         tool = [
-          {img: !status[1] && !status[0] && !status[4] ? '../../images/Icon/Icon1.png' : '../../images/Icon/Icon1-1.png', name: '制水'},
-          {img: status[6] ? '../../images/Icon/Icon5.png' : '../../images/Icon/Icon5-1.png', name: '换水'},
+          {img: !status[1] && !status[0] && !status[4] ?  require('../../images/Icon/Icon1.png') :  require('../../images/Icon/Icon1-1.png'), name: '制水'},
+          {img: status[6] ?  require('../../images/Icon/Icon5.png') :  require('../../images/Icon/Icon5-1.png'), name: '换水'},
           // {img: Icon6_1, name: '换芯'},
-          {img: status[5] ? '../../images/Icon/Icon6.png' : '../../images/Icon/Icon6-1.png', name: '童锁'},
-          {img: '../../images/Icon/Icon7-1.png', name: '制冷'},
+          {img: status[5] ?  require('../../images/Icon/Icon6.png') :  require('../../images/Icon/Icon6-1.png'), name: '童锁'},
+          {img:  require('../../images/Icon/Icon7-1.png'), name: '制冷'},
           // -
-          {img: '../../images/Icon/Icon8-1.png', name: '冰水'},
-          {img: _model === 1 ? '../../images/Icon/Icon9.png' : '../../images/Icon/Icon9-1.png', name: '常温'},
-          {img: _model === 2 ? '../../images/Icon/Icon10.png' : '../../images/Icon/Icon10-1.png', name: '冲奶'},
-          {img: _model === 3 ? '../../images/Icon/Icon11.png' : '../../images/Icon/Icon11-1.png', name: '开水'},
+          {img:  require('../../images/Icon/Icon8-1.png'), name: '冰水'},
+          {img: _model === 1 ?  require('../../images/Icon/Icon9.png') :  require('../../images/Icon/Icon9-1.png'), name: '常温'},
+          {img: _model === 2 ?  require('../../images/Icon/Icon10.png') :  require('../../images/Icon/Icon10-1.png'), name: '冲奶'},
+          {img: _model === 3 ?  require('../../images/Icon/Icon11.png') :  require('../../images/Icon/Icon11-1.png'), name: '开水'},
         ];
       }
     } else {
@@ -223,24 +222,24 @@ export default class App extends React.Component {
 
       if (model.split('-')[0] === 'DCA20') {
         tool = [
-          {img: '../../images/Icon/Icon0-1.png', name: '冲洗'},
-          {img: '../../images/Icon/Icon1-1.png', name: '制水'},
-          {img: '../../images/Icon/Icon2-1.png', name: '水满'},
-          {img: '../../images/Icon/Icon3-1.png', name: '缺水'},
-          {img: '../../images/Icon/Icon4-1.png', name: '检修'},
+          {img:  require('../../images/Icon/Icon0-1.png'), name: '冲洗'},
+          {img:  require('../../images/Icon/Icon1-1.png'), name: '制水'},
+          {img:  require('../../images/Icon/Icon2-1.png'), name: '水满'},
+          {img:  require('../../images/Icon/Icon3-1.png'), name: '缺水'},
+          {img:  require('../../images/Icon/Icon4-1.png'), name: '检修'},
         ];
       } else if (model.split('-')[0] === 'DCA16') {
         tool = [
-          {img: '../../images/Icon/Icon1-1.png', name: '制水'},
-          {img: '../../images/Icon/Icon5-1.png', name: '换水'},
+          {img:  require('../../images/Icon/Icon1-1.png'), name: '制水'},
+          {img:  require('../../images/Icon/Icon5-1.png'), name: '换水'},
           // {img: Icon6_1, name: '换芯'},
-          {img: '../../images/Icon/Icon6-1.png', name: '童锁'},
-          {img: '../../images/Icon/Icon7-1.png', name: '制冷'},
+          {img:  require('../../images/Icon/Icon6-1.png'), name: '童锁'},
+          {img:  require('../../images/Icon/Icon7-1.png'), name: '制冷'},
           // -
-          {img: '../../images/Icon/Icon8-1.png', name: '冰水'},
-          {img: '../../images/Icon/Icon9-1.png', name: '常温'},
-          {img: '../../images/Icon/Icon10-1.png', name: '冲奶'},
-          {img: '../../images/Icon/Icon11-1.png', name: '开水'},
+          {img:  require('../../images/Icon/Icon8-1.png'), name: '冰水'},
+          {img:  require('../../images/Icon/Icon9-1.png'), name: '常温'},
+          {img:  require('../../images/Icon/Icon10-1.png'), name: '冲奶'},
+          {img:  require('../../images/Icon/Icon11-1.png'), name: '开水'},
         ];
       }
     }
@@ -256,17 +255,21 @@ export default class App extends React.Component {
                     <View style={styles.top}>
                       <Text style={{color:'#fff',textAlign:'center',padding:10}}>净水机状态</Text>
                     </View>
-                    <Icon style={styles.home} name="home" size={20} color={'#fff'} />
+                    <TouchableOpacity
+                     style={styles.home}
+                      onPress={()=> this.props.navigation.navigate('Home')}>
+                      <Icon  name="home" size={20} color={'#fff'} />
+                    </TouchableOpacity>
+                   
                     <View 
                     style={styles.bg3 }
                     >
                       <ImageBackground
                         style={styles.ImageBackground }
                         source={require('../../images/device_bg3.png')}>
-                          <Text style={{color:'#fff',marginTop:50,}}>出水水质可直饮</Text>
+                          <Text style={{color:'#fff',marginTop:85,marginBottom:10}}>出水水质可直饮</Text>
                             <View style={{flexDirection:'row'}}> 
                               {otds.map((val, key) =>{
-                                let a = Nums[val].toString;
                                 return (
                                   <Image
                                     source={val===0 ? require('../../images/Num/zero.png') :
@@ -284,16 +287,38 @@ export default class App extends React.Component {
                                   />)}
                               )}
                               <Text style={{color:'#fff',marginTop:60}}>TDS</Text>
-                            </View>  
-                            <Text style={{color:'#fff',marginTop:20}}>进水水质：{itds}TDS</Text>                                  
+                            </View>                                        
                        </ImageBackground>
+                       <Text style={{color:'#fff',marginTop:40}}>进水水质：{itds}TDS</Text>       
+                    </View>
+                    <View style={{flexDirection:'row',padding:30}}>
+                      <Text style={styles.status}>净水机状态</Text>
+                      <View style={{paddingLeft:10,}}>
+                        <View style={{flexDirection:'row'}}>
+                          <Icon  name="wifi" size={20} color={info.online_at && !info.offline_at ? '#fff' : '#666'} />
+                          <Text style={{marginLeft:8,color:info.online_at && !info.offline_at ? '#fff' : '#666'}}>
+                            {info.online_at && !info.offline_at ? '设备已联网' : '设备未联网'}
+                          </Text>
+                        </View>
+                      <Text style={{color:'#fff'}}>设备ID:  {info.uuid}</Text>
+                      </View>
+                    </View>
+                    <View style={{flexDirection:'row',flexWrap:'wrap',height:130}}>
+                      {tool.map((item,key)=>{
+                        return(
+                          <View key={key} style={{width:'20%',padding:10,alignItems:'center'}}>
+                             <Image
+                              style={styles.toolsImg2}
+                              source={item.img}
+                            />
+                            <Text style={{color:'#fff'}}>{item.name}</Text>
+                          </View>
+                        )
+                      })}              
                     </View>
                 </ImageBackground>        
           </ImageBackground>
         </ScrollView>
-       
-         
-
     );
   }
 }
@@ -312,16 +337,10 @@ const styles = StyleSheet.create({
   },
   toolsImg2: {
     marginTop: 5,
-    width: 21,
-    height: 21,
+    width: 50,
+    height: 50,
   },
   ImageBackground:{
-    flex:1,
-    width:'100%',
-    height:'100%',
-    alignItems:'center',
-  },
-   ImageBackground:{
     flex:1,
     width:'100%',
     height:'100%',
@@ -330,13 +349,23 @@ const styles = StyleSheet.create({
   bg3:{
     alignItems:'center',
     width:'100%',
-    height:220,
-    paddingBottom:30,
+    height:280,
+    paddingTop:10,
+    paddingBottom:15,
     borderBottomColor:'#fff',
     borderBottomWidth:1,
   },
   tdsImg:{
     height:80,
     width:40,
-  }
+  },
+  status:{
+    color:'#fff',
+    borderRightWidth:1,
+    borderColor:'#fff',
+    textAlign:'center',
+    paddingRight:10,
+    fontSize:18,
+    paddingTop:8,
+  },
 })

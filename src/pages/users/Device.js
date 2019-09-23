@@ -361,9 +361,10 @@ export default class App extends React.Component {
           <ScrollView>
             {lists.map((item, key) => (
               <TouchableOpacity 
+              key={key}
                style={styles.item}
                onPress={() => {
-                this.props.navigation.navigate('DeviceIndex',{eid:item.uuid});
+                this.props.navigation.navigate('DeviceIndex',{eid:item.uuid,model:item.model});
               }}
               >
                 {item.model === 'DCA16-A' ? (

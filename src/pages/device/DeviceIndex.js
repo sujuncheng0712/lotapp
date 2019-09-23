@@ -46,7 +46,7 @@ const HomeBottomRoute = createBottomTabNavigator(
   },
   {
     // 初始路线名称
-    initialRouteName: 'MyCenter',
+    initialRouteName: 'Status',
 
     // 标签栏位置
     tabBarPosition: 'bottom',

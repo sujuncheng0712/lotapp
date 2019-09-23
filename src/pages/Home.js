@@ -7,7 +7,7 @@ import Device from './users/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const HomeBottomRoute = createBottomTabNavigator(
   {
-    device: {
+    Device: {
       screen: Device,
       navigationOptions: {
         title: '我的设备',
@@ -16,7 +16,7 @@ const HomeBottomRoute = createBottomTabNavigator(
         ),
       },
     },
-    shop: {
+    MyShop: {
       screen: MyShop,
       navigationOptions: {
         title: '我的商城',
@@ -47,7 +47,7 @@ const HomeBottomRoute = createBottomTabNavigator(
   },
   {
     // 初始路线名称
-    initialRouteName: 'MyCenter',
+    initialRouteName:'MyShop',
 
     // 标签栏位置
     tabBarPosition: 'bottom',

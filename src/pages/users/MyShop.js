@@ -27,7 +27,7 @@ export default class App extends React.Component {
   }
   static navigationOptions = ({navigation}) => {
     return {
-      header: null,
+      headerTitle: '我的商城',
     };
   };
 
@@ -342,6 +342,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginLeft: 10,
+    marginRight:5,
   },
   top: {
     textAlign: 'center',
