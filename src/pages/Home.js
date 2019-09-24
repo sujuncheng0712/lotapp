@@ -40,25 +40,19 @@ const HomeBottomRoute = createBottomTabNavigator(
     },
   },
   {
-    tabBarOptions: {
-      activeTintColor: '#FF7A01',
-      inactiveTintColor: 'black',
-    },
-  },
-  {
-    // 初始路线名称
-    initialRouteName:'MyShop',
-
-    // 标签栏位置
+     // 初始路线名称
+     initialRouteName:'Device',
+      // 标签栏位置
     tabBarPosition: 'bottom',
     // 标签栏选项
     tabBarOptions: {
-      activeTintColor: '#517eff',
+      activeTintColor: '#FF7A01',
       inactiveTintColor: '#666',
     },
-    // 懒加载
+      // 懒加载
     lazy: true,
   },
+ 
 );
 HomeBottomRoute.navigationOptions = ({navigation}) => {
   //  关键这一行设置 header:null

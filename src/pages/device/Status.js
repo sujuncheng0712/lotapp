@@ -180,7 +180,6 @@ export default class App extends React.Component {
         }
 
         otds = _status.otds.toString().length < 2 ? (`0${_status.otds}`).split('') : _status.otds.toString().split('');
-
         if (_status.s.toString(2).split('').length < 8) {
           for (let i = 0; i < 8; i++) {
             status.push(parseInt(_status.s.toString(2).split('').reverse()[i]) || 0);
@@ -272,15 +271,15 @@ export default class App extends React.Component {
                               {otds.map((val, key) =>{
                                 return (
                                   <Image
-                                    source={val===0 ? require('../../images/Num/zero.png') :
-                                    val===1 ? require('../../images/Num/one.png'):
-                                    val===2 ? require('../../images/Num/two.png'):
-                                    val===3 ? require('../../images/Num/three.png'):
-                                    val===4 ? require('../../images/Num/four.png'):
-                                    val===5 ? require('../../images/Num/five.png'):
-                                    val===6 ? require('../../images/Num/six.png'):
-                                    val===7 ? require('../../images/Num/seven.png'):
-                                    val===8 ? require('../../images/Num/eight.png'):require('../../images/Num/nine.png')
+                                    source={val==='0' ? require('../../images/Num/zero.png') :
+                                    val==='1' ? require('../../images/Num/one.png'):
+                                    val==='2' ? require('../../images/Num/two.png'):
+                                    val==='3' ? require('../../images/Num/three.png'):
+                                    val==='4' ? require('../../images/Num/four.png'):
+                                    val==='5' ? require('../../images/Num/five.png'):
+                                    val==='6' ? require('../../images/Num/six.png'):
+                                    val==='7' ? require('../../images/Num/seven.png'):
+                                    val==='8' ? require('../../images/Num/eight.png'):require('../../images/Num/nine.png')
                                     }
                                     key={key} 
                                     style={styles.tdsImg}

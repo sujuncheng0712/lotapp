@@ -18,8 +18,8 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       order_data:[],
-      name: '',
       balance:0,
+      LoginInfo:'',
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -61,7 +61,8 @@ export default class App extends React.Component {
     LoginInfo = eval('(' + LoginInfo + ')');
     console.log(LoginInfo)
     if (LoginInfo !== null) {
-      this.setState({name: LoginInfo.name});
+      this.setState({LoginInfo});
+      this.forceUpdate();
       //获取物流信息
       let urlInfo = `${url}/logisticsPage_create?uid=${LoginInfo.uid}&sale_type=${LoginInfo.sale_type}`;
       fetch(urlInfo).then(res =>{
@@ -94,7 +95,7 @@ export default class App extends React.Component {
   };
 
   render() {
-    const {name,order_data,balance} = this.state;
+    const {LoginInfo,order_data,balance} = this.state;
     const showList = order_data.map((item,key)=>{
       return(
         <View style={styles.logicItem} key={key}>
@@ -130,7 +131,7 @@ export default class App extends React.Component {
             <View style={{flexDirection:'row',padding:10}}>
               <Text style={{
                 marginLeft: '75%',
-              }}>{name}</Text>
+              }}>{LoginInfo.name}</Text>
               <TouchableOpacity
                 style={styles.button}
                 onPress={this.withdraw}>
@@ -139,44 +140,50 @@ export default class App extends React.Component {
                 }}>注销</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.topList}>
-              <TouchableOpacity
-                style={styles.topItem}
-                onPress={()=> this.props.navigation.navigate('CashRecord',{state:'record'})}
-              >
-                <Image
-                  style={styles.topImg}
-                  source={require('../../images/user/usermoney.png')}
-                />
-                <Text style={{color:'#fff',textAlign:'center'}}>补贴记录</Text>
-              </TouchableOpacity>
+            {LoginInfo.sale_type === 50 ? 
+              <View> 
+                <View style={styles.topList}>
+                <TouchableOpacity
+                  style={styles.topItem}
+                  onPress={()=> this.props.navigation.navigate('CashRecord',{state:'record'})}
+                >
+                  <Image
+                    style={styles.topImg}
+                    source={require('../../images/user/usermoney.png')}
+                  />
+                  <Text style={{color:'#fff',textAlign:'center'}}>补贴记录</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.topItem}
-                onPress={()=> this.props.navigation.navigate('Wallet')}
-              >
-                <Image
-                  style={styles.topImg}
-                  source={require('../../images/user/detail.png')}
-                />
-                <Text style={{color:'#fff',textAlign:'center'}}>收支记录</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.topItem}
-                onPress={()=> this.props.navigation.navigate('Cash')}
-              >
-                <Image
-                  style={styles.topImg}
-                  source={require('../../images/user/charge.png')}
-                />
-                <Text style={{color:'#fff',textAlign:'center'}}>话费充值</Text>
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Text style={{color:'#fff',textAlign:'center'}}>
-                钱包余额 ￥{balance}
-              </Text>
-            </View>
+                <TouchableOpacity
+                  style={styles.topItem}
+                  onPress={()=> this.props.navigation.navigate('Wallet')}
+                >
+                  <Image
+                    style={styles.topImg}
+                    source={require('../../images/user/detail.png')}
+                  />
+                  <Text style={{color:'#fff',textAlign:'center'}}>收支记录</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.topItem}
+                  onPress={()=> this.props.navigation.navigate('Cash')}
+                >
+                  <Image
+                    style={styles.topImg}
+                    source={require('../../images/user/charge.png')}
+                  />
+                  <Text style={{color:'#fff',textAlign:'center'}}>话费充值</Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={{color:'#fff',textAlign:'center'}}>
+                  钱包余额 ￥{balance}
+                </Text>
+              </View>
+              </View>
+            : null
+            }
+            
           </ImageBackground>
         </View>
         <View style={styles.content}>
@@ -225,48 +232,55 @@ export default class App extends React.Component {
         <View>
           {showList}
         </View>
-        <View style={{padding:10}}>
-          <Text>必备工具</Text>
+        {LoginInfo.sale_type === 50 ?
+         <View>
+           <View style={{padding:10}}>
+           <Text>必备工具</Text>
+         </View>
+ 
+         <View style={styles.orderList}>
+           <TouchableOpacity
+             style={styles.orderItem}
+             onPress={()=> this.props.navigation.navigate('Code')}>
+             <Image
+               style={styles.orderImg}
+               source={require('../../images/pic/look.png')}
+             />
+             <Text>激活码</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.orderItem}
+             onPress={()=> this.props.navigation.navigate('Share',{state:'user'})}>
+             <Image
+               style={styles.orderImg}
+               source={require('../../images/pic/extend.png')}
+             />
+             <Text>我要分享</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.orderItem}
+             onPress={()=> this.props.navigation.navigate('Setup')}>
+             <Image
+               style={styles.orderImg}
+               source={require('../../images/user/setup.png')}
+             />
+             <Text>我要报装</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.orderItem}
+             onPress={()=> this.props.navigation.navigate('Fix',{eid:''})}>
+             <Image
+               style={styles.orderImg}
+               source={require('../../images/pic/fix.png')}
+             />
+             <Text>我要保修</Text>
+           </TouchableOpacity>
+         </View>
         </View>
-
-        <View style={styles.orderList}>
-          <TouchableOpacity
-            style={styles.orderItem}
-            onPress={()=> this.props.navigation.navigate('Code')}>
-            <Image
-              style={styles.orderImg}
-              source={require('../../images/pic/look.png')}
-            />
-            <Text>激活码</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.orderItem}
-            onPress={()=> this.props.navigation.navigate('Share',{state:'user'})}>
-            <Image
-              style={styles.orderImg}
-              source={require('../../images/pic/extend.png')}
-            />
-            <Text>我要分享</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.orderItem}
-            onPress={()=> this.props.navigation.navigate('Setup')}>
-            <Image
-              style={styles.orderImg}
-              source={require('../../images/user/setup.png')}
-            />
-            <Text>我要报装</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.orderItem}
-            onPress={()=> this.props.navigation.navigate('Fix',{eid:''})}>
-            <Image
-              style={styles.orderImg}
-              source={require('../../images/pic/fix.png')}
-            />
-            <Text>我要保修</Text>
-          </TouchableOpacity>
-        </View>
+          : null
+      
+       }
+       
       </View>
       </ScrollView>
     );

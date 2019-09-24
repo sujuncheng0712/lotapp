@@ -29,11 +29,8 @@ export default class App extends React.Component {
 
   // 验证本地存储的资料是否有效
   _checkLoginState = async () => {
-    //let eid = this.props.navigation.getParam('eid');
-    let eid = '860344047684726';
-    let model = "DCA20-A";
-    //let model = this.props.navigation.getParam('model');
-
+    let eid = this.props.navigation.getParam('eid');
+    let model = this.props.navigation.getParam('model');
     this.setState({eid,model})
     let LoginInfo = await AsyncStorage.getItem('LoginInfo');
     LoginInfo = eval('(' + LoginInfo + ')');
@@ -191,15 +188,15 @@ export default class App extends React.Component {
                         {otds.map((val, key) =>{
                           return (
                             <Image
-                              source={val===0 ? require('../../images/Num/zero.png') :
-                              val===1 ? require('../../images/Num/one.png'):
-                              val===2 ? require('../../images/Num/two.png'):
-                              val===3 ? require('../../images/Num/three.png'):
-                              val===4 ? require('../../images/Num/four.png'):
-                              val===5 ? require('../../images/Num/five.png'):
-                              val===6 ? require('../../images/Num/six.png'):
-                              val===7 ? require('../../images/Num/seven.png'):
-                              val===8 ? require('../../images/Num/eight.png'):require('../../images/Num/nine.png')
+                            source={val==='0' ? require('../../images/Num/zero.png') :
+                            val==='1' ? require('../../images/Num/one.png'):
+                            val==='2' ? require('../../images/Num/two.png'):
+                            val==='3' ? require('../../images/Num/three.png'):
+                            val==='4' ? require('../../images/Num/four.png'):
+                            val==='5' ? require('../../images/Num/five.png'):
+                            val==='6' ? require('../../images/Num/six.png'):
+                            val==='7' ? require('../../images/Num/seven.png'):
+                            val==='8' ? require('../../images/Num/eight.png'):require('../../images/Num/nine.png')
                               }
                               key={key} 
                               style={styles.tdsImg}
@@ -231,7 +228,7 @@ export default class App extends React.Component {
                    <View style={{padding:20,alignItems:'center',width:'100%'}}>
                    <TouchableOpacity
                       style={styles.button}
-                      onPress={()=>{this.props.navigation.navigate('Home',{page:'MyShop'})}}
+                      onPress={()=>{this.props.navigation.navigate('MyShop')}}
                    >
                       <Text style={{color:'#fff',textAlign:'center'}}>购买滤芯</Text>
                    </TouchableOpacity>
