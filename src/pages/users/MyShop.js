@@ -9,12 +9,12 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
-  ToastAndroid,BackHandler
+  ToastAndroid,BackHandler,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as wechat from 'react-native-wechat';
 import Swiper from 'react-native-swiper';
-const {width} = Dimensions.get('window'); //解构赋值 获取屏幕宽度
+const {height,width} =  Dimensions.get('window');
 const url = 'https://iot2.dochen.cn/api';
 export default class App extends React.Component {
   constructor(props) {
@@ -192,11 +192,11 @@ export default class App extends React.Component {
   render() {
     const {lists, count, sale_type} = this.state;
     return (
-      <View style={{flex: 1}}>
-        <View style={{flex: 0.75}}>
+      <ScrollView style={{flex:1}}>
+        <View style={{height:height/3}}>
           <Swiper
             style={styles.wrapper}
-            height={100}
+            height={200}
             horizontal={true}
             autoplay={false}
             autoplayTimeout={10}
@@ -240,7 +240,7 @@ export default class App extends React.Component {
               item.type === 2 ||
               item.type === 9 ||
               (sale_type === 50 && item.type === 3) ? (
-                <View style={styles.item}>
+                <View style={styles.item} key={key}>
                   <TouchableOpacity
                     onPress={() => {
                       this.selectProduct(key);
@@ -314,7 +314,7 @@ export default class App extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

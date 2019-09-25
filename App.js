@@ -2,6 +2,7 @@ import {createStackNavigator, createAppContainer} from 'react-navigation';
 import React from 'react';
 import {View, Text, Button} from 'react-native';
 import Home from './src/pages/Home';
+import GroupHome from './src/pages/GroupHome';
 import Login from './src/pages/users/Login';
 import MyCenter from './src/pages/users/MyCenter';
 import MyShop from './src/pages/users/MyShop';
@@ -34,6 +35,7 @@ console.warn('YellowBox is disabled.');
 const AppStack = createStackNavigator(
   {
     Home:Home,
+    GroupHome:GroupHome,
     Login: Login,
     MyCenter: MyCenter,
     Record: Record,

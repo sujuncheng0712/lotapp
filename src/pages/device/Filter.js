@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground,TouchableOpacity} from 'react-native';
+import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground,TouchableOpacity,Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+const {height,width} =  Dimensions.get('window');
 const url = 'https://iot2.dochen.cn/api';
 export default class App extends React.Component {
   constructor(props) {
@@ -174,16 +175,14 @@ export default class App extends React.Component {
                   style={styles.ImageBackground }
                   source={require('../../images/device_bg2.png')}>
                     <View style={styles.top}>
-                      <Text style={{color:'#fff',textAlign:'center',padding:10}}>滤芯使用状态</Text>
+                      <Text style={{color:'#fff',textAlign:'center',padding:10,fontSize:20}}>滤芯使用状态</Text>
                     </View>
                     <TouchableOpacity
                      style={styles.home}
                       onPress={()=> this.props.navigation.navigate('Home')}>
-                      <Icon  name="home" size={20} color={'#fff'} />
+                      <Icon  name="home" size={25} color={'#fff'} />
                     </TouchableOpacity>  
-                    <View 
-                    style={styles.bg3 }
-                    >
+                    <View style={styles.bg3}>
                       <View style={{flexDirection:'row'}}> 
                         {otds.map((val, key) =>{
                           return (
@@ -241,7 +240,7 @@ export default class App extends React.Component {
 }
 const styles = StyleSheet.create({
   top:{
-    height:40,
+    height:height/15,
     marginBottom:20,
     borderBottomColor:'#fff',
     borderBottomWidth:1,
@@ -249,22 +248,20 @@ const styles = StyleSheet.create({
   },
   home:{
     position:'absolute',
-    top:10,
+    top:height/70,
     left:10,
   },
   ImageBackground:{
     flex:1,
     width:'100%',
-    height:'100%',
+    height:height-70,
     alignItems:'center',
   },
   bg3:{
     alignItems:'center',
     width:'100%',
-    height:130,
+    height:100,
     paddingTop:10,
-    paddingBottom:15,
-  
   },
   tdsImg:{
     height:80,

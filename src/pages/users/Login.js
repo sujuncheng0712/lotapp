@@ -53,7 +53,7 @@ export default class Login extends React.Component {
       }).then(res => {
         res.json().then(info => {
           if (info.status) {
-            _storeData(info.data);
+            _storeData(info.data,1);
           } else {
             ToastAndroid.show('登录失败，请检查用户名和密码', ToastAndroid.SHORT);
           }
@@ -61,14 +61,45 @@ export default class Login extends React.Component {
       });
     };
 
+    const GroupLogin = () => {
+      const {username, password} = this.state;
+      let urlInfo = `${url}/auth?type=merchants&username=${username}&password=${password}&
+      auth_type=wx`;
+      fetch(urlInfo, {
+        method: 'POST',
+        body: JSON.stringify({
+          username: username,
+          password: password,
+          auth_type: 'wx',
+          type:'merchants',
+        }),
+      }).then(res => {
+        res.json().then(info => {
+          console.log(info);
+          if (info.status) {
+            _storeData(info.data,2);
+          } else {
+            ToastAndroid.show('登录失败，请检查用户名和密码', ToastAndroid.SHORT);
+          }
+        });
+      });
+    };
+
+    
+
     // 本地存储
-    const _storeData = async data => {
+    const _storeData = async (data,state) => {
       //data.token = Date.parse(new Date());
       console.log(data);
       try {
         await AsyncStorage.setItem('LoginInfo', JSON.stringify(data), () => {
           // 存储成功后跳转
-          this.props.navigation.navigate('Home', {_isLogin: true});
+          if(state ==='1'){
+            this.props.navigation.push('Home', {_isLogin: true});
+          }else if(state ==='2'){
+            this.props.navigation.push('GroupHome', {_isLogin: true});
+          }
+      
         });
       } catch (error) {
         // Error saving data
@@ -97,9 +128,10 @@ export default class Login extends React.Component {
             onChangeText={text => this.setState({password: text})}
           />
         </View>
-        <View>
+        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center',padding:10}}>
           <Button
             type="primary"
+            style={{margin:5}}
             onPress={() => {
               Login();
             }}>
@@ -107,8 +139,9 @@ export default class Login extends React.Component {
           </Button>
           <Button
             type="primary"
+            style={{margin:5}}
             onPress={() => {
-              Login();
+              GroupLogin();
             }}>
             商家登录
           </Button>

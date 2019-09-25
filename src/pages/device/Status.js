@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground,TouchableOpacity} from 'react-native';
+import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground,TouchableOpacity,Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 const url = 'https://iot2.dochen.cn/api';
+const {height,width} =  Dimensions.get('window');
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -29,11 +30,10 @@ export default class App extends React.Component {
 
   // 验证本地存储的资料是否有效
   _checkLoginState = async () => {
-    let eid = this.props.navigation.getParam('eid');
-   // let eid = '860344047684726';
-    //let model = "DCA20-A";
-    let model = this.props.navigation.getParam('model');
-
+     let eid = this.props.navigation.getParam('eid');
+     let model = this.props.navigation.getParam('model');
+    // let eid = '860344047684726';
+    // let model = "DCA20-A";
     this.setState({eid,model})
     let LoginInfo = await AsyncStorage.getItem('LoginInfo');
     LoginInfo = eval('(' + LoginInfo + ')');
@@ -249,24 +249,26 @@ export default class App extends React.Component {
             style={styles.ImageBackground }
             source={require('../../images/dev_backgroud.png')}>
                 <ImageBackground
+                
                   style={styles.ImageBackground }
                   source={require('../../images/device_bg2.png')}>
                     <View style={styles.top}>
-                      <Text style={{color:'#fff',textAlign:'center',padding:10}}>净水机状态</Text>
+                      <Text style={{color:'#fff',textAlign:'center',padding:10,fontSize:20}}>净水机状态</Text>
                     </View>
                     <TouchableOpacity
                      style={styles.home}
                       onPress={()=> this.props.navigation.navigate('Home')}>
-                      <Icon  name="home" size={20} color={'#fff'} />
+                      <Icon  name="home" size={25} color={'#fff'} />
                     </TouchableOpacity>
                    
                     <View 
                     style={styles.bg3 }
                     >
                       <ImageBackground
-                        style={styles.ImageBackground }
+                        resizeMode="stretch"
+                        style={styles.ImageBackground2 }
                         source={require('../../images/device_bg3.png')}>
-                          <Text style={{color:'#fff',marginTop:85,marginBottom:10}}>出水水质可直饮</Text>
+                          <Text style={{color:'#fff',marginTop:75,marginBottom:10}}>出水水质可直饮</Text>
                             <View style={{flexDirection:'row'}}> 
                               {otds.map((val, key) =>{
                                 return (
@@ -288,9 +290,9 @@ export default class App extends React.Component {
                               <Text style={{color:'#fff',marginTop:60}}>TDS</Text>
                             </View>                                        
                        </ImageBackground>
-                       <Text style={{color:'#fff',marginTop:40}}>进水水质：{itds}TDS</Text>       
+                       <Text style={{color:'#fff',marginTop:30,fontSize:width/25}}>进水水质：{itds}TDS</Text>     
                     </View>
-                    <View style={{flexDirection:'row',padding:30}}>
+                    <View style={{flexDirection:'row',padding:30,justifyContent:'center',alignItems:'center'}}>
                       <Text style={styles.status}>净水机状态</Text>
                       <View style={{paddingLeft:10,}}>
                         <View style={{flexDirection:'row'}}>
@@ -302,7 +304,7 @@ export default class App extends React.Component {
                       <Text style={{color:'#fff'}}>设备ID:  {info.uuid}</Text>
                       </View>
                     </View>
-                    <View style={{flexDirection:'row',flexWrap:'wrap',height:130}}>
+                    <View style={{flexDirection:'row',flexWrap:'wrap'}}>
                       {tool.map((item,key)=>{
                         return(
                           <View key={key} style={{width:'20%',padding:10,alignItems:'center'}}>
@@ -323,36 +325,40 @@ export default class App extends React.Component {
 }
 const styles = StyleSheet.create({
   top:{
-    height:40,
+    justifyContent:'center',
     marginBottom:20,
     borderBottomColor:'#fff',
     borderBottomWidth:1,
     width:'100%',
+    height:height/15,
   },
   home:{
     position:'absolute',
-    top:10,
+    top:height/70,
     left:10,
   },
   toolsImg2: {
-    marginTop: 5,
     width: 50,
     height: 50,
   },
   ImageBackground:{
     flex:1,
+    width:width,
+    height:height-70,
+    alignItems:'center',
+  },
+  ImageBackground2:{
+    marginTop:1,
     width:'100%',
-    height:'100%',
     alignItems:'center',
   },
   bg3:{
     alignItems:'center',
-    width:'100%',
-    height:280,
-    paddingTop:10,
+    width:'95%',
     paddingBottom:15,
     borderBottomColor:'#fff',
     borderBottomWidth:1,
+    
   },
   tdsImg:{
     height:80,
@@ -364,7 +370,7 @@ const styles = StyleSheet.create({
     borderColor:'#fff',
     textAlign:'center',
     paddingRight:10,
-    fontSize:18,
-    paddingTop:8,
+    fontSize:width/20,
+    height:30,
   },
 })

@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground,TouchableOpacity} from 'react-native';
+import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground,TouchableOpacity,Dimensions} from 'react-native';
 import {Echarts, echarts} from 'react-native-secharts';
 import Icon from 'react-native-vector-icons/AntDesign';
 const url = 'https://iot2.dochen.cn/api';
+const {height,width} =  Dimensions.get('window');
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -27,10 +28,10 @@ export default class App extends React.Component {
 
   // 验证本地存储的资料是否有效
   _checkLoginState = async (state) => {
-     let eid = "860344047689287";
-     let model = 'DCA20-A';
-     //let eid = this.props.navigation.getParam('eid');
-      //let model = this.props.navigation.getParam('model');
+    //  let eid = "860344047689287";
+    //  let model = 'DCA20-A';
+    let eid = this.props.navigation.getParam('eid');
+    let model = this.props.navigation.getParam('model');
     let LoginInfo = await AsyncStorage.getItem('LoginInfo');
     LoginInfo = eval('(' + LoginInfo + ')');
     console.log(LoginInfo)
@@ -141,12 +142,12 @@ export default class App extends React.Component {
             style={styles.ImageBackground }
             source={require('../../images/device_bg2.png')}>
               <View style={styles.top}>
-                <Text style={{color:'#fff',textAlign:'center',padding:10}}>用水情况</Text>
+                <Text style={{color:'#fff',textAlign:'center',padding:10,fontSize:20}}>用水情况</Text>
               </View>
               <TouchableOpacity
                 style={styles.home}
                 onPress={()=> this.props.navigation.navigate('Home')}>
-                <Icon  name="home" size={20} color={'#fff'} />
+                <Icon  name="home" size={25} color={'#fff'} />
               </TouchableOpacity>  
               <View style={styles.buttonGroup}>
                 <TouchableOpacity 
@@ -191,7 +192,7 @@ export default class App extends React.Component {
 }
 const styles = StyleSheet.create({
   top:{
-    height:40,
+    height:height/15,
     marginBottom:20,
     borderBottomColor:'#fff',
     borderBottomWidth:1,
@@ -199,13 +200,13 @@ const styles = StyleSheet.create({
   },
   home:{
     position:'absolute',
-    top:10,
+    top:height/70,
     left:10,
   },
   ImageBackground:{
     flex:1,
     width:'100%',
-    height:'100%',
+    height:height-70,
     alignItems:'center',
   },
   buttonGroup:{

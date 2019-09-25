@@ -91,7 +91,7 @@ export default class App extends React.Component {
 
   withdraw = async () => {
     await AsyncStorage.clear();
-    this.props.navigation.navigate('Login');
+    this.props.navigation.push('Login');
   };
 
   render() {

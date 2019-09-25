@@ -1,8 +1,6 @@
 import {createBottomTabNavigator} from 'react-navigation';
-
 import React from 'react';
 import MyCenter from '../pages/users/MyCenter';
-import MyShop from './users/MyShop';
 import Device from './users/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const HomeBottomRoute = createBottomTabNavigator(
@@ -10,16 +8,16 @@ const HomeBottomRoute = createBottomTabNavigator(
     Device: {
       screen: Device,
       navigationOptions: {
-        title: '我的设备',
+        title: '首页',
         tabBarIcon: ({tintColor, focused}) => (
           <Icon name="bars" size={20} color={focused ? '#FF7A01' : '#666'} />
         ),
       },
     },
-    MyShop: {
-      screen: MyShop,
+    MyCenter: {
+      screen: MyCenter,
       navigationOptions: {
-        title: '我的商城',
+        title: '报表',
         tabBarIcon: ({tintColor, focused}) => (
           <Icon
             name="shopping-cart"
@@ -32,7 +30,16 @@ const HomeBottomRoute = createBottomTabNavigator(
     MyCenter: {
       screen: MyCenter,
       navigationOptions: {
-        title: '个人中心',
+        title: '通知',
+        tabBarIcon: ({tintColor, focused}) => (
+          <Icon name="user" size={20} color={focused ? '#FF7A01' : '#666'} />
+        ),
+      },
+    },
+    MyCenter: {
+      screen: MyCenter,
+      navigationOptions: {
+        title: '我的',
         tabBarIcon: ({tintColor, focused}) => (
           <Icon name="user" size={20} color={focused ? '#FF7A01' : '#666'} />
         ),

@@ -8,12 +8,12 @@ import {
   Image,
   ToastAndroid,
   TouchableOpacity,
-  ScrollView, BackHandler,
+  ScrollView, BackHandler
 } from 'react-native';
 import * as wechat from 'react-native-wechat';
 import Swiper from 'react-native-swiper';
-const {width} = Dimensions.get('window'); //解构赋值 获取屏幕宽度
 const url = 'https://iot2.dochen.cn/api';
+const {height,width} =  Dimensions.get('window');
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -296,14 +296,14 @@ export default class App extends React.Component {
   render() {
     const {lists} = this.state;
     return (
-      <View style={{flex: 1}}>
-        <View style={{flex:0.93}}>
+      <View style={{height:height}}>
+        <View style={{height:height/3}}>
           <Swiper
             style={styles.wrapper}
             height={200}
             horizontal={true}
             autoplay={false}
-            autoplayTimeout={10}
+            autoplayTimeout={5}
             showsButtons={false}
             activeDot={
               <View
@@ -460,6 +460,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     padding: 10,
+    flex:0.1,
   },
   deviceInfo: {
     display: 'flex',
