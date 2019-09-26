@@ -1,8 +1,7 @@
 import {createStackNavigator, createAppContainer} from 'react-navigation';
-import React from 'react';
-import {View, Text, Button} from 'react-native';
 import Home from './src/pages/Home';
 import GroupHome from './src/pages/GroupHome';
+import White from './src/pages/White';
 import Login from './src/pages/users/Login';
 import MyCenter from './src/pages/users/MyCenter';
 import MyShop from './src/pages/users/MyShop';
@@ -12,9 +11,6 @@ import Address from './src/pages/users/Address';
 import Create from './src/pages/users/Create';
 import AddDevice from './src/pages/device/AddDevice';
 import DeviceIndex from './src/pages/device/DeviceIndex';
-import Status from './src/pages/device/Status';
-import Water from './src/pages/device/Water';
-import Filter from './src/pages/device/Filter';
 import ScanScreen from './src/pages/device/ScanScreen';
 import Activation from './src/pages/device/Activation';
 import Orders from './src/pages/order/Orders';
@@ -29,11 +25,16 @@ import AfterRecord from './src/pages/returnService/AfterRecord';
 import Fix from './src/pages/returnService/Fix';
 import Share from './src/pages/returnService/Share';
 import Extend from './src/pages/returnService/Extend';
+import GroupCenter from './src/pages/group/GroupCenter';
+import Balance from './src/pages/group/Balance';
+import GroupCash from './src/pages/group/GroupCash';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
   {
+    GroupCash:GroupCash,
+    White:White,
     Home:Home,
     GroupHome:GroupHome,
     Login: Login,
@@ -61,7 +62,8 @@ const AppStack = createStackNavigator(
     DeviceIndex:DeviceIndex,
     //Filter:Filter,
     Wallet:Wallet,
-   // Status:Status,
+    Balance:Balance,
+   // GroupCash:GroupCash,
   },
   // {
   //   initialRouteName: 'Home',

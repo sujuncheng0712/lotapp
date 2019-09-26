@@ -39,11 +39,15 @@ export default class App extends React.Component {
   // 验证本地存储的资料是否有效
   _checkLoginState = async () => {
     let LoginInfo = await AsyncStorage.getItem('LoginInfo');
-    // eslint-disable-next-line no-eval
     LoginInfo = eval('(' + LoginInfo + ')');
     console.log(LoginInfo);
-    this.setState({LoginInfo});
+    // eslint-disable-next-line no-eval
     if (LoginInfo !== null) {
+      if(LoginInfo.type !==null){
+       // this.props.navigation.push('GroupHome', {_isLogin: true});
+      }
+    
+      this.setState({LoginInfo});
       let urlInfo = `${url}/equipments?uid=${LoginInfo.uid}&sale_type=${
         LoginInfo.sale_type
       }`;

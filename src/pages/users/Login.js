@@ -94,12 +94,7 @@ export default class Login extends React.Component {
       try {
         await AsyncStorage.setItem('LoginInfo', JSON.stringify(data), () => {
           // 存储成功后跳转
-          if(state ==='1'){
-            this.props.navigation.push('Home', {_isLogin: true});
-          }else if(state ==='2'){
-            this.props.navigation.push('GroupHome', {_isLogin: true});
-          }
-      
+            this.props.navigation.push('White', {_isLogin: true});
         });
       } catch (error) {
         // Error saving data

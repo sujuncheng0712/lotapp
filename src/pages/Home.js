@@ -1,11 +1,12 @@
 import {createBottomTabNavigator} from 'react-navigation';
-
 import React from 'react';
 import MyCenter from '../pages/users/MyCenter';
 import MyShop from './users/MyShop';
 import Device from './users/Device';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 const HomeBottomRoute = createBottomTabNavigator(
+
   {
     Device: {
       screen: Device,
@@ -41,7 +42,7 @@ const HomeBottomRoute = createBottomTabNavigator(
   },
   {
      // 初始路线名称
-     initialRouteName:'Device',
+    // initialRouteName:'Device',
       // 标签栏位置
     tabBarPosition: 'bottom',
     // 标签栏选项
@@ -50,14 +51,14 @@ const HomeBottomRoute = createBottomTabNavigator(
       inactiveTintColor: '#666',
     },
       // 懒加载
-    lazy: false,
+    lazy: true,
   },
  
 );
 HomeBottomRoute.navigationOptions = ({navigation}) => {
   //  关键这一行设置 header:null
   return {
-    header: null,
+    header: null
   };
 };
 

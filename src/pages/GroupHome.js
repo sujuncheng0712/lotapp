@@ -1,54 +1,47 @@
 import {createBottomTabNavigator} from 'react-navigation';
 import React from 'react';
-import MyCenter from '../pages/users/MyCenter';
-import Device from './users/Device';
+import GroupCenter from '../pages/group/GroupCenter';
+import Notice from '../pages/group/Notice';
+import List from '../pages/group/List';
+import HomePage from '../pages/group/HomePage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const HomeBottomRoute = createBottomTabNavigator(
   {
-    Device: {
-      screen: Device,
+    HomePage: {
+      screen: HomePage,
       navigationOptions: {
-        title: '首页',
+        title: '概览',
         tabBarIcon: ({tintColor, focused}) => (
-          <Icon name="bars" size={20} color={focused ? '#FF7A01' : '#666'} />
+          <Icon name="bar-chart" size={20} color={focused ? '#FF7A01' : '#666'} />
         ),
       },
     },
-    MyCenter: {
-      screen: MyCenter,
+    List: {
+      screen: List,
       navigationOptions: {
-        title: '报表',
+        title: '工单',
         tabBarIcon: ({tintColor, focused}) => (
           <Icon
-            name="shopping-cart"
+            name="list-alt"
             size={20}
             color={focused ? '#FF7A01' : '#666'}
           />
         ),
       },
     },
-    MyCenter: {
-      screen: MyCenter,
-      navigationOptions: {
-        title: '通知',
-        tabBarIcon: ({tintColor, focused}) => (
-          <Icon name="user" size={20} color={focused ? '#FF7A01' : '#666'} />
-        ),
-      },
-    },
-    MyCenter: {
-      screen: MyCenter,
+    GroupCenter: {
+      screen: GroupCenter,
       navigationOptions: {
         title: '我的',
         tabBarIcon: ({tintColor, focused}) => (
-          <Icon name="user" size={20} color={focused ? '#FF7A01' : '#666'} />
+          <Icon name="user-o" size={20} color={focused ? '#FF7A01' : '#666'} />
         ),
       },
     },
   },
   {
      // 初始路线名称
-     initialRouteName:'Device',
+     initialRouteName:'HomePage',
       // 标签栏位置
     tabBarPosition: 'bottom',
     // 标签栏选项
