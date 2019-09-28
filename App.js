@@ -28,12 +28,14 @@ import Extend from './src/pages/returnService/Extend';
 import GroupCenter from './src/pages/group/GroupCenter';
 import Balance from './src/pages/group/Balance';
 import GroupCash from './src/pages/group/GroupCash';
+import WriteCard from './src/pages/group/WriteCard';
+import CashPassword from './src/pages/group/CashPassword';
+import GroupCashRecord from './src/pages/group/GroupCashRecord';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {
-    GroupCash:GroupCash,
+  { 
     White:White,
     Home:Home,
     GroupHome:GroupHome,
@@ -63,7 +65,10 @@ const AppStack = createStackNavigator(
     //Filter:Filter,
     Wallet:Wallet,
     Balance:Balance,
-   // GroupCash:GroupCash,
+    GroupCash:GroupCash,
+    WriteCard:WriteCard,
+    CashPassword:CashPassword,
+    GroupCashRecord:GroupCashRecord,
   },
   // {
   //   initialRouteName: 'Home',

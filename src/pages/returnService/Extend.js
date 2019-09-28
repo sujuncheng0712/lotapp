@@ -8,15 +8,26 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  ToastAndroid,
+  ToastAndroid,Picker
 } from 'react-native';
-import { PickerView,Picker,Provider } from '@ant-design/react-native';
+import { Provider } from '@ant-design/react-native';
 import { WebView } from 'react-native-webview';
-import Video from 'react-native-video'
 import * as wechat from 'react-native-wechat';
-import address1 from '../../../service/address';
+import Area from '../../../service/Area';
 import district from 'antd-mobile-demo-data';
 const url = 'https://iot2.dochen.cn/api';
+let pArr = [];
+let cArr=[];
+let tArr=[];
+//省
+const provinceArr = Area.map((val,i)=>{
+
+  pArr.push(val.value);
+  return (
+    <Picker.Item key={i} label={val.value} value={`${val.code}` }/>
+  );
+});
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -29,6 +40,8 @@ export default class App extends React.Component {
       play:false,
       number:1,
       provinceCode:'',
+      cityCode:'',
+      countyCode:'',
       onchange:true,
       activeTabs:'1',
       hidden:false,
@@ -41,9 +54,6 @@ export default class App extends React.Component {
       model:'',
       waiter:false,
       LoginInfo:'',
-      province:'',
-      city:'',
-      town:'',
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -54,6 +64,7 @@ export default class App extends React.Component {
 
   // render创建之前
   componentWillMount() {
+    console.log(Area);
     let type = this.props.navigation.getParam('type','');
     let state = this.props.navigation.getParam('state','');
     this.setState({type, state});
@@ -77,7 +88,9 @@ export default class App extends React.Component {
   };
 
   submit(){
-    let {  username, phone, area, address, remark,number,LoginInfo,type,province, city,town} = this.state;
+    console.log(111);
+    let {  username, phone, address, remark,number,LoginInfo,type, provinceValue,
+      cityValue, countyValue,} = this.state;
     let model = type ==='A20' ? 'DCA20-A' :'DCA16-A';
     console.log(username)
     console.log(phone)
@@ -85,10 +98,10 @@ export default class App extends React.Component {
     console.log(remark)
     console.log(number)
     console.log(model)
-    console.log(province)
-    console.log(city)
-    console.log(town)
-    if(!(username && phone && province && city && town   && address)){
+    console.log(provinceValue)
+    console.log(cityValue)
+    console.log(countyValue)
+    if(!(username && phone && provinceValue && cityValue && countyValue   && address)){
       ToastAndroid.show('*不能为空', ToastAndroid.SHORT);
       return false;
     }
@@ -99,9 +112,9 @@ export default class App extends React.Component {
         mid:LoginInfo.mid,
         name:username,
         phone,
-        province,
-        city,
-        town,
+        province:provinceValue,
+        city:cityValue,
+        town:countyValue,
         quantity:number,
         address,
         remark,
@@ -151,10 +164,52 @@ export default class App extends React.Component {
     }
   }
 
+  //获得对应code下的市数组
+  getCityArr(code){
+    Area.forEach(item=>{
+      if(item.code === code){
+        let cityArr = item.children.map((val,i)=>{
+          cArr.push(val.value);
+          if(i===0){
+            this.setState({cityValue:tArr[0],cityCode:`${val.code}` })
+          }
+          return (
+            <Picker.Item key={i} label={val.value} value={`${val.code}` }/>
+          )
+        });
+        this.setState({cityArr});
+      }
+    });
+  }
+
+   //获得对应code下的县数组
+   getCountyArr(cityCode){
+    const { provinceCode } = this.state;
+    Area.forEach(item=>{
+      if(item.code === provinceCode){
+        item.children.forEach(value=>{
+          if(value.code === cityCode){
+            let countyArr = value.children.map((val,i)=>{
+              tArr.push(val.value);
+              if(i===0){
+                this.setState({countyCode:`${val.code}`,county:val.value});
+              }
+              return (
+                <Picker.Item key={i} label={val.value} value={`${val.code}` }/>
+              )
+            });
+            if(countyArr.length>0){
+              this.setState({countyArr});
+            }
+          }
+        });
+
+      }
+    });
+  }
+
   render() {
-    const {state,type,number,area,waiter} = this.state;
-    console.log(state);
-    console.log(type);
+    const {state,type,number,area,waiter, cityArr,countyArr} = this.state;
     return (
         <View style={{flex:1,padding:5}}>
           <ScrollView style={{flex:1}} horizontal={false} ref={(view) => { this.myScrollView = view; }}>
@@ -259,7 +314,7 @@ export default class App extends React.Component {
                     onChangeText={(e)=>{this.setState({phone:e})}}
                   />
                 </View>
-                <View style={styles.item}>
+                {/* <View style={styles.item}>
                   <Text style={styles.title}>*省：</Text>
                   <TextInput
                     style={styles.itemInput}
@@ -285,7 +340,55 @@ export default class App extends React.Component {
                     value={this.state.town}
                     onChangeText={(e)=>{this.setState({town:e})}}
                   />
-                </View>
+                </View> */}
+                <View style={styles.item}>
+                  <Text style={styles.title}>*省 : </Text>
+                  <View  style={styles.itemInput}>
+                  <Picker
+                    mode={'dropdown'}
+                    style={styles.picker}
+                    selectedValue={this.state.provinceCode}
+                    onValueChange={(value,key) => {
+                      this.setState({provinceCode: value,provinceValue:pArr[key]});console.log(value);console.log(pArr[key]);this.forceUpdate; this.getCityArr(value);}
+        
+                    }>
+                    {provinceArr}
+                  </Picker>
+                  </View>
+                </View> 
+
+                <View style={styles.item}>
+                  <Text style={styles.title}>*市 : </Text>
+                  <View  style={styles.itemInput}>
+                  <Picker
+                    mode={'dropdown'}
+                    style={styles.picker}
+                    selectedValue={this.state.cityCode}
+                    onValueChange={(value,key) => {
+                      this.setState({cityCode: value,cityValue:cArr[key]});console.log(value);console.log(cArr[key]); this.getCountyArr(value);}
+        
+                    }>
+                     {cityArr}
+                  </Picker>
+                  </View>
+                </View> 
+
+                <View style={styles.item}>
+                  <Text style={styles.title}>县/区 : </Text>
+                  <View  style={styles.itemInput}>
+                  <Picker
+                    mode={'dropdown'}
+                    style={styles.picker}
+                    selectedValue={this.state.countyCode}
+                    onValueChange={(value,key) => {
+                      this.setState({countyCode:value,countyValue: tArr[key]});console.log(value);console.log(tArr[key]);}
+        
+                    }>
+                     {countyArr}
+                  </Picker>
+                  </View>
+                </View> 
+
                 <View style={styles.item}>
                   <Text style={styles.title}>*详细地址：</Text>
                   <TextInput
@@ -308,6 +411,7 @@ export default class App extends React.Component {
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
+                    console.log('000')
                     this.submit();
                   }}>
                   <Text

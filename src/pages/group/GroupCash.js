@@ -1,8 +1,8 @@
 import {createStackNavigator, createAppContainer} from 'react-navigation';
 import React from 'react';
-import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ToastAndroid,TouchableOpacity,FlatList} from 'react-native';
+import {View, Text, DeviceEventEmitter, AsyncStorage,Image,StyleSheet,ScrollView,ToastAndroid,TouchableOpacity,FlatList} from 'react-native';
 import * as wechat from 'react-native-wechat';
-import { T } from 'antd/lib/upload/utils';
+import { PickerView } from '@ant-design/react-native';
 import { TextInput } from 'react-native-gesture-handler';
 const url = 'https://iot2.dochen.cn/api';
 let arr =["1002-工商银行","1005-农业银行","1026-中国银行","1003-建设银行","1001-招商银行",
@@ -36,6 +36,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    DeviceEventEmitter.addListener('GroupCash', ()=> {this._checkLoginState()})
     // 验证/读取 登陆状态
     this._checkLoginState();
 }
@@ -56,10 +57,15 @@ export default class App extends React.Component {
         res.json().then(info =>{
             console.log(info);
             if(info.status){
-                let bank = info.bank_data.bank.toString();
-                let balance = info.balance.toString();
+              let bank = info.bank_data.bank;
+              arr.map((item)=>{
+                if(info.bank_data.bank ===item.split('-')[0]){
+                    bank = item.split('-')[1];
+                }
+              })
+                let balance = info.balance;
                 let account =  info.bank_data.enc_bank_no;
-                let short_no = account.slice(account.length-4);
+                let short_no = account !== null ?account.slice(account.length-4):'' ;
                 let name = info.bank_data.enc_true_name;
                 let mobile = info.bank_data.enc_true_phone;
                 // arr.forEach(item =>{
@@ -114,15 +120,20 @@ export default class App extends React.Component {
 
   render() {
     const {short_no,bank,balance,password} = this.state;
-    
     return (
       <View style={{flex:1,padding:10}}>
         <View style={styles.top}>
-          <Text style={styles.topItem}>(尾号{short_no === '' ? '--' :short_no})</Text>
-          <Text style={styles.topItem2}>修改绑定银行卡 ></Text>
+          <Text style={styles.topItem}>{bank}(尾号{short_no === '' ? '--' :short_no})</Text>
+          <TouchableOpacity
+            style={styles.topItem2}
+            onPress={()=>{this.props.navigation.push('WriteCard')}}
+          >
+           <Text style={{textAlign:'right',width:'100%',color:'#666'}}>修改绑定银行卡 ></Text>
+          </TouchableOpacity>
+          
         </View>
         <View>
-          <Text style={{padding:10,color:'#666', fontWeight:'bold',}}>可提现金额：{balance ===''?'0':balance}元</Text>
+          <Text style={{padding:10,color:'#666', fontWeight:'bold',backgroundColor:'#F0EEEF'}}>可提现金额：{balance ===''?'0':balance}元</Text>
         </View>
         <View style={{width:'100%',flexDirection:'row'}}>
           <View style={styles.moneyList}>
@@ -165,7 +176,7 @@ export default class App extends React.Component {
           <TouchableOpacity
             style={styles.buttom}
             onPress={() => {
-              this.props.navigation.navigate('ScanScreen',{state:'add'});
+              this.props.navigation.navigate('CashPassword',{state:'group'});
             }}>
             <Text
               style={{
@@ -177,7 +188,7 @@ export default class App extends React.Component {
           <TouchableOpacity
             style={{...styles.buttom}}
             onPress={() => {
-              this.props.navigation.navigate('ScanScreen',{state:'add'});
+              this.props.navigation.navigate('GroupCashRecord');
             }}>
             <Text
               style={{

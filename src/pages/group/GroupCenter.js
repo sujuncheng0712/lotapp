@@ -12,9 +12,6 @@ import {
 } from 'react-native';
 import * as wechat from 'react-native-wechat';
 import Icon from 'react-native-vector-icons/EvilIcons';
-import Icon2 from 'react-native-vector-icons/FontAwesome';
-import Icon3 from 'react-native-vector-icons/Entypo';
-import { T } from 'antd/lib/upload/utils';
 const url = `https://iot2.dochen.cn/api`;
 const {height,width} =  Dimensions.get('window');
 export default class App extends React.Component {
@@ -82,7 +79,7 @@ export default class App extends React.Component {
     const {LoginInfo,wallet} = this.state;
 
     return (
-      <ScrollView>
+      <ScrollView style={{ backgroundColor:'#F0EEEF'}}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <View style={styles.top}>
             <ImageBackground
@@ -113,7 +110,7 @@ export default class App extends React.Component {
                   style={styles.topItem}
                   onPress={()=>{this.props.navigation.push('GroupCash')}}>
                   <Image
-                  style={styles.img}
+                    style={styles.img}
                     source={require('../../images/group/groupTop02.png')}
                   />
                   <Text style={styles.topfont}>我要提现</Text>
@@ -128,19 +125,39 @@ export default class App extends React.Component {
                 <TouchableOpacity
                   style={styles.topItem}
                   onPress={()=>{alert(111)}}>
-                   <Icon3 name="users" size={35} color={'#FF7701'} />
+                     <View style={styles.toolItem}>
+                      <Image
+                      style={styles.toolImg}
+                     // resizeMode="stretch"
+                      source={require('../../images/group/account.png')}
+                      />
+                   </View>
                   <Text>开通账号</Text>
                 </TouchableOpacity>
                 <TouchableOpacity  style={styles.topItem}>
-                <Icon2 name="barcode" size={35} color={'#FF7701'} />
+                  <View style={styles.toolItem}>
+                      <Image
+                      style={styles.toolImg}
+                     // resizeMode="stretch"
+                      source={require('../../images/group/buycode.png')}
+                      />
+                   </View>
                   <Text >商家买码</Text>
                   
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.topItem}
                   onPress={()=>{alert(111)}}>
-                 <Icon2 name="share-square" size={35} color={'#FF7701'} />
-                  <Text >我要推广</Text>
+                    <View style={styles.toolItem}>
+                      <Image
+                      style={styles.toolImg}
+                     // resizeMode="stretch"
+                      source={require('../../images/group/share.png')}
+                      />
+                   </View>
+                      <Text >我要推广</Text>
+                  
+                
                 </TouchableOpacity>
               </View>
           </View>
@@ -221,9 +238,21 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     width:'33%',
   },
+  toolItem:{
+    backgroundColor:'#FF7701',
+    borderRadius:50,
+    width:40,
+    height:40,
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  toolImg:{
+    height:25,
+    width:25,
+  },
   img:{
-    height:height/20,
-    width:width/11,
+    height:30,
+    width:30,
   },
   topfont:{
     color:'#fff',
@@ -232,6 +261,7 @@ const styles = StyleSheet.create({
   tool:{
     width:'100%',
     height:height/4,
+    backgroundColor:'#F0EEEF',
   },
   toolTitle:{
     fontWeight:'bold',

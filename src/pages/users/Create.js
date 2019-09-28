@@ -144,7 +144,7 @@ export default class App extends React.Component {
             if(info.status){
               ToastAndroid.show('添加成功！', ToastAndroid.SHORT);
               DeviceEventEmitter.emit('Address');
-              this.props.navigation.navigate('Address');
+              this.props.navigation.goBack();
             }
           })
         })
