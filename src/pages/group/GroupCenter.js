@@ -3,12 +3,12 @@ import {
   View,
   Text,
   AsyncStorage,
-  BackHandler,
+  Image,
   ToastAndroid,
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  Image,ScrollView,Dimensions
+  ScrollView,Dimensions
 } from 'react-native';
 import * as wechat from 'react-native-wechat';
 import Icon from 'react-native-vector-icons/EvilIcons';
@@ -76,8 +76,12 @@ export default class App extends React.Component {
   };
 
   render() {
-    const {LoginInfo,wallet} = this.state;
-
+    const {allowance,LoginInfo,wallet,commission,balance_at} = this.state;
+    //1品牌 2运营 3代理 4经销
+    let isVerdor1 = LoginInfo.type===1 || LoginInfo.type===5 || LoginInfo.type===9 || LoginInfo.type===13 || LoginInfo.type===17 || LoginInfo.type===21;
+    let isVerdor2 = LoginInfo.type===2 || LoginInfo.type===6 || LoginInfo.type===10 || LoginInfo.type===14 || LoginInfo.type===18 || LoginInfo.type===22;
+    let isVerdor3 = LoginInfo.type===3 || LoginInfo.type===7 || LoginInfo.type===11 || LoginInfo.type===15 || LoginInfo.type===19 || LoginInfo.type===23;
+    let isVerdor4 = LoginInfo.type===4 || LoginInfo.type===8 || LoginInfo.type===12 || LoginInfo.type===16 || LoginInfo.type===20 || LoginInfo.type===24;
     return (
       <ScrollView style={{ backgroundColor:'#F0EEEF'}}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -92,6 +96,15 @@ export default class App extends React.Component {
                 onPress={this.withdraw}>
                 <Icon name="gear" size={25} color={'#fff'} />
               </TouchableOpacity>
+              <View style={{width:'100%',alignItems:'center',justifyContent:'center'}}>
+              <Text style={{color:'#FF7701',backgroundColor:'#fff',borderRadius:5}}> {
+                      isVerdor1 ? ' 品牌商 '
+                    : isVerdor2 ? ' 运营商 '
+                    : isVerdor3 ? ' 代理商 '
+                    : isVerdor4 ? ' 经销商 ' : ''}
+                </Text>
+              </View>
+              
               <View style={styles.topList}>
                 <TouchableOpacity
                   style={styles.topItem}
@@ -118,33 +131,154 @@ export default class App extends React.Component {
               </View>
             </ImageBackground>
           </View>
+
+          <View style={styles.tool3}>
+            <View style={{width:'100%',flexDirection:'row'}}>
+              <View style={styles.tool3Item}>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                  <Image
+                    source={require('../../images/group/butie.png')}
+                    style={styles.tool3Img}
+                  />
+                  <Text style={{fontSize:13,color:'black',fontWeight:'bold'}}>推广补贴</Text>
+                </View>
+                <Text style={styles.tool3Font}>￥{allowance}元/台</Text>
+              </View>
+
+              <View style={styles.tool3Item}>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                  <Image
+                    source={require('../../images/group/fanli.png')}
+                    style={styles.tool3Img}
+                  />
+                  <Text style={{fontSize:13,color:'black',fontWeight:'bold'}}>滤芯返点</Text>
+                </View>
+                <Text style={styles.tool3Font}>订单*{commission}</Text>
+              </View>
+
+              <View style={styles.tool3Item}>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                  <Image
+                    source={require('../../images/group/weixiubutie.png')}
+                    style={styles.tool3Img}
+                  />
+                  <Text style={{fontSize:13,color:'black',fontWeight:'bold'}}>维修补贴</Text>
+                </View>
+                <Text style={styles.tool3Font}>完善中</Text>
+              </View>
+            </View>
+            {LoginInfo.deposit === true ? 
+             <View style={{width:'100%',flexDirection:'row'}}>
+                <View style={styles.tool3Item}>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                  <Image
+                    source={require('../../images/group/baozhengjin.png')}
+                    style={styles.tool3Img}
+                  />
+                  <Text style={{fontSize:13,color:'black',fontWeight:'bold'}}>已交保证金</Text>
+                </View>
+                <Text style={styles.tool3Font}>保证金将会冻结</Text>
+                <Text style={styles.tool3Font}>完善中</Text>
+              </View>
+            
+              <View style={styles.tool3Item}>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                  <Image
+                    source={require('../../images/group/yajin.png')}
+                    style={styles.tool3Img}
+                  />
+                  <Text style={{fontSize:13,color:'black',fontWeight:'bold'}}>已交押金</Text>
+                </View>
+                <Text style={styles.tool3Font}>用于循环提货</Text>
+                <Text style={styles.tool3Font}>完善中</Text>
+              </View>
+
+              <View style={styles.tool3Item}>
+                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                  <Image
+                    source={require('../../images/group/edu.png')}
+                    style={styles.tool3Img}
+                  />
+                  <Text style={{fontSize:13,color:'black',fontWeight:'bold'}}>发货额度</Text>
+                </View>
+                <Text style={styles.tool3Font}>截止至{balance_at}</Text>
+                <Text style={styles.tool3Font}>完善中</Text>
+              </View> 
+            </View>: null
+          }
+            
+          </View>
+
           <View style={styles.tool}>
             <Text style={{padding:20}}>我的工具</Text>
 
             <View style={styles.topList}>
+              <TouchableOpacity
+                style={styles.topItem}
+                onPress={()=>{alert(111)}}>
+                  <View style={styles.toolItem}>
+                    <Image
+                    style={styles.toolImg}
+                  // resizeMode="stretch"
+                    source={require('../../images/group/jihuoma1.png')}
+                    />
+                </View>
+                <Text>购买激活码</Text>
+              </TouchableOpacity> 
+
+              <TouchableOpacity
+                style={styles.topItem}
+                onPress={()=>{alert(111)}}>
+                  <View style={styles.toolItem}>
+                    <Image
+                    style={styles.toolImg}
+                  // resizeMode="stretch"
+                    source={require('../../images/group/chakan.png')}
+                    />
+                </View>
+                <Text>查看激活码</Text>
+              </TouchableOpacity> 
+
+              <TouchableOpacity
+                style={styles.topItem}
+                onPress={()=>{alert(111)}}>
+                  <View style={styles.toolItem}>
+                    <Image
+                    style={styles.toolImg}
+                  // resizeMode="stretch"
+                    source={require('../../images/group/yonghu.png')}
+                    />
+                </View>
+                <Text>查看用户</Text>
+              </TouchableOpacity> 
+            
+              {isVerdor4  ? null :
                 <TouchableOpacity
                   style={styles.topItem}
                   onPress={()=>{alert(111)}}>
-                     <View style={styles.toolItem}>
+                    <View style={styles.toolItem}>
                       <Image
                       style={styles.toolImg}
-                     // resizeMode="stretch"
+                    // resizeMode="stretch"
                       source={require('../../images/group/account.png')}
                       />
-                   </View>
-                  <Text>开通账号</Text>
-                </TouchableOpacity>
-                <TouchableOpacity  style={styles.topItem}>
-                  <View style={styles.toolItem}>
-                      <Image
-                      style={styles.toolImg}
-                     // resizeMode="stretch"
-                      source={require('../../images/group/buycode.png')}
-                      />
-                   </View>
-                  <Text >商家买码</Text>
-                  
-                </TouchableOpacity>
+                  </View>
+                  <Text>添加商家</Text>
+                </TouchableOpacity> 
+              }
+              {isVerdor4 ? null :
+               <TouchableOpacity  style={styles.topItem}>
+                <View style={styles.toolItem}>
+                    <Image
+                    style={styles.toolImg}
+                    // resizeMode="stretch"
+                    source={require('../../images/group/list.png')}
+                    />
+                  </View>
+                <Text >商家列表</Text>
+             </TouchableOpacity>
+              }
+               
                 <TouchableOpacity
                   style={styles.topItem}
                   onPress={()=>{alert(111)}}>
@@ -152,10 +286,10 @@ export default class App extends React.Component {
                       <Image
                       style={styles.toolImg}
                      // resizeMode="stretch"
-                      source={require('../../images/group/share.png')}
+                      source={require('../../images/group/daohang-tuiguanglianjie.png')}
                       />
                    </View>
-                      <Text >我要推广</Text>
+                      <Text >分享链接</Text>
                   
                 
                 </TouchableOpacity>
@@ -229,14 +363,15 @@ const styles = StyleSheet.create({
   topList:{ 
     flexDirection:'row',
     width:'100%',
-    alignItems:'center',
-    justifyContent:'center',
-    paddingTop:10,
+    alignItems:'flex-start',
+    justifyContent:'flex-start',
+    flexWrap:'wrap',
   },
   topItem:{
     alignItems:'center',
     justifyContent:'center',
     width:'33%',
+    marginTop:10,
   },
   toolItem:{
     backgroundColor:'#FF7701',
@@ -245,6 +380,7 @@ const styles = StyleSheet.create({
     height:40,
     alignItems:'center',
     justifyContent:'center',
+    marginBottom:5,
   },
   toolImg:{
     height:25,
@@ -260,10 +396,35 @@ const styles = StyleSheet.create({
   },
   tool:{
     width:'100%',
-    height:height/4,
     backgroundColor:'#F0EEEF',
   },
   toolTitle:{
     fontWeight:'bold',
+  },
+  tool3:{
+    width:'100%',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor:'#F0EEEF',
+    flexWrap:'wrap',
+    marginTop:5,
+  },
+  tool3Item:{
+    //padding:5,
+    width:'33%',
+    borderColor:'grey',
+    borderWidth:0.5,
+    alignItems:'center',
+    justifyContent:'center',
+    height:60,
+  },
+  tool3Img:{
+    width:17,
+    height:17,
+  },
+  tool3Font:{
+    color:'grey',
+    fontSize:10,
   }
 })

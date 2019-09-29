@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, AsyncStorage,ScrollView,StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, AsyncStorage,ScrollView,StyleSheet,DeviceEventEmitter} from 'react-native';
 import * as wechat from 'react-native-wechat';
 const url = 'https://iot2.dochen.cn/api';
 export default class App extends React.Component {
@@ -21,6 +21,7 @@ export default class App extends React.Component {
 
   // render创建之前
   componentWillMount() {
+    DeviceEventEmitter.addListener('List', ()=> {this._checkLoginState()})
     // 验证/读取 登陆状态
     this._checkLoginState();
   }
@@ -76,9 +77,6 @@ export default class App extends React.Component {
 
   render() {
     const {waitSet, waitFix, finish, state} = this.state;
-    console.log(waitSet);
-    console.log(waitFix);
-    console.log(finish);
     let List = [];
     if(waitSet.length>0 || waitFix.length>0 || finish.length>0){
       let share = [];
@@ -88,7 +86,10 @@ export default class App extends React.Component {
      
       List = share.map((item,key)=>{
         return(
-          <TouchableOpacity style={styles.item} key={key}>
+          <View 
+            style={styles.item} 
+            key={key}
+          >
             <View style={styles.rol}>
               <Text style={styles.left}> 
                 类型：
@@ -141,15 +142,22 @@ export default class App extends React.Component {
               <Text style={styles.left}> 
               完成状态：
               </Text>
-              <Text style={styles.right}>
-              {item.state===1 ? '已申请' : '已完成'}
-              </Text>
+              <View style={{...styles.right,justifyContent:'space-between',marginRight:10}}>
+                <Text >
+                 {item.state===1 ? '已申请' : item.state === 2 && item.change_mid === null ? '已完成' : '已拒单'}
+                </Text>
+                {state ==='c' ? null :
+                  <TouchableOpacity 
+                    style={styles.submit} 
+                    key={key}
+                    onPress={()=>{this.props.navigation.push('SetDetail',{usuid:item.uuid})}}  
+                  ><Text style={styles.submitFont}>点击完成</Text></TouchableOpacity>
+                }
+              </View>
             </View>
-          </TouchableOpacity>
+          </View>
         )
-        
       })
-    
     }
     return (
       <View style={{flex: 1}}>
@@ -216,7 +224,8 @@ const styles = StyleSheet.create({
   },
   item:{
     backgroundColor:'#F0EEEF',
-    marginTop:10,
+    padding:10,
+    marginTop:5,
   },
   rol:{
     flexDirection:'row',
@@ -228,7 +237,18 @@ const styles = StyleSheet.create({
   },
   right:{
     width:'75%',
-    textAlign:'left'
+    textAlign:'left',
+    flexDirection:'row',
+  },
+  submit:{
+    backgroundColor:'#FF7701',
+    borderColor:'#FF7701',
+    padding:1,
+    borderRadius:4,
+  },
+  submitFont:{
+    color:'#fff',
+    textAlign:'center',
   }
 
 })

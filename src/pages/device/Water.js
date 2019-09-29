@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, AsyncStorage,Image,StyleSheet,ScrollView,ImageBackground,TouchableOpacity,Dimensions} from 'react-native';
+import {View, Text, AsyncStorage,StyleSheet,ScrollView,ImageBackground,TouchableOpacity,Dimensions} from 'react-native';
 import {Echarts, echarts} from 'react-native-secharts';
 import Icon from 'react-native-vector-icons/AntDesign';
 const url = 'https://iot2.dochen.cn/api';
