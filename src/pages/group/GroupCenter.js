@@ -255,7 +255,7 @@ export default class App extends React.Component {
               {isVerdor4  ? null :
                 <TouchableOpacity
                   style={styles.topItem}
-                  onPress={()=>{alert(111)}}>
+                  onPress={()=>{this.props.navigation.push('Addmerchant')}}>
                     <View style={styles.toolItem}>
                       <Image
                       style={styles.toolImg}
@@ -278,21 +278,55 @@ export default class App extends React.Component {
                 <Text >商家列表</Text>
              </TouchableOpacity>
               }
-               
-                <TouchableOpacity
-                  style={styles.topItem}
-                  onPress={()=>{alert(111)}}>
-                    <View style={styles.toolItem}>
-                      <Image
-                      style={styles.toolImg}
-                     // resizeMode="stretch"
-                      source={require('../../images/group/daohang-tuiguanglianjie.png')}
-                      />
-                   </View>
-                      <Text >分享链接</Text>
-                  
-                
-                </TouchableOpacity>
+
+              {LoginInfo.deposit === true ? 
+                <TouchableOpacity  style={styles.topItem}>
+                <View style={styles.toolItem}>
+                    <Image
+                    style={styles.toolImg}
+                    // resizeMode="stretch"
+                    source={require('../../images/group/tihuo.png')}
+                    />
+                  </View>
+                <Text >我要提货</Text>
+             </TouchableOpacity> : null}
+
+             {LoginInfo.deposit === true ? 
+                <TouchableOpacity  style={styles.topItem}>
+                <View style={styles.toolItem}>
+                    <Image
+                    style={styles.toolImg}
+                    // resizeMode="stretch"
+                    source={require('../../images/group/tuihuo.png')}
+                    />
+                  </View>
+                <Text >我要退货</Text>
+             </TouchableOpacity> : null}
+
+             <TouchableOpacity
+                style={styles.topItem}
+                onPress={()=>{alert(111)}}>
+                  <View style={styles.toolItem}>
+                    <Image
+                    style={styles.toolImg}
+                  // resizeMode="stretch"
+                    source={require('../../images/group/duizhangdan.png')}
+                    />
+                </View>
+                <Text >对账单</Text>
+              </TouchableOpacity>
+             <TouchableOpacity
+                style={styles.topItem}
+                onPress={()=>{alert(111)}}>
+                  <View style={styles.toolItem}>
+                    <Image
+                    style={styles.toolImg}
+                  // resizeMode="stretch"
+                    source={require('../../images/group/daohang-tuiguanglianjie.png')}
+                    />
+                </View>
+                <Text >分享链接</Text>
+              </TouchableOpacity>
               </View>
           </View>
 
@@ -302,7 +336,7 @@ export default class App extends React.Component {
             <View style={styles.topList}>
                 <TouchableOpacity
                   style={styles.topItem}
-                  onPress={()=>{alert(111)}}>
+                  onPress={()=>{this.props.navigation.push('PhoneGuide')}}>
                   <Image
                   style={styles.img}
                     source={require('../../images/group/phone.png')}
@@ -332,8 +366,6 @@ export default class App extends React.Component {
               </View>
           </View>
         </View>
-
-
       </ScrollView>
     );
   }
@@ -341,12 +373,12 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   top:{
     width: '100%',
-    height:height/4,
   },
   ImageBackground:{
     flex:1,
     width:'100%',
     height:'100%',
+  //  paddingBottom:10,
   },
   contact:{
     textAlign:'center',
@@ -366,6 +398,7 @@ const styles = StyleSheet.create({
     alignItems:'flex-start',
     justifyContent:'flex-start',
     flexWrap:'wrap',
+    marginBottom:10,
   },
   topItem:{
     alignItems:'center',
@@ -414,7 +447,7 @@ const styles = StyleSheet.create({
     //padding:5,
     width:'33%',
     borderColor:'grey',
-    borderWidth:0.5,
+    borderWidth:0.2,
     alignItems:'center',
     justifyContent:'center',
     height:60,

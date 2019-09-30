@@ -73,10 +73,10 @@ export default class App extends React.Component {
     return (
       <View style={{flex: 1,}}>
         <View style={styles.title}>
-          <Text style={styles.titleDate}>发送时间</Text>
-          <Text style={styles.titleItem}>银行卡号</Text>
-          <Text style={styles.titleItem}>金额</Text>
-          <Text style={styles.titleItem}>处理进度</Text>
+          <Text style={{...styles.titleItem,width:'23%'}}>发送时间</Text>
+          <Text style={{...styles.titleItem,width:'44%'}}>银行卡号</Text>
+          <Text style={{...styles.titleItem,width:'15%'}}>金额</Text>
+          <Text style={{...styles.titleItem,width:'18%'}}>处理进度</Text>
         </View>
         
 
@@ -88,10 +88,10 @@ export default class App extends React.Component {
             ItemSeparatorComponent={separator}
             renderItem={({item}) =>
               <View style={styles.item}>
-                <Text style={styles.titleDate}>{item.created_at}</Text>
-                <Text style={styles.titlePhone}>{item.account}</Text>
-                <Text style={styles.titleItem}>{item.amount}</Text>
-                <Text style={styles.titleItem}>{item.state}</Text>
+                <Text style={{...styles.titleItem,width:'23%'}}>{item.created_at}</Text>
+                <Text style={{...styles.titleItem,width:'44%'}}>{item.account}</Text>
+                <Text style={{...styles.titleItem,width:'15%'}}>{item.amount}</Text>
+                <Text style={{...styles.titleItem,width:'18%'}}>{item.state}</Text>
               </View>
             }
           />
@@ -106,19 +106,20 @@ const styles = StyleSheet.create({
     backgroundColor:'#bbb',
   },
   titleDate:{
-    flex:1.2,
+
     textAlign:'center',
     padding:10,
   },
   titlePhone:{
-    flex:1.4,
+  
     textAlign:'center',
     padding:10,
   },
   titleItem:{
-    flex:1,
+
     textAlign:'center',
-    padding:10,
+    padding:5,
+    fontSize:12,
   },
   item:{
     flexDirection:'row',
