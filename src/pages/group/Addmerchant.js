@@ -1,8 +1,19 @@
 import React from 'react';
-import {View, Text, AsyncStorage, ScrollView, StyleSheet,Picker} from 'react-native';
-import * as wechat from 'react-native-wechat';
+import {View, Text, AsyncStorage, ScrollView, StyleSheet,Picker,TextInput,TouchableOpacity,ToastAndroid} from 'react-native';
 import { T } from 'antd/lib/upload/utils';
+import Area from '../../../service/Area';
 const url = 'https://iot2.dochen.cn/api';
+let pArr = [];
+let cArr=[];
+let tArr=[];
+//省
+const provinceArr = Area.map((val,i)=>{
+
+  pArr.push(val.value);
+  return (
+    <Picker.Item key={i} label={val.value} value={`${val.code}` }/>
+  );
+});
 let that = '';
 export default class App extends React.Component {
   constructor(props) {
@@ -116,6 +127,131 @@ export default class App extends React.Component {
     }
   };
 
+   //获得对应code下的市数组
+   getCityArr(code){
+    Area.forEach(item=>{
+      if(item.code === code){
+        let cityArr = item.children.map((val,i)=>{
+          cArr.push(val.value);
+          if(i===0){
+            this.setState({cityValue:tArr[0],cityCode:`${val.code}` })
+          }
+          return (
+            <Picker.Item key={i} label={val.value} value={`${val.code}` }/>
+          )
+        });
+        this.setState({cityArr});
+      }
+    });
+  }
+
+   //获得对应code下的县数组
+   getCountyArr(cityCode){
+    const { provinceCode } = this.state;
+    Area.forEach(item=>{
+      if(item.code === provinceCode){
+        item.children.forEach(value=>{
+          if(value.code === cityCode){
+            let countyArr = value.children.map((val,i)=>{
+              tArr.push(val.value);
+              if(i===0){
+                this.setState({countyCode:`${val.code}`,county:val.value});
+              }
+              return (
+                <Picker.Item key={i} label={val.value} value={`${val.code}` }/>
+              )
+            });
+            if(countyArr.length>0){
+              this.setState({countyArr});
+            }
+          }
+        });
+
+      }
+    });
+  }
+
+  //处理返点
+  handleCommission(value, pid) {
+    this.state.data.forEach(item => {
+      if (item.pid === pid) {
+        if (item.type === 3) {
+          item.commission = value;
+        }
+      }
+    })
+  }
+
+  //处理补贴
+  handleAllowance(value, pid) {
+    this.state.data.forEach(item => {
+      if (item.pid === pid) {
+        if (item.type === 3) {
+          item.allowance = value;
+        }
+      }
+    })
+  }
+
+   //提交
+   submit() {
+    let {
+      commission_rate, contact, organization, sid, type2, pledge, deposit,
+      contract, username, data, provinceValue, cityValue, countyValue,LoginInfo
+    } = this.state;
+    let area = `${provinceValue}/${cityValue}/${countyValue}`;
+
+    let a = true;
+    data.forEach(item => {
+      if (!(item.allowance > 0 && item.commission > 0)) {
+        message.error('补贴和返点必须大于0');
+        a = false;
+        return false;
+      }
+    });
+    if (a === false) {
+      return false;
+    }
+
+    let postMerchants = `${url}/merchants`;
+    fetch(postMerchants, {
+      method: `POST`,
+      body: JSON.stringify({
+        products: data,
+        area: area,
+        commission_rate: commission_rate,
+        contact: contact,
+        organization: organization,
+        sale_type: LoginInfo.sale_type,
+        password: '0123456789',
+        sid: LoginInfo.username,
+        type2: parseInt(type2),
+        pledge: pledge,
+        deposit: deposit,
+        contract: contract,
+        username: username,
+      }),
+    }).then(res => {
+      if (res.ok) {
+        res.json().then(info => {
+          console.log(info);
+          if (info.status) {
+            ToastAndroid.show('提交成功', ToastAndroid.SHORT);
+            this.props.navigation.goBack(); 
+          } else {
+            if (info.code === 9005) {
+              ToastAndroid.show('返点或补贴错误，请在个人中心检查确认', ToastAndroid.SHORT);
+            } else if (info.code === 10006) {
+              ToastAndroid.show('请输入完整，正确的参数', ToastAndroid.SHORT);
+            }else if (info.code === 10004) {
+              ToastAndroid.show('该商家已存在', ToastAndroid.SHORT);
+            }
+          }
+        });
+      }
+    });
+  }
+
   render() {
     const {merchantsInfo, lists, area, type, mobile, sid, data,
       cityArr, countyArr,LoginInfo} = this.state;
@@ -125,6 +261,7 @@ export default class App extends React.Component {
       const isMer02 = LoginInfo.type === 2 || LoginInfo.type === 6 || LoginInfo.type === 10 || LoginInfo.type === 14;
       const isMer03 = LoginInfo.type === 3 || LoginInfo.type === 7 || LoginInfo.type === 11 || LoginInfo.type === 15;
       let showLevelList = <Picker.Item label={''} value={'-1'}/>;
+      //客户类型处理
       if(isVendor){
         const levelArr = [{value:'-1',label:''},{value:'1',label:'品牌商'},{value:'2',label:'运营商'},{value:'3',label:'代理商'},{value:'4',label:'经销商'}];
         showLevelList = levelArr.map((item,key)=>{
@@ -135,11 +272,10 @@ export default class App extends React.Component {
       }  else if(isMer01){
         const levelArr2 = [{value:'-1',label:''},{value:'2',label:'运营商'},{value:'3',label:'代理商',key:2},{value:'4',label:'经销商'}];
         showLevelList = levelArr2.map((item,key)=>{
-          if(item.key>0){
             return(
               <Picker.Item key={key} label={item.label} value={item.value }/>
             )
-          }
+          
         })
       } else  if(isMer02){
         const levelArr3 = [{value:'-1',label:''},{value:'3',label:'代理商',key:2},{value:'4',label:'经销商'}];
@@ -150,20 +286,56 @@ export default class App extends React.Component {
           
         })
       } else  if(isMer03){
-        showLevelList = levelArr.map((item,key)=>{
-          if(item.key>2){
+        const levelArr4 = [{value:'-1',label:''},{value:'4',label:'经销商'}];
+        showLevelList = levelArr4.map((item,key)=>{
             return(
               <Picker.Item key={key} label={'经销商'} value={'4' }/>
             )
-          }else{
-            return false;
-          }
         })
       }
+
+
+      const showList = data.map((item,key )=> {
+        if (LoginInfo.sale_type !== 3 && item.type === 3) {
+          return (
+           <View key={key}>
+            <View style={styles.item}>
+              <View style={styles.itemTitle}>
+               <Text style={{width:'100%',textAlign:'right'}}>{item.allowanceTitle}：</Text>
+              </View>
+            
+              <View  style={styles.itemInput}>
+                  <TextInput 
+                    placeholder={'请填写产品补贴金额'}
+                    value={item.allowance}
+                    onChangeText={(e)=>{const newText = e.replace(/[^\d]+/, '');this.handleAllowance(newText, item.pid)}}
+                  />
+              </View>
+            </View>
+
+            <View style={styles.item}>
+              <View style={styles.itemTitle}>
+               <Text style={{width:'100%',textAlign:'right'}}>{item.commissionTitle}：</Text>
+              </View>
+            
+              <View  style={styles.itemInput}>
+                  <TextInput 
+                    placeholder={'请填写滤芯返点比例'}
+                    value={item.commission}
+                    onChangeText={(e)=>{ const newText = e.replace(/[^\d]+/, ''); this.handleCommission(newText, item.pid)}}
+                  />
+              </View>
+            </View>
+           </View>
+          )
+        }
+      });
+
     return (
       <ScrollView>
         <View style={{flex: 1,padding:10}}>
           <Text style={styles.top}>请填写以下信息:</Text>
+          {/*账号类型*/}
           <View style={styles.item}>
             <View style={styles.itemTitle}>
              <Text style={{width:'100%',textAlign:'right'}}>账号类型：</Text>
@@ -181,6 +353,175 @@ export default class App extends React.Component {
                 </Picker>
             </View>
           </View>
+          {/*单位名称*/}
+          <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>单位名称：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+                <TextInput 
+                  placeholder={'请输入单位名称'}
+                  onChangeText={(e)=>{this.setState({organization:e})}}
+                />
+            </View>
+          </View>
+          {/*省*/}
+          <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>所属省：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+             <Picker
+              mode={'dropdown'}
+              style={styles.picker}
+              selectedValue={this.state.provinceCode}
+              onValueChange={(value,key) => {
+                this.setState({provinceCode: value,provinceValue:pArr[key]});console.log(value);console.log(pArr[key]);this.forceUpdate; this.getCityArr(value);}
+  
+              }>
+              {provinceArr}
+            </Picker>
+            </View>
+          </View>
+          {/*市*/}
+          <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>市：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+               <Picker
+                mode={'dropdown'}
+                style={styles.picker}
+                selectedValue={this.state.cityCode}
+                onValueChange={(value,key) => {
+                  this.setState({cityCode: value,cityValue:cArr[key]});console.log(value);console.log(cArr[key]); this.getCountyArr(value);}
+    
+                }>
+                {cityArr}
+              </Picker>
+            </View>
+          </View>
+          {/*县/区*/}
+          <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>县/区：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+               <Picker
+                mode={'dropdown'}
+                style={styles.picker}
+                selectedValue={this.state.countyCode}
+                onValueChange={(value,key) => {
+                  this.setState({countyCode:value,countyValue: tArr[key]});console.log(value);console.log(tArr[key]);}
+    
+                }>
+                {countyArr}
+              </Picker>
+            </View>
+          </View>
+          {/*联系人*/}
+          <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>联系人：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+                <TextInput 
+                  placeholder={'请输入联系人'}
+                  onChangeText={(e)=>{this.setState({contact:e})}}
+                />
+            </View>
+          </View>
+          {/*手机*/}
+          <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>手机：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+                <TextInput 
+                  placeholder={'请输入手机号'}
+                  value={this.state.username}
+                  onChangeText={(e)=>{const newText = e.replace(/[^\d]+/, '');this.setState({username:newText})}}
+                />
+            </View>
+          </View>
+
+          {showList}
+
+          {/*押金*/}
+          <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>押金：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+                <TextInput 
+                  placeholder={'押金必须是有效数字'}
+                  onChangeText={(e)=>{const newText = e.replace(/[^\d]+/, '');this.setState({deposit:newText})}}
+                />
+            </View>
+          </View>
+          {!(LoginInfo.type === 5 && LoginInfo.sale_type !== '3')  ? null :
+            //保证金
+            <View style={styles.item}>
+              <View style={styles.itemTitle}>
+                <Text style={{width:'100%',textAlign:'right'}}>保证金：</Text>
+              </View>
+          
+              <View  style={styles.itemInput}>
+                <TextInput 
+                  placeholder={'保证金必须是有效数字'}
+                  onChangeText={(e)=>{const newText = e.replace(/[^\d]+/, '');this.setState({pledge:newText})}}
+                />
+            </View>
+          </View>
+        }
+
+         {/*合同号*/}
+         <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>合同号：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+                <TextInput 
+                  placeholder={'请规范填写合同号'}
+                  onChangeText={(e)=>{this.setState({contract:e})}}
+                />
+            </View>
+          </View>
+
+          {/*初始密码*/}
+         <View style={styles.item}>
+            <View style={styles.itemTitle}>
+             <Text style={{width:'100%',textAlign:'right'}}>初始密码：</Text>
+            </View>
+          
+             <View  style={styles.itemInput}>
+                <TextInput 
+                  editable={false}
+                  defaultValue={'0123456789'}
+                />
+            </View>
+          </View>
+
+          <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    this.submit();
+                  }}>
+                  <Text
+                    style={{
+                      color:'white',
+                      textAlign:'center',
+                    }}
+                  >提 交</Text>
+                </TouchableOpacity>
         </View>
       </ScrollView>
       
@@ -197,6 +538,7 @@ const styles = StyleSheet.create({
   item:{
     flexDirection:'row',
     width:'100%',
+    marginTop:5,
   },
   itemTitle:{
     width:'30%',
@@ -213,5 +555,16 @@ const styles = StyleSheet.create({
     borderWidth:0.5,
     borderRadius: 5,
     marginRight: 30,
-  }
+  },
+  button:{
+    backgroundColor: '#FF7A01',
+    color:'#FF7A01',
+    textAlign:'center',
+    borderRadius:5,
+    width: '100%',
+    fontSize:10,
+    padding: 5,
+    marginTop: 10,
+    marginBottom: 20,
+  },
 })

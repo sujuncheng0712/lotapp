@@ -110,7 +110,7 @@ export default class App extends React.Component {
           type: 'bar',
           data: moneyArr,
           itemStyle: {
-            color: 'black',
+            color: '#FF7701',
           },
       }],
       textStyle: {

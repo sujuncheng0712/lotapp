@@ -360,32 +360,32 @@ export default class App extends React.Component {
                 <View style={styles.item}>
                   <Text style={styles.title}>*市 : </Text>
                   <View  style={styles.itemInput}>
-                  <Picker
-                    mode={'dropdown'}
-                    style={styles.picker}
-                    selectedValue={this.state.cityCode}
-                    onValueChange={(value,key) => {
-                      this.setState({cityCode: value,cityValue:cArr[key]});console.log(value);console.log(cArr[key]); this.getCountyArr(value);}
-        
-                    }>
-                     {cityArr}
-                  </Picker>
+                    <Picker
+                      mode={'dropdown'}
+                      style={styles.picker}
+                      selectedValue={this.state.cityCode}
+                      onValueChange={(value,key) => {
+                        this.setState({cityCode: value,cityValue:cArr[key]});console.log(value);console.log(cArr[key]); this.getCountyArr(value);}
+          
+                      }>
+                      {cityArr}
+                    </Picker>
                   </View>
                 </View> 
 
                 <View style={styles.item}>
                   <Text style={styles.title}>县/区 : </Text>
                   <View  style={styles.itemInput}>
-                  <Picker
-                    mode={'dropdown'}
-                    style={styles.picker}
-                    selectedValue={this.state.countyCode}
-                    onValueChange={(value,key) => {
-                      this.setState({countyCode:value,countyValue: tArr[key]});console.log(value);console.log(tArr[key]);}
-        
-                    }>
-                     {countyArr}
-                  </Picker>
+                    <Picker
+                      mode={'dropdown'}
+                      style={styles.picker}
+                      selectedValue={this.state.countyCode}
+                      onValueChange={(value,key) => {
+                        this.setState({countyCode:value,countyValue: tArr[key]});console.log(value);console.log(tArr[key]);}
+          
+                      }>
+                      {countyArr}
+                    </Picker>
                   </View>
                 </View> 
 

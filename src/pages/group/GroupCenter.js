@@ -267,7 +267,9 @@ export default class App extends React.Component {
                 </TouchableOpacity> 
               }
               {isVerdor4 ? null :
-               <TouchableOpacity  style={styles.topItem}>
+               <TouchableOpacity  
+                style={styles.topItem}
+                onPress={()=>{this.props.navigation.push('MerchantList')}}>
                 <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
