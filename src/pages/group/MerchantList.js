@@ -144,7 +144,7 @@ export default class App extends React.Component {
              <TouchableOpacity
              style={{...styles.item,backgroundColor:type === 4 ? '#FF7701' : 'white' }}
              onPress={() => {
-               this.setState({state:4});
+               this.setState({type:4});
                this._checkLoginState(4);
              }}>
              <Text
@@ -154,29 +154,55 @@ export default class App extends React.Component {
              >经销商</Text>
            </TouchableOpacity>
           }
-        </View>
+         </View>
      
-        <View style={styles.content}>
-          <View style={styles.top}>
-            <Text style={styles.title}>区域</Text>
-            <Text style={styles.title}>联系人</Text>
-            <Text style={styles.title}>电话</Text>
-            <Text style={styles.title}>操作</Text>
-          </View>
-          <FlatList
-            style={{flex:1}}
-            data={lists}
-            keyExtractor={(item) => String(item.id)}
-            ItemSeparatorComponent={separator}
-            renderItem={({item}) =>
-              <View style={styles.top}>
-                <Text style={styles.title}>{item.m_area}</Text>
-                <Text style={styles.title}>{item.contact}</Text>
-                <Text style={styles.title}>{item.mobile}</Text>
-                <Text style={styles.title}>{item.type}</Text>
+          <View style={styles.content}>
+            <View style={styles.top}>
+              <Text style={styles.title}>区域</Text>
+              <Text style={styles.title}>联系人</Text>
+              <Text style={styles.title}>电话</Text>
+              <Text style={styles.title}>操作</Text>
+            </View>
+            <FlatList
+              style={{flex:1}}
+              data={lists}
+              keyExtractor={(item) => String(item.id)}
+              ItemSeparatorComponent={separator}
+              renderItem={({item}) =>
+                <View style={{...styles.top,}}>
+                  <Text style={styles.title}>{item.m_area}</Text>
+                  <Text style={styles.title}>{item.contact}</Text>
+                  <Text style={styles.title}>{item.mobile}</Text>
+                  <View style={styles.title}>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={() => {
+                        this.props.navigation.push('MerchantDetails',{mid:item.uuid});
+                      }}>
+                      <Text
+                        style={{
+                          textAlign:'center',color:'white',fontSize:12,
+                        }}
+                      >查看详情</Text>
+                   </TouchableOpacity>
+                  </View>
+                  
               </View>
-            }
-          />
+              }
+            />
+          </View>
+          <View style={{justifyContent:'center',alignItems:'flex-end',marginTop:15,marginBottom:25}}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                this.props.navigation.push('Addmerchant');
+              }}>
+              <Text
+                style={{
+                  textAlign:'center',color:'white'
+                }}
+              >+ 添加商家</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );
@@ -186,7 +212,10 @@ const styles = StyleSheet.create({
   top:{
     flexDirection:'row',
     width:'100%',
-    flexWrap:'wrap'
+    flexWrap:'wrap',
+    paddingTop:10,
+    paddingBottom:10,
+
   },
   item:{
     width:'25%',
@@ -197,13 +226,20 @@ const styles = StyleSheet.create({
   content:{
     borderColor:'#666',
     borderWidth:0.2,
-    padding:3,
-    marginTop:25,
+    padding:5,
+    marginTop:20,
   },
   title:{
     width:'25%',
     textAlign:'center',
     padding:3,
     fontSize:12,
+  },
+  button:{
+    backgroundColor:'#FF7701',
+    borderColor:'#FF7701',
+    borderWidth:1,
+    padding:5,
+    borderRadius:5,
   }
 })

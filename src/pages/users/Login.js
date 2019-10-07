@@ -1,4 +1,3 @@
-import {createStackNavigator, createAppContainer} from 'react-navigation';
 import React from 'react';
 import {
   AsyncStorage,

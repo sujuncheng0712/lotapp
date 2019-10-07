@@ -36,11 +36,12 @@ import ActivataDevice from './src/pages/group/ActivataDevice';
 import PhoneGuide from './src/pages/group/PhoneGuide';
 import Addmerchant from './src/pages/group/Addmerchant';
 import MerchantList from './src/pages/group/MerchantList';
+import MerchantDetails from './src/pages/group/MerchantDetails';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  { MerchantList:MerchantList,
+  {  MerchantDetails:MerchantDetails,
     White:White,
     Home:Home,
     GroupHome:GroupHome,
@@ -80,6 +81,7 @@ const AppStack = createStackNavigator(
     PhoneGuide:PhoneGuide,
     Addmerchant:Addmerchant,
     MerchantList:MerchantList,
+    MerchantDetails:MerchantDetails,
   },
   // {
   //   initialRouteName: 'Home',
