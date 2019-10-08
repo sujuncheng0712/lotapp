@@ -24,6 +24,9 @@ export default class App extends React.Component {
       type2:'1',
       change:false,
       key:'',
+      allowance:'',
+      commission:'',
+      equiptags:'',
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -39,8 +42,8 @@ export default class App extends React.Component {
     LoginInfo = LoginInfo[0];
 
     if (LoginInfo !== null) {
-      //let mid = this.props.navigation.getParam('mid');
-      let mid = '22d6bde6cc9611e9b4ea00163e0e26fc';
+      let mid = this.props.navigation.getParam('mid');
+      //let mid = '22d6bde6cc9611e9b4ea00163e0e26fc';
       this.setState({LoginInfo,mid});
       this.getMerchantDetails(LoginInfo,mid);
       this.getSubscriptionList(LoginInfo,mid);
@@ -190,6 +193,40 @@ export default class App extends React.Component {
     else if(num === 2) this.setState({visibleProducts: false,});
   };
 
+  updateList(key){
+    const {allowance,commission,LoginInfo,mid,equiptags} = this.state;
+   
+    let urlInfo = `${url}/merchantAllowance`;
+    fetch(urlInfo,{
+      method:'PUT',
+      body:JSON.stringify({
+        mid:mid,
+        equiptags:equiptags,
+        sale_type:LoginInfo.sale_type,
+        commission:parseInt(commission),
+        allowance:parseInt(allowance),
+      })
+    }).then(res =>{
+      res.json().then(info =>{
+        console.log(info);
+        if (info.status){
+          this.getList(LoginInfo,mid);
+          ToastAndroid.show('修改成功', ToastAndroid.SHORT);
+          this.setState({data});
+        }else{
+          if(info.code === 10003){
+          ToastAndroid.show('你的该型号还没有收益配置，请先联系上级代理为你配置该型号的收益。', ToastAndroid.SHORT);
+          }else if(info.code === 9005){
+            ToastAndroid.show('返点或补贴错误，请在个人中心检查确认', ToastAndroid.SHORT);
+          }
+        }
+      })
+    })
+
+    
+
+  }
+
   render() {
     const { subscriptionList, productsLists, info, val, allowanceLists, disabled, area,
       organization, contact, LoginInfo,mid,data,change,key} = this.state;
@@ -200,7 +237,7 @@ export default class App extends React.Component {
           <View style={styles.separator}></View>
         )
       };
-      console.log(subscriptionList)
+
     return (
       <ScrollView style={{flex: 1,padding:10,backgroundColor:'#F0F2F5',}}>
        <View style={styles.one}>
@@ -298,81 +335,78 @@ export default class App extends React.Component {
         </View>
        </View>
 
-       <View style={{...styles.one,marginBottom:20,padding:20}}>
+       <View style={{...styles.one,marginBottom:2,}}>
         <Text style={styles.oneTitle}>签约时间</Text>
         <View style={{...styles.oneContent,flexDirection:'row',justifyContent:'center'}}>
           <Text style={{...styles.twoTitle,width:'40%'}}>起始时间</Text>
           <Text style={{...styles.twoTitle,width:'30%'}}>合同编号</Text>
           <Text style={{...styles.twoTitle,width:'30%'}}>操作</Text>
         </View>
-        {subscriptionList === [] ? <Text>暂无数据</Text> :
           <FlatList
-          style={{flex:1}}
-          data={subscriptionList}
-          keyExtractor={(item) => String(item.id)}
-          ItemSeparatorComponent={separator}
-          renderItem={({item}) =>
-          <View key={`a${item.id}`} style={{...styles.oneContent,flexDirection:'row',justifyContent:'center',marginTop:2,paddingBottom:10}}>
-            <Text style={{...styles.twoTitle,width:'40%'}}>{item.begin_at}</Text>
-            <Text style={{...styles.twoTitle,width:'30%'}}>{item.contract}</Text>
-            <TouchableOpacity
-                style={{...styles.twoButton,width:'30%'}}
-                onPress={() => {
-                  this.showModal(1,item);
-                }}>
-                <Text
-                  style={{
-                    textAlign:'center',color:'white'
-                  }}
-                >更多信息</Text>
-            </TouchableOpacity>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={this.state.visibleSubscription}
-              onRequestClose={() => {
-                alert("Modal has been closed.");
-              }}
-        >
-              <View style={{height:Dimensions.get('window').height, justifyContent:'center', alignItems:'center', backgroundColor:'rgba(0,0,0,0.5)'}}>
-                <View style={{height:180,  width:300, margin:20, backgroundColor:'white'}}>
-                  <View style={{flex:1, borderWidth:1, borderColor:'#eee'}}>
-                    <Text style={styles.modalTitle}>签约信息详情</Text>
-                    <View style={styles.oneItem}>
-                      <Text style={styles.twoItemTitle}>押金(元)：</Text>
-                      <Text style={styles.twoInput}>¥ {val.deposit}</Text>
-                    </View>
-                    <View style={{...styles.oneItem,marginTop:10}}>
-                      <Text style={styles.twoItemTitle}>保证金(元)：</Text>
-                      <Text style={styles.twoInput}>¥ {val.pledge}</Text>
-                    </View>
-                    <View style={styles.twoButtonStyle}>
-                      <TouchableOpacity
-                        style={{...styles.twoButton,width:'25%'}}
-                        onPress={() => {
-                          this.hideModal(1);
-                        }}>
-                        <Text
-                          style={{
-                            textAlign:'center',color:'white'
-                          }}
-                        >确 定</Text>
-                      </TouchableOpacity>
+            data={subscriptionList}
+            keyExtractor={(item) => String(item.id)}
+            ItemSeparatorComponent={separator}
+            renderItem={({item,i}) =>
+            <View key={i} style={{...styles.oneContent,flexDirection:'row',justifyContent:'center',marginBottom:2}}>
+              <Text style={{...styles.twoTitle,width:'40%'}}>{item.begin_at}</Text>
+              <Text style={{...styles.twoTitle,width:'30%'}}>{item.contract}</Text>
+              <TouchableOpacity
+                  style={{...styles.twoButton,width:'30%'}}
+                  onPress={() => {
+                    this.showModal(1,item);
+                  }}>
+                  <Text
+                    style={{
+                      textAlign:'center',color:'white'
+                    }}
+                  >更多信息</Text>
+              </TouchableOpacity>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.visibleSubscription}
+                onRequestClose={() => {
+                  alert("Modal has been closed.");
+                }}
+              >
+                <View style={{height:Dimensions.get('window').height, justifyContent:'center', alignItems:'center', backgroundColor:'rgba(0,0,0,0.5)'}}>
+                  <View style={{height:180,  width:300, margin:20, backgroundColor:'white'}}>
+                    <View style={{flex:1, borderWidth:1, borderColor:'#eee'}}>
+                      <Text style={styles.modalTitle}>签约信息详情</Text>
+                      <View style={styles.oneItem}>
+                        <Text style={styles.twoItemTitle}>押金(元)：</Text>
+                        <Text style={styles.twoInput}>¥ {val.deposit}</Text>
+                      </View>
+                      <View style={{...styles.oneItem,marginTop:10}}>
+                        <Text style={styles.twoItemTitle}>保证金(元)：</Text>
+                        <Text style={styles.twoInput}>¥ {val.pledge}</Text>
+                      </View>
+                      <View style={styles.twoButtonStyle}>
+                        <TouchableOpacity
+                          style={{...styles.twoButton,width:'25%'}}
+                          onPress={() => {
+                            this.hideModal(1);
+                          }}>
+                          <Text
+                            style={{
+                              textAlign:'center',color:'white'
+                            }}
+                          >确 定</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-           </Modal>
-         </View>
-          }
+            </Modal>
+          </View>
+            }
         />   
-        }
         
        </View> 
 
        <View style={{...styles.one,marginBottom:50}}>
         <Text style={styles.oneTitle}>产品收益/返点</Text>
-        <View style={{...styles.oneContent,flexDirection:'row',justifyContent:'center'}}>
+        <View style={{...styles.oneContent,display:'flex',flexDirection:'row',justifyContent:'center'}}>
           <Text style={{...styles.twoTitle}}>型号</Text>
           <Text style={{...styles.twoTitle}}>补贴</Text>
           <Text style={{...styles.twoTitle}}>返点</Text>
@@ -383,13 +417,14 @@ export default class App extends React.Component {
           data={data}
           keyExtractor={(item) => String(item.id)}
           ItemSeparatorComponent={separator}
-          renderItem={({item}) =>
-            <View  key={`b${item.key}`} style={{...styles.oneContent,flexDirection:'row',justifyContent:'center'}}>
+          renderItem={({item,i}) =>
+            <View  key={i} style={{...styles.oneContent,flexDirection:'row',justifyContent:'center'}}>
               <Text style={styles.twoTitle}>{item.equiptags}</Text>
               {item.key ===key && change ? 
                 <TextInput 
-                   style={{...styles.twoTitle,borderColor:'#666',borderWidth:0.5}}
+                   style={{...styles.twoTitle,borderColor:'#666',borderWidth:0.5,marginRight:2}}
                    defaultValue={item.allowance}
+                   onChangeText={(e)=>{this.setState({allowance:e})}}
                 /> :
                 <Text style={styles.twoTitle}>{item.allowance}</Text>
               }
@@ -397,7 +432,8 @@ export default class App extends React.Component {
                item.key ===key && change ? 
                <TextInput 
                  defaultValue={item.allowance}
-                 style={{...styles.twoTitle,borderColor:'#666',borderWidth:0.5}}
+                 style={{...styles.twoTitle,borderColor:'#666',borderWidth:0.5,marginRight:2}}
+                 onChangeText={(e)=>{this.setState({commission:e})}}
              /> :
               <Text style={styles.twoTitle}>{item.commission}</Text>
              }
@@ -408,7 +444,8 @@ export default class App extends React.Component {
                     <TouchableOpacity
                       style={{...styles.threeBotton,backgroundColor:'#FF7701',borderColor:'#FF7701'}}
                       onPress={() => {
-                        this.setState({change:false})
+                        this.setState({change:false});
+                        this.updateList(key);
                       }}>
                       <Text
                         style={{
@@ -431,7 +468,7 @@ export default class App extends React.Component {
                 <TouchableOpacity
                   style={styles.threeBotton}
                   onPress={() => {
-                    this.setState({change:true,key:item.key})
+                    this.setState({change:true,key:item.key,allowance:item.allowance,commission:item.commission,equiptags:item.equiptags})
                   }}>
                   <Text
                     style={{

@@ -241,7 +241,7 @@ export default class App extends React.Component {
 
               <TouchableOpacity
                 style={styles.topItem}
-                onPress={()=>{alert(111)}}>
+                onPress={()=>{this.props.navigation.push('UserQuery')}}>
                   <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
@@ -307,7 +307,7 @@ export default class App extends React.Component {
 
              <TouchableOpacity
                 style={styles.topItem}
-                onPress={()=>{alert(111)}}>
+                onPress={()=>{this.props.navigation.push('Statement')}}>
                   <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
@@ -319,7 +319,7 @@ export default class App extends React.Component {
               </TouchableOpacity>
              <TouchableOpacity
                 style={styles.topItem}
-                onPress={()=>{alert(111)}}>
+                onPress={()=>{this.props.navigation.push('Statement')}}>
                   <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
@@ -346,7 +346,9 @@ export default class App extends React.Component {
                   <Text style={styles.toolTitle}>手机端</Text>
                   <Text>使用指引</Text>
                 </TouchableOpacity>
-                <TouchableOpacity  style={styles.topItem}>
+                <TouchableOpacity  
+                  style={styles.topItem}
+                  onPress={()=>{this.props.navigation.push('PCGuide')}}>
                 <Image
                   style={styles.img}
                     source={require('../../images/group/computer.png')}

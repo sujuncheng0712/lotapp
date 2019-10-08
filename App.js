@@ -37,11 +37,15 @@ import PhoneGuide from './src/pages/group/PhoneGuide';
 import Addmerchant from './src/pages/group/Addmerchant';
 import MerchantList from './src/pages/group/MerchantList';
 import MerchantDetails from './src/pages/group/MerchantDetails';
+import Earnring from './src/pages/group/Earnring';
+import PCGuide from './src/pages/group/PCGuide';
+import UserQuery from './src/pages/group/UserQuery';
+import Statement from './src/pages/group/Statement';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {  MerchantDetails:MerchantDetails,
+  {   
     White:White,
     Home:Home,
     GroupHome:GroupHome,
@@ -82,6 +86,10 @@ const AppStack = createStackNavigator(
     Addmerchant:Addmerchant,
     MerchantList:MerchantList,
     MerchantDetails:MerchantDetails,
+    Earnring:Earnring,
+    PCGuide:PCGuide,
+    UserQuery:UserQuery,
+    Statement:Statement,
   },
   // {
   //   initialRouteName: 'Home',

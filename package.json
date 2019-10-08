@@ -16,6 +16,7 @@
     "react-native": "0.60.5",
     "react-native-camera": "^3.3.0",
     "react-native-check-box": "^2.1.7",
+    "react-native-datepicker": "^1.7.2",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-image-picker": "^1.1.0",
     "react-native-radio-master": "^1.0.1",

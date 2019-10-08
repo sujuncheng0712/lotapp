@@ -146,7 +146,7 @@ export default class App extends React.Component {
 
             <TouchableOpacity
               style={styles.item}
-              onPress={()=>{alert(111)}}
+              onPress={()=>{this.props.navigation.push('Earnring',{state:'a'})}}
             >
               <Text style={{fontSize:15}}>已结算收益</Text>
               <Image
@@ -163,7 +163,7 @@ export default class App extends React.Component {
 
             <TouchableOpacity
               style={styles.item}
-              onPress={()=>{alert(111)}}
+              onPress={()=>{this.props.navigation.push('Earnring',{state:'b'})}}
             >
               <Text style={{fontSize:15}}>未结算收益</Text>
               <Image
