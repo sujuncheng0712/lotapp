@@ -228,7 +228,7 @@ export default class App extends React.Component {
 
               <TouchableOpacity
                 style={styles.topItem}
-                onPress={()=>{alert(111)}}>
+                onPress={()=>{this.props.navigation.push('Codes')}}>
                   <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
@@ -282,7 +282,9 @@ export default class App extends React.Component {
               }
 
               {LoginInfo.deposit === true ? 
-                <TouchableOpacity  style={styles.topItem}>
+                <TouchableOpacity  
+                  style={styles.topItem}
+                  onPress={()=>{this.props.navigation.push('Pick')}}>
                 <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}

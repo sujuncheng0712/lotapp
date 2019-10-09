@@ -1,18 +1,11 @@
 import React from 'react';
 import {View, Text, AsyncStorage, StyleSheet, TouchableOpacity, ToastAndroid, TextInput, Image} from 'react-native';
 import { PickerView,Picker,Provider } from '@ant-design/react-native';
-import * as wechat from 'react-native-wechat';
 import address1 from '../../../service/address';
-import Icon from 'react-native-vector-icons/index';
 import district from 'antd-mobile-demo-data';
 import ImagePicker from 'react-native-image-picker';
 const url = 'https://iot2.dochen.cn/api';
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -230,7 +223,7 @@ export default class App extends React.Component {
                   data={address1}
                   cols={3}
                   value={this.state.area}
-                  placeholder={'请输入联系电话'}
+                  placeholder={'请输入地区'}
                   onChange={this.onChange}
                 >
                   <Text style={{height:'100%',paddingTop: 10}}>

@@ -41,11 +41,13 @@ import Earnring from './src/pages/group/Earnring';
 import PCGuide from './src/pages/group/PCGuide';
 import UserQuery from './src/pages/group/UserQuery';
 import Statement from './src/pages/group/Statement';
+import Codes from './src/pages/group/Codes';
+import Pick from './src/pages/group/Pick';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {   
+  {    Pick:Pick, 
     White:White,
     Home:Home,
     GroupHome:GroupHome,
@@ -90,6 +92,8 @@ const AppStack = createStackNavigator(
     PCGuide:PCGuide,
     UserQuery:UserQuery,
     Statement:Statement,
+    Codes:Codes,
+    Pick:Pick,
   },
   // {
   //   initialRouteName: 'Home',
