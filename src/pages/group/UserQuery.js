@@ -51,6 +51,7 @@ export default class App extends React.Component {
 
   render() {
     const { userList } = this.state;
+    
     let list = userList.map((item,key)=>{
       return(
         <View style={styles.item} key={key}>
@@ -73,7 +74,10 @@ export default class App extends React.Component {
     return (
       <ScrollView style={{flex:1,padding:10}}>
       <View style={{paddingBottom:60}}>
-        {list}
+        { userList.length !== 0 ? 
+          list :
+          <Text style={{width:'100%',textAlign:'center'}}>NO DATA</Text> 
+        }
       </View>
       </ScrollView>
       

@@ -43,11 +43,13 @@ import UserQuery from './src/pages/group/UserQuery';
 import Statement from './src/pages/group/Statement';
 import Codes from './src/pages/group/Codes';
 import Pick from './src/pages/group/Pick';
+import PickRecord from './src/pages/group/PickRecord';
+import Mall from './src/pages/group/Mall';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {    Pick:Pick, 
+  {    
     White:White,
     Home:Home,
     GroupHome:GroupHome,
@@ -94,6 +96,8 @@ const AppStack = createStackNavigator(
     Statement:Statement,
     Codes:Codes,
     Pick:Pick,
+    PickRecord:PickRecord,
+    Mall:Mall,
   },
   // {
   //   initialRouteName: 'Home',

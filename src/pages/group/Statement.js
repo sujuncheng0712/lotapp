@@ -185,6 +185,10 @@ export default class App extends React.Component {
           </View>
               }
         />
+         {newin_out_datas.length === 0 ?
+         <Text style={{width:'100%',textAlign:'center'}}>NO DATA</Text>
+         : <Text></Text>
+        }
         <View style={styles.pagination}>
          <Pagination 
           total={page1} 
@@ -214,6 +218,11 @@ export default class App extends React.Component {
           </View>
               }
         />
+        {newsend_mod_datas.length === 0 ?
+         <Text style={{width:'100%',textAlign:'center'}}>NO DATA</Text>
+         : <Text></Text>
+        }
+       
          <View style={styles.pagination}>
           <Pagination 
             total={page2} 
@@ -243,6 +252,10 @@ export default class App extends React.Component {
           </View>
               }
         />
+        {newreturn_mod_datas.length === 0 ?
+         <Text style={{width:'100%',textAlign:'center'}}>NO DATA</Text>
+         : <Text></Text>
+        }
          <View style={styles.pagination}>
           <Pagination 
             total={page3} 

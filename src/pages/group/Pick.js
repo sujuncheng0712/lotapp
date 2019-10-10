@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, Text, ScrollView, AsyncStorage,StyleSheet,TouchableOpacity,TextInput,Picker,ToastAndroid} from 'react-native';
+import {View, Text, ScrollView, AsyncStorage,StyleSheet,TouchableOpacity,TextInput,ToastAndroid,DeviceEventEmitter} from 'react-native';
 import address1 from '../../../service/address';
-import { PickerView } from '@ant-design/react-native';
+import { List, Picker, Provider } from '@ant-design/react-native';
 const url = 'https://iot2.dochen.cn/api';
 let time = 0;
+let that = '';
 let children = [];
 export default class App extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class App extends React.Component {
       address:'',
       remark:'',
       mpid:'',
+      title:'',
       quantity:0,
       price:1,
       balance:'',
@@ -37,6 +39,11 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    let list = this.props.navigation.getParam('list');
+    let data = this.props.navigation.getParam('data');
+    let LoginInfo =  this.props.navigation.getParam('LoginInfo');
+    this.setState({list,data,LoginInfo});
+    that = this;
     this._checkLoginState();
 }
 
@@ -55,16 +62,16 @@ export default class App extends React.Component {
           res.json().then(info =>{
               console.log(info);
               let list = [];
-              let list2 = [];
               if(info.status && time ===0){
                   info.data.forEach((item) =>{
                       //children.push(<Picker.Item label={item.title+' : '+item.price} value={item.mpid}/>);
-                      list.push({label:item.title+' : '+item.price,value:item.mpid})
+                      list.push({value:item.mpid,label:item.title+' : '+item.price})
                   })
                   time++;
-                  list2.push(list);
-                  console.log(list2);
-                  this.setState({data:info.data,mpid:info.data[0].mpid,list:list2,});
+                  console.log(list);
+                  //this.setState({data:info.data,mpid:info.data[0].mpid,
+                  //  list:list,
+                 // });
               }
 
           })
@@ -88,21 +95,30 @@ export default class App extends React.Component {
     //选择机器
     handleChange(value) {
       console.log(`Selected: ${value}`);
-      this.state.data.forEach(item =>{
-          if (item.mpid ===value){
-              this.setState({mpid:value,price:item.price});
+      that.state.data.forEach(item =>{
+        console.log(`${item.mpid}`);
+        console.log(`${value}`);
+        console.log(`${item.mpid ===value}`);
+          if (item.mpid ==value){
+           
+            that.setState({mpid:value,price:item.price,title:item.title+' : '+item.price});
           }
+          
       })
 
   }
   //选择地区
   onChange(value) {
       let area =value.toString().replace(new RegExp(',', 'g'), '/');
-      this.setState({area});
+      that.setState({area});
   }
 
   signUp(){
       const {consignee,phone,area,address,remark,quantity,mpid,price,balance,LoginInfo} = this.state;
+    
+      let newMpid = mpid.toString();
+      let newQuantity = parseInt(quantity);
+      let newPrice = parseInt(price);
       if (quantity === 0 ) {
           ToastAndroid.show('请输入数量', ToastAndroid.SHORT);
           return false;
@@ -124,18 +140,18 @@ export default class App extends React.Component {
               sale_type:LoginInfo.sale_type,
               total:quantity*price,
               products:[{
-                  mpid:mpid,
-                  quantity:quantity,
-                  price:price,
+                  mpid:newMpid,
+                  quantity:newQuantity,
+                  price:newPrice,
               }],
           })
       }).then(res =>{
+        console.log(res);
           res.json().then(info =>{
               console.log(info);
               if (info.status) {
                 ToastAndroid.show('提交成功', ToastAndroid.SHORT);
-                  this.getLimit();
-                 this.props.navigation.goBack();
+                  that.props.navigation.goBack()
               }else{
                 ToastAndroid.show('提交失败', ToastAndroid.SHORT);
               }
@@ -144,9 +160,8 @@ export default class App extends React.Component {
   }
 
   render() {
-    const {balance,price,area,list} = this.state;
+    const {balance,price,area,list,mpid,title} = this.state;
     console.log(balance+'----'+price)
-
     
     return (
       <ScrollView style={{flex:1,paddingBottom:40,}}>
@@ -154,24 +169,28 @@ export default class App extends React.Component {
           <Text style={{fontWeight:'bold',padding:5}}>你当前剩余额度为：{balance}</Text>
           <TouchableOpacity
             style={styles.topButton}
-            onPress={()=>{this.props.navigation.push('')}}
+            onPress={()=>{this.props.navigation.push('PickRecord')}}
           >
             <Text style={{color:'white'}}>提货记录</Text>
           </TouchableOpacity>
         </View>
-        <View>
+        <Provider>
           <View style={styles.item}>
             <View style={styles.itemTitle}>
              <Text style={{textAlign:'right',fontSize:17}}>选择产品：</Text>
             </View>
            
             <View style={styles.input}>
-            <PickerView
-               onChange={(value)=>{this.setState({mpid:value})}}
-              value={this.state.mpid}
-              data={list}
-              cascade={false}
-            />
+              <List>
+                <Picker
+                  data={list}
+                  cols={1}
+                  value={this.state.mpid}
+                  onChange={this.handleChange}
+                >
+                  <Text style={{fontSize:17,padding:10}}> {title}</Text>
+                </Picker>
+              </List>
             </View>
           </View>
 
@@ -195,7 +214,7 @@ export default class App extends React.Component {
            
             <View style={styles.input}>
               <TextInput 
-                value={this.state.quantity}
+                value={this.state.consignee}
                 onChangeText={(e)=>{ this.setState({consignee:e})}}
               />
             </View>
@@ -208,7 +227,7 @@ export default class App extends React.Component {
            
             <View style={styles.input}>
               <TextInput 
-                value={this.state.quantity}
+                value={this.state.phone}
                 onChangeText={(e)=>{ const newText = e.replace(/[^\d]+/, ''); this.setState({phone:newText})}}
               />
             </View>
@@ -220,11 +239,56 @@ export default class App extends React.Component {
             </View>
            
             <View style={styles.input}>
-              
+              <List>
+              <Picker
+                  data={address1}
+                  cols={3}
+                  value={this.state.area}
+                  placeholder={'请输入地区'}
+                  onChange={this.onChange}
+                >
+                  <Text style={{fontSize:17,padding:10}}>
+                    {area}
+                  </Text>
+                </Picker>
+              </List>
             </View>
           </View>
 
-        </View>
+          <View style={styles.item}>
+              <View style={styles.itemTitle}>
+                <Text style={{textAlign:'right',fontSize:17}}>详细地址：</Text>
+              </View>
+           
+            <View style={styles.input}>
+              <TextInput 
+                value={this.state.address}
+                onChangeText={(e)=>{  this.setState({address:e})}}
+              />
+            </View>
+          </View>
+
+          <View style={styles.item}>
+              <View style={styles.itemTitle}>
+              <Text style={{textAlign:'right',fontSize:17}}>备注信息：</Text>
+              </View>
+           
+            <View style={styles.input}>
+              <TextInput 
+                value={this.state.remark}
+                onChangeText={(e)=>{  this.setState({remark:e})}}
+              />
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={{...styles.topButton,marginLeft:0,marginTop:40}}
+            onPress={()=>{this.signUp()}}
+          >
+            <Text style={{color:'white',fontSize:17}}>提 交</Text>
+          </TouchableOpacity>
+
+        </Provider>
         
       </ScrollView>
       
@@ -241,6 +305,8 @@ const styles = StyleSheet.create({
     padding:5,
     borderRadius:5,
     marginLeft:10,
+    justifyContent:'center',
+    alignItems:'center',
   },
   list:{
 

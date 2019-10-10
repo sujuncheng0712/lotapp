@@ -106,7 +106,8 @@ export default class App extends React.Component {
            </View> 
           )
         })}
-        
+        {data.length === 0 ?
+        <Text style={{width:'100%',textAlign:'center'}}>NO DATA</Text> : <Text></Text>}
       </ScrollView>
       
     );

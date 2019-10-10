@@ -8,12 +8,13 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,Dimensions
+  ScrollView,Dimensions,DeviceEventEmitter
 } from 'react-native';
 import * as wechat from 'react-native-wechat';
 import Icon from 'react-native-vector-icons/EvilIcons';
 const url = `https://iot2.dochen.cn/api`;
 const {height,width} =  Dimensions.get('window');
+let time = 0;
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +27,8 @@ export default class App extends React.Component {
       wallet: '',
       pledge: '',
       balance_at: '',
+      list:[],
+      data:[],
     };
   }
 
@@ -62,6 +65,25 @@ export default class App extends React.Component {
         })
       })
 
+      //获取产品列表
+      let urlInfo2=`${url}/merchantProduct?sale_type=${LoginInfo.sale_type}`;
+      fetch(urlInfo2).then(res =>{
+          res.json().then(info =>{
+              console.log(info);
+              let list = [];
+              if(info.status && time ===0){
+                  info.data.forEach((item) =>{
+                      //children.push(<Picker.Item label={item.title+' : '+item.price} value={item.mpid}/>);
+                      list.push({value:item.mpid,label:item.title+' : '+item.price})
+                  })
+                  time++;
+                  console.log(list);
+                  this.setState({list:list,data:info.data});
+              }
+
+          })
+      })
+
     } else {
       this.props.navigation.navigate('Login');
     }
@@ -76,7 +98,7 @@ export default class App extends React.Component {
   };
 
   render() {
-    const {allowance,LoginInfo,wallet,commission,balance_at} = this.state;
+    const {allowance,LoginInfo,wallet,commission,balance_at,list,data} = this.state;
     //1品牌 2运营 3代理 4经销
     let isVerdor1 = LoginInfo.type===1 || LoginInfo.type===5 || LoginInfo.type===9 || LoginInfo.type===13 || LoginInfo.type===17 || LoginInfo.type===21;
     let isVerdor2 = LoginInfo.type===2 || LoginInfo.type===6 || LoginInfo.type===10 || LoginInfo.type===14 || LoginInfo.type===18 || LoginInfo.type===22;
@@ -215,7 +237,7 @@ export default class App extends React.Component {
             <View style={styles.topList}>
               <TouchableOpacity
                 style={styles.topItem}
-                onPress={()=>{alert(111)}}>
+                onPress={()=>{this.props.navigation.push('Mall')}}>
                   <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
@@ -284,7 +306,7 @@ export default class App extends React.Component {
               {LoginInfo.deposit === true ? 
                 <TouchableOpacity  
                   style={styles.topItem}
-                  onPress={()=>{this.props.navigation.push('Pick')}}>
+                  onPress={()=>{ this.props.navigation.push('Pick',{list:list,data:data,LoginInfo:LoginInfo})}}>
                 <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
