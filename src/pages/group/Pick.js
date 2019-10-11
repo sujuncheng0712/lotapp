@@ -169,7 +169,8 @@ export default class App extends React.Component {
           <Text style={{fontWeight:'bold',padding:5}}>你当前剩余额度为：{balance}</Text>
           <TouchableOpacity
             style={styles.topButton}
-            onPress={()=>{this.props.navigation.push('PickRecord')}}
+            //onPress={()=>{this.props.navigation.push('PickRecord')}}
+            onPress={()=>{alert('完善中')}}
           >
             <Text style={{color:'white'}}>提货记录</Text>
           </TouchableOpacity>

@@ -264,13 +264,13 @@ export default class App extends React.Component {
             onChange={(e)=>{this.send_mod_datasChange(e)}}/>
         </View>
         <View style={{paddingBottom:40}}>
-          <Text>设备已激活:{equipment}台</Text>
-          <Text>设备未激活：台</Text>
-          <Text>账户余额：{wallet}元</Text>
-          <Text>结余</Text>
-          <Text>保证金：{pledge}元（已冻结）</Text>
-          <Text>剩余押金：{balance}元</Text>
-          <Text>可提现：{wallet}元</Text>
+          <Text style={{fontSize:14}}>设备已激活:{equipment}台</Text>
+          <Text style={{fontSize:14}}>设备未激活：台</Text>
+          <Text style={{fontSize:14}}>账户余额：{wallet}元</Text>
+          <Text style={{fontSize:14}}>结余</Text>
+          <Text style={{fontSize:14}}>保证金：{pledge}元（已冻结）</Text>
+          <Text style={{fontSize:14}}>剩余押金：{balance}元</Text>
+          <Text style={{fontSize:14}}>可提现：{wallet}元</Text>
         </View>
       </ScrollView>
       

@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, AsyncStorage,ScrollView,StyleSheet,DeviceEventEmitter} from 'react-native';
+import {View, Text, TouchableOpacity, AsyncStorage,ScrollView,StyleSheet,TextInput,Image} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 const url = 'https://iot2.dochen.cn/api';
 export default class App extends React.Component {
   constructor(props) {
@@ -75,18 +76,96 @@ export default class App extends React.Component {
       })
     })
   }
+
+   // 统计所选择的商品价格
+   countPrice(lists) {
+    let count = 0;
+    lists.map((val) => {
+      if (val.check) count = count + val.price * val.num;
+    });
+    this.setState({count});
+  }
   render() {
     const {lists, count, balance, select_pay} = this.state;
-    
-    return (
-      <ScrollView style={{flex: 1}}>
+    console.log(lists)
+    const productsList = lists.map((item,key)=>{
+      return(
         
+        <View style={styles.item}>
+          <TouchableOpacity
+            onPress={()=>{
+              const _lists = lists;
+              _lists[key].check = lists[key].check ? false : true;
+              this.setState({lists: _lists});
+              this.countPrice(_lists);
+            }}
+          >
+           <Icon name={item.check ? 'md-radio-button-on': "md-radio-button-off"} size={20} color={item.check ? '#ff8800':'#666'} /> 
+          </TouchableOpacity>
+          <Image
+            style={styles.itemImg}
+            source={{uri: `${item.prev_image}`}}
+            cache={'force-cache'}
+          />
+          <View>
+            <Text>{item.title}</Text>
+            <Text style={{color:'#FF7701'}}>￥ {item.price}.00</Text>
+          </View>
+          <TextInput 
+            style={styles.input}
+            value={item.num}
+            onChangeText={(e)=>{
+              const newText = e.replace(/[^\d]+/, '');
+              const _lists = lists;
+              _lists[key].num = newText;
+              this.setState({lists: _lists});
+              this.countPrice(_lists);}}/>
+          <Text>个</Text>
+        </View>
+      )
+     
+    
+    })
+
+    return (
+      <ScrollView style={{flex: 1,padding:10}}>
+        {productsList}
+        <View style={styles.shouldPay}>
+          <Text>应付金额：</Text>
+        </View>
       </ScrollView>
     );
   }
 }
 const styles = StyleSheet.create({
-  
+  item:{
+    flexDirection:'row',
+    borderBottomColor:'#666',
+    borderBottomWidth:0.5,
+    paddingTop:10,
+    paddingBottom:10,
+    alignItems:'center',
+  },
+  itemImg:{
+    height:40,
+    width:40,
+    marginLeft:10,
+    marginRight:10,
+  },
+  input:{
+    borderWidth:0.5,
+    borderColor:'#666',
+    width:'15%',
+    height:40,
+    marginLeft:4,
+    marginRight:4,
+  },
+  shouldPay:{
+    flexDirection:'row',
+    alignItems:'center',
+    paddingTop:5,
+    paddingBottom:5,
+  }
 
 
 })

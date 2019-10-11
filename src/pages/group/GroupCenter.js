@@ -105,7 +105,7 @@ export default class App extends React.Component {
     let isVerdor3 = LoginInfo.type===3 || LoginInfo.type===7 || LoginInfo.type===11 || LoginInfo.type===15 || LoginInfo.type===19 || LoginInfo.type===23;
     let isVerdor4 = LoginInfo.type===4 || LoginInfo.type===8 || LoginInfo.type===12 || LoginInfo.type===16 || LoginInfo.type===20 || LoginInfo.type===24;
     return (
-      <ScrollView style={{ backgroundColor:'#F0EEEF'}}>
+      <ScrollView style={{flex:1 }}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <View style={styles.top}>
             <ImageBackground
@@ -129,7 +129,7 @@ export default class App extends React.Component {
               
               <View style={styles.topList}>
                 <TouchableOpacity
-                  style={styles.topItem}
+                  style={{...styles.topItem,backgroundColor:''}}
                   onPress={()=>{this.props.navigation.push('Balance')}}>
                   <Image
                   style={styles.img}
@@ -137,12 +137,12 @@ export default class App extends React.Component {
                   />
                   <Text style={styles.topfont}>收支明细</Text>
                 </TouchableOpacity>
-                <View  style={styles.topItem}>
+                <View     style={{...styles.topItem,backgroundColor:''}}>
                   <Text style={styles.topfont}>￥{wallet}</Text>
                   <Text style={styles.topfont}>账户余额</Text>
                 </View>
                 <TouchableOpacity
-                  style={styles.topItem}
+                     style={{...styles.topItem,backgroundColor:''}}
                   onPress={()=>{this.props.navigation.push('GroupCash')}}>
                   <Image
                     style={styles.img}
@@ -232,7 +232,7 @@ export default class App extends React.Component {
           </View>
 
           <View style={styles.tool}>
-            <Text style={{padding:20}}>我的工具</Text>
+            <Text style={styles.mainTitle}>我的工具</Text>
 
             <View style={styles.topList}>
               <TouchableOpacity
@@ -318,7 +318,10 @@ export default class App extends React.Component {
              </TouchableOpacity> : null}
 
              {LoginInfo.deposit === true ? 
-                <TouchableOpacity  style={styles.topItem}>
+                <TouchableOpacity  
+                  style={styles.topItem}
+                   onPress={()=>{alert('完善中')}}>
+                  {/* onPress={()=>{this.props.navigation.push('AfterSale')}}> */}
                 <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
@@ -357,7 +360,7 @@ export default class App extends React.Component {
           </View>
 
           <View style={styles.tool}>
-            <Text style={{padding:20}}>使用指引</Text>
+            <Text style={styles.mainTitle}>使用指引</Text>
 
             <View style={styles.topList}>
                 <TouchableOpacity
@@ -383,7 +386,7 @@ export default class App extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.topItem}
-                  onPress={()=>{alert(111)}}>
+                  onPress={()=>{alert('完善中')}}>
                  <Image
                   style={styles.img}
                     source={require('../../images/group/product.png')}
@@ -427,12 +430,14 @@ const styles = StyleSheet.create({
     justifyContent:'flex-start',
     flexWrap:'wrap',
     marginBottom:10,
+    marginTop:5,
   },
   topItem:{
     alignItems:'center',
     justifyContent:'center',
     width:'33%',
     marginTop:10,
+    backgroundColor:'white',
   },
   toolItem:{
     backgroundColor:'#FF7701',
@@ -458,6 +463,7 @@ const styles = StyleSheet.create({
   tool:{
     width:'100%',
     backgroundColor:'#F0EEEF',
+    marginTop:5,
   },
   toolTitle:{
     fontWeight:'bold',
@@ -487,5 +493,9 @@ const styles = StyleSheet.create({
   tool3Font:{
     color:'grey',
     fontSize:10,
+  },
+  mainTitle:{
+    paddingLeft:20,
+    marginTop:15
   }
 })

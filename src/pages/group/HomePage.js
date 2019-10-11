@@ -34,7 +34,7 @@ export default class App extends React.Component {
   // render创建之前
   componentWillMount() {
     // 验证/读取 登陆状态
-    this._checkLoginState();
+  
   }
 
   // 验证本地存储的资料是否有效
@@ -64,6 +64,7 @@ export default class App extends React.Component {
             timeArr.push(time[i]);
             moneyArr.push(money[i])
           }
+          for(let  i =0;i<5;i++){
           this.setState({
             ac_filter: info.datas.ac_filter,
             ac_not_use: info.datas.ac_not_use,
@@ -81,7 +82,7 @@ export default class App extends React.Component {
             timeArr,
             moneyArr
           })
-
+        }
         }
       })
     })
@@ -93,6 +94,10 @@ export default class App extends React.Component {
 
   componentDidMount() {
     //wechat.registerApp('wxed79edc328ec284a');
+  
+      this._checkLoginState();
+    
+    
   }
 
   render() {

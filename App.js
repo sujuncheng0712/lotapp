@@ -45,11 +45,13 @@ import Codes from './src/pages/group/Codes';
 import Pick from './src/pages/group/Pick';
 import PickRecord from './src/pages/group/PickRecord';
 import Mall from './src/pages/group/Mall';
+import AfterSale from './src/pages/group/AfterSale';
+import ChangeGoods from './src/pages/group/ChangeGoods';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {    
+  {  Mall:Mall,
     White:White,
     Home:Home,
     GroupHome:GroupHome,
@@ -98,6 +100,8 @@ const AppStack = createStackNavigator(
     Pick:Pick,
     PickRecord:PickRecord,
     Mall:Mall,
+    AfterSale:AfterSale,
+    ChangeGoods:ChangeGoods,
   },
   // {
   //   initialRouteName: 'Home',

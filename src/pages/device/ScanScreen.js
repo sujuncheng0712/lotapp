@@ -1,4 +1,3 @@
-
 import { RNCamera } from 'react-native-camera'
 import React, {Component} from 'react';
 import {
@@ -66,6 +65,14 @@ class ScanScreen extends React.Component {
         this.props.navigation.navigate('Fix', {
           eid: data
         })
+      }else if(state === 'changeGoodOld'){
+        this.props.navigation.navigate('ChangeGoods', {
+          oldEid: data
+        })
+      }else if(state === 'changeGoodNew'){
+        this.props.navigation.navigate('ChangeGoods', {
+          newEid: data
+        })
       }
 
     }else{
@@ -77,6 +84,10 @@ class ScanScreen extends React.Component {
         this.props.navigation.navigate('AddDevice')
       }else if (state==='fix'){
         this.props.navigation.navigate('Fix')
+      }else if (state==='changeGoodOld'){
+        this.props.navigation.navigate('ChangeGoods')
+      }else if (state==='changeGoodNew'){
+        this.props.navigation.navigate('ChangeGoods')
       }
     }
   };

@@ -72,7 +72,7 @@ export default class App extends React.Component {
           <Text style={styles.item}>实际发货</Text>
           <Text style={styles.item}>操作</Text>
         </View>
-        <Text style={{width:'100%',textAlign:'center'}}>无数据</Text>
+        <Text style={{width:'100%',textAlign:'center'}}>NO DATA</Text>
       </ScrollView>
     );
   }
