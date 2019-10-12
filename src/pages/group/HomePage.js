@@ -123,11 +123,12 @@ export default class App extends React.Component {
       },
     };
     return (
-      <ScrollView style={{flex: 1, }}>
+      <ScrollView style={{flex: 1,  backgroundColor:'#F0EEEF',}}>
         <View style={styles.top}>
           <Text style={styles.topFont}>近7天激活概览</Text>
           <Echarts option={option} height={350} />
         </View>
+        <View style={{width:'100%',height:5,backgroundColor:'white'}}></View>
         <View style={{...styles.top,marginTop:5}}>
           <Text style={{padding:10}}>设备激活与收益概览：</Text>
           <View style={styles.list}>
@@ -135,7 +136,7 @@ export default class App extends React.Component {
               style={styles.item}
               onPress={()=>{this.props.navigation.push('ActivataDevice')}}
             >
-              <Text style={{fontSize:15}}>已激活设备</Text>
+              <Text style={styles.itemTitle}>已激活设备</Text>
               <Image
                style={styles.img}
                source={require('../../images/yejijihuo-.png')}
@@ -153,7 +154,7 @@ export default class App extends React.Component {
               style={styles.item}
               onPress={()=>{this.props.navigation.push('Earnring',{state:'a'})}}
             >
-              <Text style={{fontSize:15}}>已结算收益</Text>
+              <Text style={styles.itemTitle}>已结算收益</Text>
               <Image
                style={styles.img}
                source={require('../../images/yingyongicon-.png')}
@@ -170,7 +171,7 @@ export default class App extends React.Component {
               style={styles.item}
               onPress={()=>{this.props.navigation.push('Earnring',{state:'b'})}}
             >
-              <Text style={{fontSize:15}}>未结算收益</Text>
+              <Text style={styles.itemTitle}>未结算收益</Text>
               <Image
                style={styles.img}
                source={require('../../images/jiesuan.png')}
@@ -211,5 +212,9 @@ const styles = StyleSheet.create({
   img:{
     width:40,
     height:40,
+  },
+  itemTitle:{
+    fontSize:14,
+    marginBottom:5,
   }
 })

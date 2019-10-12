@@ -91,7 +91,7 @@ export default class App extends React.Component {
     const productsList = lists.map((item,key)=>{
       return(
         
-        <View style={styles.item}>
+        <View style={styles.item} key={key}>
           <TouchableOpacity
             onPress={()=>{
               const _lists = lists;
@@ -114,6 +114,7 @@ export default class App extends React.Component {
           <TextInput 
             style={styles.input}
             value={item.num}
+            defaultValue={'1'}
             onChangeText={(e)=>{
               const newText = e.replace(/[^\d]+/, '');
               const _lists = lists;
@@ -131,8 +132,58 @@ export default class App extends React.Component {
       <ScrollView style={{flex: 1,padding:10}}>
         {productsList}
         <View style={styles.shouldPay}>
-          <Text>应付金额：</Text>
+          <Text style={{ width:'40%'}}>应付金额：</Text>
+          <View style={{flexDirection:'row',justifyContent:'flex-end',alignItems:'flex-end',width:'60%'}}>
+            <Text style={{color:'#FF7701'}}>{count}.00</Text>
+            <Text>元</Text>
+          </View>
         </View>
+        <Text style={styles.choose}>选择支付方式</Text>
+        <TouchableOpacity 
+          style={styles.item}
+          onPress={()=>{this.setState({select_pay:'pay/wx'})}}
+        >
+          <View style={{width:'50%',flexDirection:'row',alignItems:'center'}}>
+            <Image
+              style={styles.itemImg}
+              source={require('../../images/pay-wechat.png')}
+           />
+            <Text>微信支付</Text>
+          </View>
+      
+        <View style={{width:'50%',alignItems:'flex-end'}}>
+        {select_pay === 'pay/wx' ? (
+             <Icon name={ 'ios-checkmark-circle-outline'} size={20} color={'#ff8800'} /> 
+            ) : <Text></Text>}
+        </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.item}
+          onPress={()=>{this.setState({select_pay:'pay/wallet'})}}
+        >
+          <View style={{width:'80%',flexDirection:'row',alignItems:'center'}}>
+            <Image
+              style={styles.itemImg}
+              source={require('../../images/pay-balance.png')}
+           />
+            <Text>余额支付</Text>
+            <Text style={{color:'#FF7701',marginLeft:10}}>余额：¥{balance}</Text>
+          </View>
+      
+          <View style={{width:'20%',alignItems:'flex-end'}}>
+            {select_pay === 'pay/wallet' ? (
+                <Icon name={ 'ios-checkmark-circle-outline'} size={20} color={'#ff8800'} /> 
+                ) : <Text></Text>}
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={()=>{}}
+        >
+         <Text style={{color:'white'}}>立即购买</Text>
+        </TouchableOpacity>
       </ScrollView>
     );
   }
@@ -143,7 +194,7 @@ const styles = StyleSheet.create({
     borderBottomColor:'#666',
     borderBottomWidth:0.5,
     paddingTop:10,
-    paddingBottom:10,
+    paddingBottom:15,
     alignItems:'center',
   },
   itemImg:{
@@ -156,16 +207,37 @@ const styles = StyleSheet.create({
     borderWidth:0.5,
     borderColor:'#666',
     width:'15%',
-    height:40,
+    height:35,
     marginLeft:4,
     marginRight:4,
+    paddingBottom:0,
+    paddingTop:-5
   },
   shouldPay:{
     flexDirection:'row',
     alignItems:'center',
     paddingTop:5,
     paddingBottom:5,
+    borderBottomColor:'#666',
+    borderBottomWidth:0.5,
+    paddingBottom:10,
+  },
+  choose:{
+    marginTop:10,
+    width:'100%',
+    textAlign:'center',
+  },
+  button:{
+    backgroundColor:'#FF7701',
+    borderWidth:1,
+    borderColor:'#FF7701',
+    justifyContent:'center',
+    alignItems:'center',
+    padding:5,
+    borderRadius:5,
+    marginTop:20,
   }
+
 
 
 })

@@ -105,7 +105,7 @@ export default class App extends React.Component {
     let isVerdor3 = LoginInfo.type===3 || LoginInfo.type===7 || LoginInfo.type===11 || LoginInfo.type===15 || LoginInfo.type===19 || LoginInfo.type===23;
     let isVerdor4 = LoginInfo.type===4 || LoginInfo.type===8 || LoginInfo.type===12 || LoginInfo.type===16 || LoginInfo.type===20 || LoginInfo.type===24;
     return (
-      <ScrollView style={{flex:1 }}>
+      <ScrollView style={{flex:1,  backgroundColor:'#F0EEEF', }}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <View style={styles.top}>
             <ImageBackground
@@ -115,9 +115,18 @@ export default class App extends React.Component {
 
               <TouchableOpacity
                 style={styles.home}
-                onPress={this.withdraw}>
+                onPress={()=>{this.props.navigation.push('ChangePassword',{state:'group'})}}>
                 <Icon name="gear" size={25} color={'#fff'} />
+                <Text style={{color:'white',fontSize:10}}>修改密码</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.home2}
+                onPress={this.withdraw}>
+                  <Icon name="redo" size={25} color={'#fff'} />
+               <Text style={{color:'white',fontSize:10}}>注销</Text>
+              </TouchableOpacity>
+
               <View style={{width:'100%',alignItems:'center',justifyContent:'center'}}>
               <Text style={{color:'#FF7701',backgroundColor:'#fff',borderRadius:5}}> {
                       isVerdor1 ? ' 品牌商 '
@@ -153,7 +162,7 @@ export default class App extends React.Component {
               </View>
             </ImageBackground>
           </View>
-
+          <View style={{width:'100%',height:5,backgroundColor:'white'}}></View>
           <View style={styles.tool3}>
             <View style={{width:'100%',flexDirection:'row'}}>
               <View style={styles.tool3Item}>
@@ -230,7 +239,7 @@ export default class App extends React.Component {
           }
             
           </View>
-
+          <View style={{width:'100%',height:5,backgroundColor:'white'}}></View>
           <View style={styles.tool}>
             <Text style={styles.mainTitle}>我的工具</Text>
 
@@ -346,7 +355,7 @@ export default class App extends React.Component {
               </TouchableOpacity>
              <TouchableOpacity
                 style={styles.topItem}
-                onPress={()=>{this.props.navigation.push('Statement')}}>
+                onPress={()=>{this.props.navigation.push('Share')}}>
                   <View style={styles.toolItem}>
                     <Image
                     style={styles.toolImg}
@@ -358,7 +367,7 @@ export default class App extends React.Component {
               </TouchableOpacity>
               </View>
           </View>
-
+          <View style={{width:'100%',height:5,backgroundColor:'white'}}></View>
           <View style={styles.tool}>
             <Text style={styles.mainTitle}>使用指引</Text>
 
@@ -422,6 +431,15 @@ const styles = StyleSheet.create({
     position:'absolute',
     top:height/70,
     right:10,
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  home2:{
+    position:'absolute',
+    top:height/70,
+    right:60,
+    alignItems:'center',
+    justifyContent:'center',
   },
   topList:{ 
     flexDirection:'row',
@@ -436,8 +454,9 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
     width:'33%',
-    marginTop:10,
+   paddingBottom:10,
     backgroundColor:'white',
+    backgroundColor:'#F0EEEF',
   },
   toolItem:{
     backgroundColor:'#FF7701',
@@ -463,7 +482,7 @@ const styles = StyleSheet.create({
   tool:{
     width:'100%',
     backgroundColor:'#F0EEEF',
-    marginTop:5,
+   //marginTop:5,
   },
   toolTitle:{
     fontWeight:'bold',
@@ -475,7 +494,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     backgroundColor:'#F0EEEF',
     flexWrap:'wrap',
-    marginTop:5,
+    //marginTop:5,
   },
   tool3Item:{
     //padding:5,
@@ -484,7 +503,7 @@ const styles = StyleSheet.create({
     borderWidth:0.2,
     alignItems:'center',
     justifyContent:'center',
-    height:60,
+    height:65,
   },
   tool3Img:{
     width:17,

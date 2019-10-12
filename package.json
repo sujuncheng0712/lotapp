@@ -19,6 +19,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-image-picker": "^1.1.0",
+    "react-native-pwd-input": "^1.0.1",
     "react-native-radio-master": "^1.0.1",
     "react-native-reanimated": "^1.2.0",
     "react-native-secharts": "^1.7.0",

@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Image,ScrollView
 } from 'react-native';
-import {Button, WhiteSpace, WingBlank} from '@ant-design/react-native';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import * as wechat from 'react-native-wechat';
 const url = 'https://iot2.dochen.cn/api';
 export default class App extends React.Component {
@@ -131,13 +131,13 @@ export default class App extends React.Component {
             <View style={{flexDirection:'row',padding:10}}>
               <Text style={{
                 marginLeft: '75%',
+                color:'white',
               }}>{LoginInfo.name}</Text>
               <TouchableOpacity
                 style={styles.button}
                 onPress={this.withdraw}>
-                <Text style={{
-                  textAlign:'center',
-                }}>注销</Text>
+                  <Icon name="redo" size={25} color={'#fff'} />
+                <Text style={{ textAlign:'center',color:'white'}}>注销</Text>
               </TouchableOpacity>
             </View>
             {LoginInfo.sale_type === 50 ? 
@@ -227,6 +227,16 @@ export default class App extends React.Component {
               />
               <Text>退款/售后</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.orderItem}
+              onPress={()=> this.props.navigation.navigate('ChangePassword',{state:'users'})}>
+              <Image
+                style={styles.orderImg}
+                source={require('../../images/user/unsend.png')}
+              />
+              <Text>修改密码</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View>
@@ -298,9 +308,8 @@ const styles = StyleSheet.create({
     //flex:0.40,
   },
   button: {
-    backgroundColor: '#0078D7',
-    borderColor: '#0078D7',
-    color: '#FF7A01',
+    justifyContent:'center',
+    alignItems:'center',
     textAlign: 'center',
     borderRadius: 10,
     width: 50,
@@ -316,10 +325,11 @@ const styles = StyleSheet.create({
     padding:10,
     flexDirection: 'row',
     borderTopWidth:0.5,
-    borderColor:'#bbb'
+    borderColor:'#bbb',
+    flexWrap:'wrap'
   },
   orderItem:{
-    flex:0.25,
+    width:'33%',
     color: '#FF7A01',
     textAlign: 'center',
     fontSize: 10,

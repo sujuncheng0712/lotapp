@@ -1,4 +1,3 @@
-import {createStackNavigator, createAppContainer} from 'react-navigation';
 import React from 'react';
 import {View, Text, Button, AsyncStorage, StyleSheet, Image, TouchableOpacity,ScrollView} from 'react-native';
 import * as wechat from 'react-native-wechat';

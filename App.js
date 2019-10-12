@@ -9,6 +9,7 @@ import Device from './src/pages/users/Device';
 import Record from './src/pages/users/Record';
 import Address from './src/pages/users/Address';
 import Create from './src/pages/users/Create';
+import ChangePassword from './src/pages/users/ChangePassword';
 import AddDevice from './src/pages/device/AddDevice';
 import DeviceIndex from './src/pages/device/DeviceIndex';
 import ScanScreen from './src/pages/device/ScanScreen';
@@ -51,7 +52,7 @@ console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {  Mall:Mall,
+  {   
     White:White,
     Home:Home,
     GroupHome:GroupHome,
@@ -102,6 +103,7 @@ const AppStack = createStackNavigator(
     Mall:Mall,
     AfterSale:AfterSale,
     ChangeGoods:ChangeGoods,
+    ChangePassword:ChangePassword,
   },
   // {
   //   initialRouteName: 'Home',

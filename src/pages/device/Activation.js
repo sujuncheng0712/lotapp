@@ -118,7 +118,7 @@ export default class App extends React.Component {
   render() {
     const {haveActivationAt, isForbidButton} = this.state;
     const {navigation} = this.props;
-    const eid = navigation.getParam('eid', 'no');
+    const eid = navigation.getParam('eid', 'NO DATA');
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={styles.title}>激活设备</Text>

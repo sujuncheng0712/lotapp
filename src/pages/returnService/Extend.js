@@ -8,13 +8,11 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  ToastAndroid,Picker
+  ToastAndroid,Picker,Dimensions
 } from 'react-native';
 import { Provider } from '@ant-design/react-native';
 import { WebView } from 'react-native-webview';
-import * as wechat from 'react-native-wechat';
 import Area from '../../../service/Area';
-import district from 'antd-mobile-demo-data';
 const url = 'https://iot2.dochen.cn/api';
 let pArr = [];
 let cArr=[];
@@ -92,15 +90,7 @@ export default class App extends React.Component {
     let {  username, phone, address, remark,number,LoginInfo,type, provinceValue,
       cityValue, countyValue,} = this.state;
     let model = type ==='A20' ? 'DCA20-A' :'DCA16-A';
-    console.log(username)
-    console.log(phone)
-    console.log(address)
-    console.log(remark)
-    console.log(number)
-    console.log(model)
-    console.log(provinceValue)
-    console.log(cityValue)
-    console.log(countyValue)
+    
     if(!(username && phone && provinceValue && cityValue && countyValue   && address)){
       ToastAndroid.show('*不能为空', ToastAndroid.SHORT);
       return false;
@@ -314,33 +304,7 @@ export default class App extends React.Component {
                     onChangeText={(e)=>{this.setState({phone:e})}}
                   />
                 </View>
-                {/* <View style={styles.item}>
-                  <Text style={styles.title}>*省：</Text>
-                  <TextInput
-                    style={styles.itemInput}
-                    placeholder={'请输入省'}
-                    value={this.state.province}
-                    onChangeText={(e)=>{this.setState({province:e})}}
-                  />
-                </View>
-                <View style={styles.item}>
-                  <Text style={styles.title}>*市：</Text>
-                  <TextInput
-                    style={styles.itemInput}
-                    placeholder={'请输入市'}
-                    value={this.state.city}
-                    onChangeText={(e)=>{this.setState({city:e})}}
-                  />
-                </View>
-                <View style={styles.item}>
-                  <Text style={styles.title}>*县/区：</Text>
-                  <TextInput
-                    style={styles.itemInput}
-                    placeholder={'请输入县/区'}
-                    value={this.state.town}
-                    onChangeText={(e)=>{this.setState({town:e})}}
-                  />
-                </View> */}
+               
                 <View style={styles.item}>
                   <Text style={styles.title}>*省 : </Text>
                   <View  style={styles.itemInput}>
@@ -548,22 +512,26 @@ const styles = StyleSheet.create({
   },
   waiter:{
     position:'absolute',
-    height:300,
-    width:'75%',
-    top:80,
-    left:50,
+    height:350,
+    width:'90%',
+    top:'10%',
+    justifyContent:'center',
+    justifyContent:'center',
+    paddingRight:'10%',
   },
   cha:{
     position:'absolute',
-    height:50,
-    width:'75%',
-    top:370,
-    left:50,
+    height:80,
+    width:'100%',
+    top:'60%',
+    
     alignItems:'center',
+    justifyContent:'center',
+    paddingRight:'10%',
   },
   chaImg:{
-    height:'100%',
-    width:'20%',
+    height:60,
+    width:60,
   },
   buttom:{
     height:'110%',
@@ -571,6 +539,7 @@ const styles = StyleSheet.create({
     position:'absolute',
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
     alignItems: 'center',
+    justifyContent:'center',
   },
   video:{
     width:'100%',
