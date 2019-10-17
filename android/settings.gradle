@@ -1,4 +1,8 @@
 rootProject.name = 'lotapp'
+include ':react-native-upgrade-android'
+project(':react-native-upgrade-android').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-upgrade-android/android')
+include ':react-native-update-app'
+project(':react-native-update-app').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-update-app/android')
 include ':react-native-webview'
 project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview/android')
 include ':react-native-camera'

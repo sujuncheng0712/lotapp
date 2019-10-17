@@ -39,6 +39,8 @@ target 'lotapp' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+  pod 'RNUpdateApp', :path => '../node_modules/react-native-update-app'
+
   target 'lotappTests' do
     inherit! :search_paths
     # Pods for testing

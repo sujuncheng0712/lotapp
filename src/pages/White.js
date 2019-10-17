@@ -32,7 +32,12 @@ export default class App extends React.Component {
       this.props.navigation.navigate('Login',{_isLogin: true});
     }else{
       if (LoginInfo.type === null) {
-        this.props.navigation.push('Home', {_isLogin: true});
+        if(LoginInfo.sale_type === 33){
+          this.props.navigation.push('Home33', {_isLogin: true});
+        }else{
+          this.props.navigation.push('Home', {_isLogin: true});
+        }
+        
       } else {
         this.props.navigation.push('GroupHome',{_isLogin: true});
       }

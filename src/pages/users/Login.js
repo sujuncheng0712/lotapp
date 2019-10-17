@@ -12,7 +12,6 @@ import {
   ToastAndroid,
 } from 'react-native';
 import * as wechat from 'react-native-wechat';
-import {Button, WhiteSpace, WingBlank} from '@ant-design/react-native';
 const url = 'https://iot2.dochen.cn/api';
 
 export default class Login extends React.Component {
@@ -101,17 +100,19 @@ export default class Login extends React.Component {
     };
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text>登录</Text>
-        <View>
+        <Text style={styles.title}>物联汇</Text>
+        <View style={styles.item}>
+          <Text >账号：</Text>
           <TextInput
             style={styles.input_text}
             placeholder={'账号'}
             autoCapitalize={'none'}
             autoCorrect={false}
-            onChangeText={text => this.setState({username: text})}
+            onChangeText={text => {text=text.trim();this.setState({username: text})}}
           />
         </View>
-        <View>
+        <View style={styles.item}>
+         <Text >密码：</Text>
           <TextInput
             style={styles.input_text}
             placeholder={'密码'}
@@ -119,26 +120,25 @@ export default class Login extends React.Component {
             autoCorrect={false}
             secureTextEntry={true}
             maxLength={16}
-            onChangeText={text => this.setState({password: text})}
+            onChangeText={text => {text=text.trim();this.setState({password: text})}}
           />
         </View>
-        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center',padding:10}}>
-          <Button
-            type="primary"
-            style={{margin:5}}
+        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center',padding:10,marginTop:10}}>
+
+          <TouchableHighlight
+            style={styles.button}
             onPress={() => {
               Login();
             }}>
-            个人登录
-          </Button>
-          <Button
-            type="primary"
-            style={{margin:5}}
+           <Text style={styles.buttonFont}>个人登录</Text> 
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={styles.button}
             onPress={() => {
               GroupLogin();
             }}>
-            商家登录
-          </Button>
+            <Text style={styles.buttonFont}>商家登录</Text>
+          </TouchableHighlight>
         </View>
       </View>
     );
@@ -168,6 +168,9 @@ const styles = StyleSheet.create({
     width: swidth * 0.7 - 50 * 0.4 - 10,
     height: 35,
     paddingVertical: 0,
+    borderColor:'#666',
+    borderWidth:0.5,
+    borderRadius:5,
   },
   forget: {
     marginTop: 36,
@@ -178,14 +181,33 @@ const styles = StyleSheet.create({
     color: '#517eff',
   },
   button: {
-    width: swidth * 0.7,
-    height: (swidth / 6.7) * 0.7,
-    marginTop: 36,
+    margin:5,
+    backgroundColor:'#FF7701',
+    paddingTop:10,
+    paddingBottom:10,
+    paddingLeft:20,
+    paddingRight:20,
+    borderColor:'#FF7701',
+    borderWidth:1,
+    borderRadius:5,
   },
-
+  buttonFont:{
+    color:'white',
+  },
   come_back: {
     position: 'absolute',
     left: 22,
     top: 15,
+  },
+  title:{
+    fontSize:25,
+    fontWeight:'bold',
+    marginBottom:40,
+  },
+  item:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    marginTop:5,
   },
 });

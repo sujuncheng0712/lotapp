@@ -1,9 +1,11 @@
 import {createStackNavigator, createAppContainer} from 'react-navigation';
 import Home from './src/pages/Home';
+import Home33 from './src/pages/Home33';
 import GroupHome from './src/pages/GroupHome';
 import White from './src/pages/White';
 import Login from './src/pages/users/Login';
 import MyCenter from './src/pages/users/MyCenter';
+import MyCenter33 from './src/pages/users/MyCenter33';
 import MyShop from './src/pages/users/MyShop';
 import Device from './src/pages/users/Device';
 import Record from './src/pages/users/Record';
@@ -48,13 +50,16 @@ import PickRecord from './src/pages/group/PickRecord';
 import Mall from './src/pages/group/Mall';
 import AfterSale from './src/pages/group/AfterSale';
 import ChangeGoods from './src/pages/group/ChangeGoods';
+import MiandanRule from './src/pages/miandan/MiandanRule';
+import RecommendRecord from './src/pages/miandan/RecommendRecord';
 console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {   
+  {    
     White:White,
     Home:Home,
+    Home33:Home33,
     GroupHome:GroupHome,
     Login: Login,
     MyCenter: MyCenter,
@@ -104,6 +109,9 @@ const AppStack = createStackNavigator(
     AfterSale:AfterSale,
     ChangeGoods:ChangeGoods,
     ChangePassword:ChangePassword,
+    MyCenter33:MyCenter33,
+    MiandanRule:MiandanRule,
+    RecommendRecord:RecommendRecord,
   },
   // {
   //   initialRouteName: 'Home',

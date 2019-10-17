@@ -193,10 +193,10 @@ export default class App extends React.Component {
     const {lists, count, sale_type} = this.state;
     return (
       <ScrollView style={{flex:1}}>
-        <View style={{height:height/3}}>
+        <View style={{height:width/1.7}}>
           <Swiper
             style={styles.wrapper}
-            height={200}
+            height={width/1.7}
             horizontal={true}
             autoplay={false}
             autoplayTimeout={10}
@@ -330,8 +330,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: width,
-    flex: 1,
-    height: 10,
+    height: width/1.7,
   },
   iconfont: {
     marginTop: 12,

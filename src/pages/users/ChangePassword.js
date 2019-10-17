@@ -79,17 +79,19 @@ export default class App extends React.Component {
         
         <View style={styles.inputItem}>
            <Text style={{fontSize:15}}>旧密码：</Text>
-          <PwdInput
+          <TextInput
             style={styles.input}
+            secureTextEntry={true}
             onChangeText={text => this.setState({oldPwd: text})}
           />
         </View>
 
         <View style={styles.inputItem}>
            <Text style={{fontSize:15}}>新密码：</Text>
-          <PwdInput
+          <TextInput
             style={styles.input}
             password ={true}
+            secureTextEntry={true}
             onChangeText={text => this.setState({newPwd: text})}
           />
         </View>

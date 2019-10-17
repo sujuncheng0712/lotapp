@@ -17,6 +17,7 @@
     "react-native-camera": "^3.3.0",
     "react-native-check-box": "^2.1.7",
     "react-native-datepicker": "^1.7.2",
+    "react-native-fs": "^2.14.1",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-image-picker": "^1.1.0",
     "react-native-pwd-input": "^1.0.1",
@@ -26,6 +27,7 @@
     "react-native-swiper": "^1.5.14",
     "react-native-tab-navigator": "^0.3.4",
     "react-native-table-component": "^1.2.1",
+    "react-native-update-app": "^1.1.11",
     "react-native-vector-icons": "^6.6.0",
     "react-native-video": "^5.0.2",
     "react-native-webview": "^7.0.5",
@@ -44,5 +46,6 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "optionalDependencies": {}
 }

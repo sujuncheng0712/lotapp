@@ -11,6 +11,7 @@ import {
   ScrollView, BackHandler
 } from 'react-native';
 import * as wechat from 'react-native-wechat';
+import RNUpdate from "react-native-update-app"
 import Swiper from 'react-native-swiper';
 const url = 'https://iot2.dochen.cn/api';
 const {height,width} =  Dimensions.get('window');
@@ -91,7 +92,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    wechat.registerApp('wxed79edc328ec284a');
+    //wechat.registerApp('wxed79edc328ec284a');
   }
 
   onBackAndroid = () => {
@@ -297,14 +298,15 @@ export default class App extends React.Component {
     });
   }
 
+
   render() {
     const {lists} = this.state;
     return (
-      <View style={{height:height}}>
-        <View style={{height:height/3}}>
+      <View style={{flex:1}}>
+        <View style={{height:width/1.7}}>
           <Swiper
             style={styles.wrapper}
-            height={200}
+            height={width/1.7}
             horizontal={true}
             autoplay={false}
             autoplayTimeout={5}
@@ -354,6 +356,7 @@ export default class App extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
+        
         <View>
           <Text style={{padding: 10}}>
             你的新滤芯。PPF：{this.state.p}个，CPP：{this.state.c}个，RO：
@@ -361,7 +364,8 @@ export default class App extends React.Component {
           </Text>
           <Text>{this.state.checkUid}</Text>
         </View>
-        <View style={{flex: 1}}>
+       
+        <View>
           <ScrollView>
             {lists.map((item, key) => (
               <TouchableOpacity 
@@ -435,7 +439,9 @@ export default class App extends React.Component {
               </TouchableOpacity>
             ))}
           </ScrollView>
+          
         </View>
+       
       </View>
     );
   }
@@ -449,7 +455,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: width,
-    flex: 1,
+    height:width/1.7
   },
   deviceImg: {
     width: 50,
@@ -484,4 +490,5 @@ const styles = StyleSheet.create({
     fontSize: 10,
     padding: 5,
   },
+  
 });
