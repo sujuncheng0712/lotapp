@@ -257,7 +257,7 @@ export default class App extends React.Component {
                     </View>
                     <TouchableOpacity
                      style={styles.home}
-                      onPress={()=> this.props.push.push('Home')}>
+                     onPress={()=> this.props.navigation.push('Home')}>
                       <Icon  name="home" size={25} color={'#fff'} />
                     </TouchableOpacity>
                    

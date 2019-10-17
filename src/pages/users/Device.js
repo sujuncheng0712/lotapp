@@ -11,7 +11,6 @@ import {
   ScrollView, BackHandler
 } from 'react-native';
 import * as wechat from 'react-native-wechat';
-import RNUpdate from "react-native-update-app"
 import Swiper from 'react-native-swiper';
 const url = 'https://iot2.dochen.cn/api';
 const {height,width} =  Dimensions.get('window');
@@ -29,6 +28,9 @@ export default class App extends React.Component {
       msg: '',
       checkUid: '',
       LoginInfo: {},
+      version:'',
+      oldVersion:'1.0',
+      visable:'false',
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -80,11 +82,28 @@ export default class App extends React.Component {
     }
   };
 
+  //获取版本号
+  getVersion(){
+    const {oldVersion} = this.state;
+    let urlInfo = `${url}/auth`;
+    fetch(urlInfo).then(res=>{
+      res.json().then(info=>{
+        console.log(info)
+        if(info.status){
+          if(info.version !== oldVersion){
+            this.setState({version:info.version,visable:true})
+          }
+        }
+      })
+    })
+  }
+
   // render创建之前
   componentWillMount() {
     // 验证/读取 登陆状态
     this._checkLoginState();
     BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+    this.getVersion();
   }
 
   componentWillUnmount() {
@@ -298,9 +317,13 @@ export default class App extends React.Component {
     });
   }
 
+  //下载更新
+  downLoad(){
+
+  }
 
   render() {
-    const {lists} = this.state;
+    const {lists,visable} = this.state;
     return (
       <View style={{flex:1}}>
         <View style={{height:width/1.7}}>
@@ -441,7 +464,18 @@ export default class App extends React.Component {
           </ScrollView>
           
         </View>
-       
+       <View style={styles.scan}>
+          <View style={styles.model}>
+            <TouchableOpacity
+              onPress={()=>{this.downLoad()}}
+            >
+              <Text>确认</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text>取消</Text>
+            </TouchableOpacity>
+          </View>
+       </View>
       </View>
     );
   }
@@ -470,7 +504,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     padding: 10,
-    flex:0.1,
   },
   deviceInfo: {
     display: 'flex',
@@ -490,5 +523,18 @@ const styles = StyleSheet.create({
     fontSize: 10,
     padding: 5,
   },
-  
+   scan:{
+    width:width,
+    height:height,
+    borderColor:'red',
+    borderWidth:1,
+    position:'absolute',
+    top:0,
+    left:0,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  model:{
+    flexDirection:'row',
+  }
 });
