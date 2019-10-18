@@ -194,6 +194,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-android-auto-update')
     implementation project(':react-native-update-app')
     implementation 'com.android.support:multidex:1.0.3'
     implementation project(':react-native-webview')

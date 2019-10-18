@@ -8,8 +8,11 @@ import {
   Image,
   ToastAndroid,
   TouchableOpacity,
-  ScrollView, BackHandler
+  ScrollView, BackHandler,Platform
 } from 'react-native';
+import _updateConfig from './update.json';
+const {appKey} = _updateConfig[Platform.OS];
+import RNAndroidAutoUpdate from "react-native-android-auto-update";
 import * as wechat from 'react-native-wechat';
 import Swiper from 'react-native-swiper';
 const url = 'https://iot2.dochen.cn/api';
@@ -319,7 +322,9 @@ export default class App extends React.Component {
 
   //下载更新
   downLoad(){
-
+    ToastAndroid.show('已开始下载', ToastAndroid.SHORT);
+    this.setState({visable:false})
+    RNAndroidAutoUpdate.goToDownload('http://iot.dochen.cn/app/app-2g.apk');
   }
 
   render() {
@@ -464,18 +469,27 @@ export default class App extends React.Component {
           </ScrollView>
           
         </View>
-       <View style={styles.scan}>
-          <View style={styles.model}>
-            <TouchableOpacity
-              onPress={()=>{this.downLoad()}}
-            >
-              <Text>确认</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text>取消</Text>
-            </TouchableOpacity>
-          </View>
-       </View>
+        {/* {visable === true ?
+          <View style={styles.scan}>
+            <Text>发现新版本，是否现在下载？</Text>
+            <View style={styles.model}>
+              <TouchableOpacity
+                style={styles.downLoadButton}
+                onPress={()=>{this.downLoad()}}
+              >
+                <Text>确认</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.downLoadButton}
+                onPress={()=>{this.setState({visable:false})}}
+              >
+                <Text>取消</Text>
+              </TouchableOpacity>
+            </View>
+         </View>  :<Text></Text>
+        
+        } */}
+       
       </View>
     );
   }
@@ -536,5 +550,10 @@ const styles = StyleSheet.create({
   },
   model:{
     flexDirection:'row',
+  },
+  downLoadButton:{
+    padding:10,
+    backgroundColor:'#FF7701',
+    borderColor:'#FF7701',
   }
 });

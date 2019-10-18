@@ -1,4 +1,6 @@
 rootProject.name = 'lotapp'
+include ':react-native-android-auto-update'
+project(':react-native-android-auto-update').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-auto-update/android')
 include ':react-native-upgrade-android'
 project(':react-native-upgrade-android').projectDir = new File(rootProject.projectDir, '../../../AppData/Roaming/npm/node_modules/react-native-upgrade-android/android')
 include ':react-native-upgrade-android'

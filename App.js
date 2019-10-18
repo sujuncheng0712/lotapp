@@ -5,6 +5,7 @@ import GroupHome from './src/pages/GroupHome';
 import White from './src/pages/White';
 import Login from './src/pages/users/Login';
 import MyCenter from './src/pages/users/MyCenter';
+import MyProject from './src/pages/users/MyProject';
 import MyCenter33 from './src/pages/users/MyCenter33';
 import MyShop from './src/pages/users/MyShop';
 import Device from './src/pages/users/Device';
@@ -56,7 +57,7 @@ console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {    
+  {    MyProject:MyProject,
     White:White,
     Home:Home,
     Home33:Home33,
