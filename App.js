@@ -57,7 +57,7 @@ console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {    MyProject:MyProject,
+  {  
     White:White,
     Home:Home,
     Home33:Home33,

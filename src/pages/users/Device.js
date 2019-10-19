@@ -8,11 +8,21 @@ import {
   Image,
   ToastAndroid,
   TouchableOpacity,
-  ScrollView, BackHandler,Platform
+  ScrollView, BackHandler,Platform,Linking
 } from 'react-native';
-import _updateConfig from './update.json';
+import {
+  isFirstTime,
+  isRolledBack,
+  packageVersion,
+  currentVersion,
+  checkUpdate,
+  downloadUpdate,
+  switchVersion,
+  switchVersionLater,
+  markSuccess,
+} from 'react-native-update';
+import _updateConfig from '../../../update.json'
 const {appKey} = _updateConfig[Platform.OS];
-import RNAndroidAutoUpdate from "react-native-android-auto-update";
 import * as wechat from 'react-native-wechat';
 import Swiper from 'react-native-swiper';
 const url = 'https://iot2.dochen.cn/api';
@@ -321,10 +331,16 @@ export default class App extends React.Component {
   }
 
   //下载更新
-  downLoad(){
-    ToastAndroid.show('已开始下载', ToastAndroid.SHORT);
+  downLoad= async () =>{
     this.setState({visable:false})
-    RNAndroidAutoUpdate.goToDownload('http://iot.dochen.cn/app/app-2g.apk');
+     let info;
+    try {
+      info = await checkUpdate(appKey);
+    } catch (err) {
+      console.warn(err);
+      return;
+    }
+   Linking.openURL(info.downloadUrl)
   }
 
   render() {
@@ -469,26 +485,32 @@ export default class App extends React.Component {
           </ScrollView>
           
         </View>
-        {/* {visable === true ?
+        {visable === true ?
           <View style={styles.scan}>
-            <Text>发现新版本，是否现在下载？</Text>
             <View style={styles.model}>
-              <TouchableOpacity
-                style={styles.downLoadButton}
-                onPress={()=>{this.downLoad()}}
-              >
-                <Text>确认</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.downLoadButton}
-                onPress={()=>{this.setState({visable:false})}}
-              >
-                <Text>取消</Text>
-              </TouchableOpacity>
+                <Text style={styles.modelTitle}>物联汇新版震撼发布</Text>
+               <View  style={{padding:10}}>
+                   <Text>新版特性：</Text>
+                  <Text>1.别按下载</Text>
+                </View>
+              <View style={styles.modelButton}>
+                <TouchableOpacity
+                  style={styles.downLoadButton}
+                  onPress={()=>{this.downLoad()}}
+                >
+                  <Text style={{color:'white'}}>下 载</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.downLoadButton}
+                  onPress={()=>{this.setState({visable:false})}}
+                >
+                  <Text style={{color:'white'}}>取 消</Text>
+                </TouchableOpacity>
+              </View>
             </View>
+            
          </View>  :<Text></Text>
-        
-        } */}
+        }
        
       </View>
     );
@@ -548,12 +570,33 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
   },
-  model:{
+  modelButton:{
     flexDirection:'row',
+    padding:10,
+    justifyContent:'space-between',
   },
   downLoadButton:{
-    padding:10,
+    width:'40%',
+    padding:5,
     backgroundColor:'#FF7701',
     borderColor:'#FF7701',
+    alignItems:'center',
+    justifyContent:'center',
+    borderRadius:5,
+  },
+  model:{
+  
+    width:width*8/10,
+    borderColor:'#FF7701',
+    borderWidth:1,
+    backgroundColor:'white',
+    borderRadius:5,
+  },
+  modelTitle:{
+    width:'100%',
+    backgroundColor:'#FF7701',
+    padding:10,
+    color:'white',
+    fontSize:20
   }
 });

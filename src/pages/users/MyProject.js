@@ -30,7 +30,7 @@ import {
 import _updateConfig from '../../../update.json'
 const {appKey} = _updateConfig[Platform.OS];
 
-class MyProject extends Component {
+export default class MyProject extends Component {
   componentDidMount(){
     if (isFirstTime) {
       Alert.alert('提示', '这是当前版本第一次启动,是否要模拟启动失败?失败将回滚到上一版本', [
@@ -54,17 +54,21 @@ class MyProject extends Component {
     }
   };
   checkUpdate = async () => {
-    if (__DEV__) {
-      // 开发模式不支持热更新，跳过检查
-      return;
-    }
+    // if (__DEV__) {
+    //   // 开发模式不支持热更新，跳过检查
+    //   alert('开发模式')
+    //   return;
+    // }
     let info;
+  
     try {
       info = await checkUpdate(appKey);
     } catch (err) {
       console.warn(err);
       return;
     }
+    
+    console.log(info);
     if (info.expired) {
       Alert.alert('提示', '您的应用版本已更新,请前往应用商店下载新的版本', [
         {text: '确定', onPress: ()=>{info.downloadUrl && Linking.openURL(info.downloadUrl)}},

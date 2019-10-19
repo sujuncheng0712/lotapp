@@ -7,7 +7,6 @@ import {
   AsyncStorage,
   ToastAndroid,TouchableOpacity
 } from 'react-native';
-import PwdInput from 'react-native-pwd-input';
 const url = 'https://iot2.dochen.cn/api';
 export default class App extends React.Component {
   constructor(props) {

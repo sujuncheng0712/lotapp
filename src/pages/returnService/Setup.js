@@ -116,7 +116,7 @@ export default class App extends React.Component {
             </View>
             <View style={styles.item}>
               <Text style={styles.title}>地区：</Text>
-              <View style={styles.input}  onPress={this.onPress}>
+              <View style={{...styles.input,width:'63%',marginRight:'11.5%'}}  onPress={this.onPress}>
                 <Picker
                   data={address1}
                   cols={3}
@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
     marginTop:20,
   },
   input:{
-    width:'70%',
-    marginTop: 0,
+    width:'60%',
+    marginRight: '15%',
     borderColor:'#bbb',
     borderWidth:0.5,
     borderRadius: 5,
