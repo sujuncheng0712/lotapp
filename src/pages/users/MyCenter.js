@@ -137,7 +137,7 @@ export default class App extends React.Component {
                 style={styles.button}
                 onPress={this.withdraw}>
                   <Icon name="redo" size={25} color={'#fff'} />
-                <Text style={{ textAlign:'center',color:'white'}}>注销</Text>
+                <Text style={{ textAlign:'center',color:'white'}}>退出登录</Text>
               </TouchableOpacity>
             </View>
             {LoginInfo.sale_type === 50 ? 

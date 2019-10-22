@@ -12,6 +12,7 @@ import Device from './src/pages/users/Device';
 import Record from './src/pages/users/Record';
 import Address from './src/pages/users/Address';
 import Create from './src/pages/users/Create';
+import Register from './src/pages/users/Register';
 import ChangePassword from './src/pages/users/ChangePassword';
 import AddDevice from './src/pages/device/AddDevice';
 import DeviceIndex from './src/pages/device/DeviceIndex';
@@ -57,7 +58,7 @@ console.disableYellowBox = true;
 console.warn('YellowBox is disabled.');
 
 const AppStack = createStackNavigator(
-  {  
+  {   
     White:White,
     Home:Home,
     Home33:Home33,
@@ -113,6 +114,7 @@ const AppStack = createStackNavigator(
     MyCenter33:MyCenter33,
     MiandanRule:MiandanRule,
     RecommendRecord:RecommendRecord,
+    Register:Register,
   },
   // {
   //   initialRouteName: 'Home',

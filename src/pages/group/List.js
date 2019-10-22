@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
     marginTop:10,
   },
   button:{
+    marginTop:5,
     width:'33%',
     backgroundColor:'#FF7701',
     color:'#fff',
@@ -208,6 +209,7 @@ const styles = StyleSheet.create({
     padding:5,
   },
   button2:{
+    marginTop:5,
     width:'33%',
     color:'black',
     borderColor:'#666',

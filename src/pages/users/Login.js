@@ -2,16 +2,13 @@ import React from 'react';
 import {
   AsyncStorage,
   TextInput,
-  TouchableHighlight,
-  ScrollView,
   Image,
   Text,
   View,
   Dimensions,
   StyleSheet,
-  ToastAndroid,
+  ToastAndroid,TouchableOpacity
 } from 'react-native';
-import * as wechat from 'react-native-wechat';
 const url = 'https://iot2.dochen.cn/api';
 
 export default class Login extends React.Component {
@@ -125,20 +122,30 @@ export default class Login extends React.Component {
         </View>
         <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center',padding:10,marginTop:10}}>
 
-          <TouchableHighlight
+          <TouchableOpacity
             style={styles.button}
             onPress={() => {
               Login();
             }}>
            <Text style={styles.buttonFont}>个人登录</Text> 
-          </TouchableHighlight>
-          <TouchableHighlight
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.button}
             onPress={() => {
               GroupLogin();
             }}>
             <Text style={styles.buttonFont}>商家登录</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.register}>
+        <TouchableOpacity
+            style={styles.registerButton}
+            onPress={() => {
+              this.props.navigation.navigate('Register')
+            }}>
+            <Text style={{color:'grey'}}>用户注册</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -210,4 +217,16 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     marginTop:5,
   },
+  register:{
+    width:'100%',
+    padding:5,
+    marginTop:10,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  registerButton:{
+    justifyContent:'center',
+    alignItems:'center',
+    padding:5,
+  }
 });

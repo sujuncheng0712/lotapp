@@ -124,7 +124,7 @@ export default class App extends React.Component {
                 style={styles.home2}
                 onPress={this.withdraw}>
                   <Icon name="redo" size={25} color={'#fff'} />
-               <Text style={{color:'white',fontSize:10}}>注销</Text>
+               <Text style={{color:'white',fontSize:10}}>退出登录</Text>
               </TouchableOpacity>
 
               <View style={{width:'100%',alignItems:'center',justifyContent:'center'}}>
