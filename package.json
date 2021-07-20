@@ -13,7 +13,7 @@
     "antd-mobile-demo-data": "^0.3.0",
     "native-echarts": "^0.5.0",
     "react": "16.8.6",
-    "react-native": "0.60.5",
+    "react-native": "0.62.3",
     "react-native-android-auto-update": "^0.1.0",
     "react-native-camera": "^3.3.0",
     "react-native-check-box": "^2.1.7",
